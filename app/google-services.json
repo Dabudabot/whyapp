@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "976009312752",
+    "firebase_url": "https://whyapp-d6636.firebaseio.com",
+    "project_id": "whyapp-d6636",
+    "storage_bucket": "whyapp-d6636.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:976009312752:android:32087b36847d9a8d",
+        "android_client_info": {
+          "package_name": "com.inno.dabudabot.whyapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "976009312752-t4janptamnjruf3jsa81oqcc09ivd54q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.inno.dabudabot.whyapp",
+            "certificate_hash": "af4cfc1f7b4e99c34debbfd6cccaf1448db54903"
+          }
+        },
+        {
+          "client_id": "976009312752-1rmk65fccpcolq336468i2kur723m9qm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAv_vz430T3bN5uAQKjn03ESoIlJH7dSiQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "976009312752-1rmk65fccpcolq336468i2kur723m9qm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
