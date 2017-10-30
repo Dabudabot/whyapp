@@ -61,7 +61,6 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         Chat chat = mChats.get(position);
 
         myChatViewHolder.txtMessageText.setText(chat.getMessage());
-        myChatViewHolder.txtMessageUser.setText(chat.getSender());
         myChatViewHolder.txtMessageTime.setText(chat.getTime());
     }
 
@@ -69,7 +68,6 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         Chat chat = mChats.get(position);
 
         otherChatViewHolder.txtMessageText.setText(chat.getMessage());
-        otherChatViewHolder.txtMessageUser.setText(chat.getSender());
         otherChatViewHolder.txtMessageTime.setText(chat.getTime());
     }
 
@@ -92,22 +90,20 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     private static class MyChatViewHolder extends RecyclerView.ViewHolder {
-        private TextView txtMessageUser, txtMessageTime, txtMessageText;
+        private TextView txtMessageTime, txtMessageText;
 
         public MyChatViewHolder(View itemView) {
             super(itemView);
-            txtMessageUser = (TextView) itemView.findViewById(R.id.message_user);
             txtMessageTime = (TextView) itemView.findViewById(R.id.message_time);
             txtMessageText = (TextView) itemView.findViewById(R.id.message_text);
         }
     }
 
     private static class OtherChatViewHolder extends RecyclerView.ViewHolder {
-        private TextView txtMessageUser, txtMessageTime, txtMessageText;
+        private TextView txtMessageTime, txtMessageText;
 
         public OtherChatViewHolder(View itemView) {
             super(itemView);
-            txtMessageUser = (TextView) itemView.findViewById(R.id.message_user);
             txtMessageTime = (TextView) itemView.findViewById(R.id.message_time);
             txtMessageText = (TextView) itemView.findViewById(R.id.message_text);
         }
