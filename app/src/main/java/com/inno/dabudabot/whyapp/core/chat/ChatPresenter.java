@@ -2,7 +2,7 @@ package com.inno.dabudabot.whyapp.core.chat;
 
 import android.content.Context;
 
-import com.inno.dabudabot.whyapp.models.Chat;
+import com.inno.dabudabot.whyapp.models.Message;
 
 /**
  * Created by Daulet on 10/21/17.
@@ -19,8 +19,8 @@ public class ChatPresenter implements ChatContract.Presenter, ChatContract.OnSen
     }
 
     @Override
-    public void sendMessage(Context context, Chat chat, String receiverFirebaseToken) {
-        mChatInteractor.sendMessageToFirebaseUser(context, chat, receiverFirebaseToken);
+    public void sendMessage(Context context, Message message, String receiverFirebaseToken) {
+        mChatInteractor.sendMessageToFirebaseUser(context, message, receiverFirebaseToken);
     }
 
     @Override
@@ -39,8 +39,8 @@ public class ChatPresenter implements ChatContract.Presenter, ChatContract.OnSen
     }
 
     @Override
-    public void onGetMessagesSuccess(Chat chat) {
-        mView.onGetMessagesSuccess(chat);
+    public void onGetMessagesSuccess(Message message) {
+        mView.onGetMessagesSuccess(message);
     }
 
     @Override

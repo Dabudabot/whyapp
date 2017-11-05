@@ -21,6 +21,7 @@ import com.inno.dabudabot.whyapp.core.registration.RegisterContract;
 import com.inno.dabudabot.whyapp.core.registration.RegisterPresenter;
 import com.inno.dabudabot.whyapp.core.users.add.AddUserContract;
 import com.inno.dabudabot.whyapp.core.users.add.AddUserPresenter;
+import com.inno.dabudabot.whyapp.ui.activities.ChatUsersListingActivity;
 import com.inno.dabudabot.whyapp.ui.activities.UserListingActivity;
 
 import java.net.NetworkInterface;
@@ -115,7 +116,7 @@ public class LoginFragment
     public void onLoginSuccess(String message) {
         mProgressDialog.dismiss();
         Toast.makeText(getActivity(), "Logged in successfully", Toast.LENGTH_SHORT).show();
-        UserListingActivity.startActivity(getActivity(),
+        ChatUsersListingActivity.startActivity(getActivity(),
                 Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
     }
 

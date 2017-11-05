@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.inno.dabudabot.whyapp.R;
-import com.inno.dabudabot.whyapp.models.Chat;
+import com.inno.dabudabot.whyapp.models.Message;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
@@ -19,15 +19,15 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final int VIEW_TYPE_ME = 1;
     private static final int VIEW_TYPE_OTHER = 2;
 
-    private List<Chat> mChats;
+    private List<Message> mMessages;
 
-    public ChatRecyclerAdapter(List<Chat> chats) {
-        mChats = chats;
+    public ChatRecyclerAdapter(List<Message> messages) {
+        mMessages = messages;
     }
 
-    public void add(Chat chat) {
-        mChats.add(chat);
-        notifyItemInserted(mChats.size() - 1);
+    public void add(Message message) {
+        mMessages.add(message);
+        notifyItemInserted(mMessages.size() - 1);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (TextUtils.equals(mChats.get(position).getSenderUid(),
+        if (TextUtils.equals(mMessages.get(position).getSenderUid(),
                 FirebaseAuth.getInstance().getCurrentUser().getUid())) {
             configureMyChatViewHolder((MyChatViewHolder) holder, position);
         } else {
@@ -58,30 +58,30 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     private void configureMyChatViewHolder(MyChatViewHolder myChatViewHolder, int position) {
-        Chat chat = mChats.get(position);
+        Message message = mMessages.get(position);
 
-        myChatViewHolder.txtMessageText.setText(chat.getMessage());
-        myChatViewHolder.txtMessageTime.setText(chat.getTime());
+        myChatViewHolder.txtMessageText.setText(message.getMessage());
+        myChatViewHolder.txtMessageTime.setText(message.getTime());
     }
 
     private void configureOtherChatViewHolder(OtherChatViewHolder otherChatViewHolder, int position) {
-        Chat chat = mChats.get(position);
+        Message message = mMessages.get(position);
 
-        otherChatViewHolder.txtMessageText.setText(chat.getMessage());
-        otherChatViewHolder.txtMessageTime.setText(chat.getTime());
+        otherChatViewHolder.txtMessageText.setText(message.getMessage());
+        otherChatViewHolder.txtMessageTime.setText(message.getTime());
     }
 
     @Override
     public int getItemCount() {
-        if (mChats != null) {
-            return mChats.size();
+        if (mMessages != null) {
+            return mMessages.size();
         }
         return 0;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (TextUtils.equals(mChats.get(position).getSenderUid(),
+        if (TextUtils.equals(mMessages.get(position).getSenderUid(),
                 FirebaseAuth.getInstance().getCurrentUser().getUid())) {
             return VIEW_TYPE_ME;
         } else {
