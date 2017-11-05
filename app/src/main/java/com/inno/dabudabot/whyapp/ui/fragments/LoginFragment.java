@@ -3,6 +3,7 @@ package com.inno.dabudabot.whyapp.ui.fragments;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -23,10 +24,6 @@ import com.inno.dabudabot.whyapp.core.users.add.AddUserContract;
 import com.inno.dabudabot.whyapp.core.users.add.AddUserPresenter;
 import com.inno.dabudabot.whyapp.ui.activities.ChatUsersListingActivity;
 import com.inno.dabudabot.whyapp.ui.activities.UserListingActivity;
-
-import java.net.NetworkInterface;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by Daulet on 10/21/17.
@@ -105,11 +102,17 @@ public class LoginFragment
     }
 
     private void onLogin(View view) {
-        pass = getMacAddress();
+        pass = generatePass();
         username = mETxtUsername.getText().toString() + "@test.com";
 
         mLoginPresenter.login(getActivity(), username, pass);
         mProgressDialog.show();
+    }
+
+    private String generatePass() {
+        return Settings.Secure.getString(
+                getContext().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
     }
 
     @Override
@@ -124,38 +127,6 @@ public class LoginFragment
     public void onLoginFailure(String message) {
         Toast.makeText(getActivity(), "Registration: " + message, Toast.LENGTH_SHORT).show();
         mRegisterPresenter.register(getActivity(), username, pass);
-    }
-
-    /**
-     * Get MAC address of devise
-     * @return MAC address
-     */
-    public static String getMacAddress() {
-        try {
-            List<NetworkInterface> all =
-                    Collections.list(NetworkInterface.getNetworkInterfaces());
-            for (NetworkInterface nif : all) {
-                if (!nif.getName().equalsIgnoreCase("wlan0")) continue;
-                byte[] macBytes = nif.getHardwareAddress();
-                if (macBytes == null) {
-                    return "SOME_EMPTY_PASSWORD";
-                }
-
-                StringBuilder res1 = new StringBuilder();
-                for (byte b : macBytes) {
-                    res1.append(Integer.toHexString(b & 0xFF));
-                    res1.append(":");
-                }
-
-                if (res1.length() > 0) {
-                    res1.deleteCharAt(res1.length() - 1);
-                }
-                return res1.toString();
-            }
-        } catch (Exception ex) {
-            return "SOME_WRONG_PASSWORD";
-        }
-        return "SOME_DEFAULT_PASSWORD";
     }
 
     @Override
