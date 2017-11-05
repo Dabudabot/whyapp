@@ -3,6 +3,7 @@ package com.inno.dabudabot.whyapp.ui.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -11,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.inno.dabudabot.whyapp.R;
@@ -86,7 +88,7 @@ public class UserListingActivity
     }
 
     private void logout() {
-        new AlertDialog.Builder(this)
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setTitle(R.string.logout)
                 .setMessage(R.string.are_you_sure)
                 .setPositiveButton(R.string.logout, new DialogInterface.OnClickListener() {
@@ -101,8 +103,14 @@ public class UserListingActivity
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
-                })
-                .show();
+                });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+        Button nbutton = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
+        nbutton.setTextColor(getResources().getColor(R.color.grey_900));
+        Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
+        pbutton.setTextColor(getResources().getColor(R.color.grey_900));
     }
 
     @Override
