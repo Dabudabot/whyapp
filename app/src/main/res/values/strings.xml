@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">WhyApp</string>
+    <string name="chats_name">Chats</string>
+    <string name="contacts_name">Contacts</string>
     <string name="action_settings">Settings</string>
     <string name="username">Username</string>
     <string name="password">Password</string>

@@ -5,7 +5,7 @@ import android.text.format.DateFormat;
 /**
  * Created by Daulet on 10/21/17.
  */
-public class Chat  {
+public class Message {
     private String sender;
     private String receiver;
     private String senderUid;
@@ -13,10 +13,10 @@ public class Chat  {
     private String message;
     private long timestamp;
 
-    public Chat(){
+    public Message(){
     }
 
-    public Chat(String sender, String receiver, String senderUid, String receiverUid, String message, long timestamp){
+    public Message(String sender, String receiver, String senderUid, String receiverUid, String message, long timestamp){
         this.sender = sender;
         this.receiver = receiver;
         this.senderUid = senderUid;

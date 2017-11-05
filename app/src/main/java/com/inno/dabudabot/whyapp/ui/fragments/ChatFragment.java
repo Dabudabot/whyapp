@@ -18,7 +18,7 @@ import com.inno.dabudabot.whyapp.R;
 import com.inno.dabudabot.whyapp.core.chat.ChatContract;
 import com.inno.dabudabot.whyapp.core.chat.ChatPresenter;
 import com.inno.dabudabot.whyapp.events.PushNotificationEvent;
-import com.inno.dabudabot.whyapp.models.Chat;
+import com.inno.dabudabot.whyapp.models.Message;
 import com.inno.dabudabot.whyapp.ui.adapters.ChatRecyclerAdapter;
 import com.inno.dabudabot.whyapp.utils.Constants;
 import com.google.firebase.auth.FirebaseAuth;
@@ -114,14 +114,14 @@ public class ChatFragment
         String sender = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         String senderUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         String receiverFirebaseToken = getArguments().getString(Constants.ARG_FIREBASE_TOKEN);
-        Chat chat = new Chat(sender,
+        Message chatMessage = new Message(sender,
                 receiver,
                 senderUid,
                 receiverUid,
                 message,
                 System.currentTimeMillis());
         mChatPresenter.sendMessage(getActivity().getApplicationContext(),
-                chat,
+                chatMessage,
                 receiverFirebaseToken);
     }
 
@@ -137,12 +137,12 @@ public class ChatFragment
     }
 
     @Override
-    public void onGetMessagesSuccess(Chat chat) {
+    public void onGetMessagesSuccess(Message message) {
         if (mChatRecyclerAdapter == null) {
-            mChatRecyclerAdapter = new ChatRecyclerAdapter(new ArrayList<Chat>());
+            mChatRecyclerAdapter = new ChatRecyclerAdapter(new ArrayList<Message>());
             mRecyclerViewChat.setAdapter(mChatRecyclerAdapter);
         }
-        mChatRecyclerAdapter.add(chat);
+        mChatRecyclerAdapter.add(message);
         mRecyclerViewChat.smoothScrollToPosition(mChatRecyclerAdapter.getItemCount() - 1);
     }
 

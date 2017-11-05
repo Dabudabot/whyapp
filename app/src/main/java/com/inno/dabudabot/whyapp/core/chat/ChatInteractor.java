@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.inno.dabudabot.whyapp.fcm.FcmNotificationBuilder;
-import com.inno.dabudabot.whyapp.models.Chat;
+import com.inno.dabudabot.whyapp.models.Message;
 import com.inno.dabudabot.whyapp.utils.Constants;
 import com.inno.dabudabot.whyapp.utils.SharedPrefUtil;
 import com.google.firebase.database.ChildEventListener;
@@ -39,9 +39,9 @@ public class ChatInteractor implements ChatContract.Interactor {
     }
 
     @Override
-    public void sendMessageToFirebaseUser(final Context context, final Chat chat, final String receiverFirebaseToken) {
-        final String room_type_1 = chat.getSenderUid() + "_" + chat.getReceiverUid();
-        final String room_type_2 = chat.getReceiverUid() + "_" + chat.getSenderUid();
+    public void sendMessageToFirebaseUser(final Context context, final Message message, final String receiverFirebaseToken) {
+        final String room_type_1 = message.getSenderUid() + "_" + message.getReceiverUid();
+        final String room_type_2 = message.getReceiverUid() + "_" + message.getSenderUid();
 
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -50,19 +50,19 @@ public class ChatInteractor implements ChatContract.Interactor {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild(room_type_1)) {
                     Log.e(TAG, "sendMessageToFirebaseUser: " + room_type_1 + " exists");
-                    databaseReference.child(Constants.ARG_CHAT_ROOMS).child(room_type_1).child(String.valueOf(chat.getTimestamp())).setValue(chat);
+                    databaseReference.child(Constants.ARG_CHAT_ROOMS).child(room_type_1).child(String.valueOf(message.getTimestamp())).setValue(message);
                 } else if (dataSnapshot.hasChild(room_type_2)) {
                     Log.e(TAG, "sendMessageToFirebaseUser: " + room_type_2 + " exists");
-                    databaseReference.child(Constants.ARG_CHAT_ROOMS).child(room_type_2).child(String.valueOf(chat.getTimestamp())).setValue(chat);
+                    databaseReference.child(Constants.ARG_CHAT_ROOMS).child(room_type_2).child(String.valueOf(message.getTimestamp())).setValue(message);
                 } else {
-                    Log.e(TAG, "sendMessageToFirebaseUser: success");
-                    databaseReference.child(Constants.ARG_CHAT_ROOMS).child(room_type_1).child(String.valueOf(chat.getTimestamp())).setValue(chat);
-                    getMessageFromFirebaseUser(chat.getSenderUid(), chat.getReceiverUid());
+                    Log.e(TAG, "sendMessageToFirebaseUser: success");//TODO: MOVE IT FROM HERE TO SEP
+                    databaseReference.child(Constants.ARG_CHAT_ROOMS).child(room_type_1).child(String.valueOf(message.getTimestamp())).setValue(message);
+                    getMessageFromFirebaseUser(message.getSenderUid(), message.getReceiverUid());
                 }
                 // send push notification to the receiver
-                sendPushNotificationToReceiver(chat.getSender(),
-                        chat.getMessage(),
-                        chat.getSenderUid(),
+                sendPushNotificationToReceiver(message.getSender(),
+                        message.getMessage(),
+                        message.getSenderUid(),
                         new SharedPrefUtil(context).getString(Constants.ARG_FIREBASE_TOKEN),
                         receiverFirebaseToken);
                 mOnSendMessageListener.onSendMessageSuccess();
@@ -108,8 +108,8 @@ public class ChatInteractor implements ChatContract.Interactor {
                             .child(room_type_1).addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            Chat chat = dataSnapshot.getValue(Chat.class);
-                            mOnGetMessagesListener.onGetMessagesSuccess(chat);
+                            Message message = dataSnapshot.getValue(Message.class);
+                            mOnGetMessagesListener.onGetMessagesSuccess(message);
                         }
 
                         @Override
@@ -140,8 +140,8 @@ public class ChatInteractor implements ChatContract.Interactor {
                             .child(room_type_2).addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            Chat chat = dataSnapshot.getValue(Chat.class);
-                            mOnGetMessagesListener.onGetMessagesSuccess(chat);
+                            Message message = dataSnapshot.getValue(Message.class);
+                            mOnGetMessagesListener.onGetMessagesSuccess(message);
                         }
 
                         @Override

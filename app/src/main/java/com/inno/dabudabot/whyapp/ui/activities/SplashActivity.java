@@ -33,7 +33,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                    UserListingActivity.startActivity(SplashActivity.this);
+                    ChatUsersListingActivity.startActivity(SplashActivity.this);
                 } else {
                     LoginActivity.startIntent(SplashActivity.this);
                 }

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.inno.dabudabot.whyapp.R;
+import com.inno.dabudabot.whyapp.core.users.getall.GetChatUsersPresenter;
 import com.inno.dabudabot.whyapp.core.users.getall.GetUsersContract;
 import com.inno.dabudabot.whyapp.core.users.getall.GetUsersPresenter;
 import com.inno.dabudabot.whyapp.models.User;
@@ -21,7 +22,10 @@ import com.inno.dabudabot.whyapp.utils.ItemClickSupport;
 
 import java.util.List;
 
-public class UsersFragment extends Fragment implements GetUsersContract.View, ItemClickSupport.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class UsersFragment extends Fragment implements
+        GetUsersContract.View,
+        ItemClickSupport.OnItemClickListener,
+        SwipeRefreshLayout.OnRefreshListener {
     public static final String ARG_TYPE = "type";
     public static final String TYPE_CHATS = "type_chats";
     public static final String TYPE_ALL = "type_all";
@@ -32,6 +36,7 @@ public class UsersFragment extends Fragment implements GetUsersContract.View, It
     private UserListingRecyclerAdapter mUserListingRecyclerAdapter;
 
     private GetUsersPresenter mGetUsersPresenter;
+    private GetChatUsersPresenter mGetChatUsersPresenter;
 
     public static UsersFragment newInstance(String type) {
         Bundle args = new Bundle();
@@ -62,6 +67,7 @@ public class UsersFragment extends Fragment implements GetUsersContract.View, It
 
     private void init() {
         mGetUsersPresenter = new GetUsersPresenter(this);
+        mGetChatUsersPresenter = new GetChatUsersPresenter(this);
         getUsers();
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
@@ -83,7 +89,7 @@ public class UsersFragment extends Fragment implements GetUsersContract.View, It
 
     private void getUsers() {
         if (TextUtils.equals(getArguments().getString(ARG_TYPE), TYPE_CHATS)) {
-
+            mGetChatUsersPresenter.getChatUsers();
         } else if (TextUtils.equals(getArguments().getString(ARG_TYPE), TYPE_ALL)) {
             mGetUsersPresenter.getAllUsers();
         }
@@ -123,11 +129,25 @@ public class UsersFragment extends Fragment implements GetUsersContract.View, It
 
     @Override
     public void onGetChatUsersSuccess(List<User> users) {
-
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
+        mUserListingRecyclerAdapter = new UserListingRecyclerAdapter(users);
+        mRecyclerViewAllUserListing.setAdapter(mUserListingRecyclerAdapter);
+        mUserListingRecyclerAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onGetChatUsersFailure(String message) {
-
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
+        Toast.makeText(getActivity(), "Error: " + message, Toast.LENGTH_SHORT).show();
     }
 }
