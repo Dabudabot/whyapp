@@ -5,23 +5,29 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.inno.dabudabot.whyapp.R;
-import com.inno.dabudabot.whyapp.controller.ChatCreatorController;
-import com.inno.dabudabot.whyapp.controller.GetUsersController;
 import com.inno.dabudabot.whyapp.listener.GetUsersView;
+import com.inno.dabudabot.whyapp.core.users.getall.GetChatUsersPresenter;
+import com.inno.dabudabot.whyapp.core.users.getall.GetUsersPresenter;
 import com.inno.dabudabot.whyapp.models.User;
+import com.inno.dabudabot.whyapp.ui.activities.MessagingActivity;
 import com.inno.dabudabot.whyapp.ui.adapters.UserListingRecyclerAdapter;
 import com.inno.dabudabot.whyapp.utils.Constants;
 import com.inno.dabudabot.whyapp.utils.ItemClickSupport;
 
 import java.util.List;
 
-public class UsersFragment extends Fragment implements
+/**
+ * Created by dabudabot on 07.11.17.
+ */
+
+public class ChatsFragment extends Fragment implements
         GetUsersView,
         ItemClickSupport.OnItemClickListener,
         SwipeRefreshLayout.OnRefreshListener {
@@ -31,8 +37,8 @@ public class UsersFragment extends Fragment implements
 
     private UserListingRecyclerAdapter mUserListingRecyclerAdapter;
 
-    private GetUsersController getUsersController;
-    private ChatCreatorController chatCreatorController;
+    private GetUsersPresenter mGetUsersPresenter;
+    private GetChatUsersPresenter mGetChatUsersPresenter;
 
     public static UsersFragment newInstance(String type) {
         Bundle args = new Bundle();
@@ -58,9 +64,9 @@ public class UsersFragment extends Fragment implements
 
     private void bindViews(View view) {
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(
-                                R.id.swipe_refresh_layout);
+                R.id.swipe_refresh_layout);
         mRecyclerViewAllUserListing = (RecyclerView) view.findViewById(
-                                R.id.recycler_view_all_user_listing);
+                R.id.recycler_view_all_user_listing);
     }
 
     @Override
@@ -71,9 +77,9 @@ public class UsersFragment extends Fragment implements
     }
 
     private void init() {
-        chatCreatorController = new ChatCreatorController();
-        getUsersController = new GetUsersController(this);
-        getUsersController.getUsersFromFirebase();
+        mGetUsersPresenter = new GetUsersPresenter(this);//???
+        mGetChatUsersPresenter = new GetChatUsersPresenter(this);//???
+        getUsers();
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -89,17 +95,35 @@ public class UsersFragment extends Fragment implements
 
     @Override
     public void onRefresh() {
-        getUsersController.getUsersFromFirebase();
+        getUsers();
+    }
+
+    private void getUsers() {
+        if (TextUtils.equals(
+                getArguments().getString(Constants.ARG_TYPE),
+                Constants.TYPE_CHAT)) {
+            mGetChatUsersPresenter.getChatUsers();
+        } else if (TextUtils.equals(
+                getArguments().getString(Constants.ARG_TYPE),
+                Constants.TYPE_USER)) {
+            mGetUsersPresenter.getAllUsers();
+        }
     }
 
     @Override
     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-        chatCreatorController.initCreate(getActivity(),
-                mUserListingRecyclerAdapter.getUser(position).getId());
+        MessagingActivity.startActivity(getActivity(),
+                mUserListingRecyclerAdapter.getUser(position).getEmail(),
+                mUserListingRecyclerAdapter.getUser(position).getUid(),
+                mUserListingRecyclerAdapter.getUser(position).getFirebaseToken());
     }
 
+
+
+
+    //----------------
     @Override
-    public void onGetUsersSuccess(List<User> users) {
+    public void onGetAllUsersSuccess(List<User> users) {
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -112,16 +136,37 @@ public class UsersFragment extends Fragment implements
     }
 
     @Override
-    public void onGetUsersFailure(String message) {
+    public void onGetAllUsersFailure(String message) {
         mSwipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
-        Toast.makeText(
-                getActivity(),
-                "Error: " + message,
-                Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Error: " + message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onGetChatUsersSuccess(List<User> users) {
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
+        mUserListingRecyclerAdapter = new UserListingRecyclerAdapter(users);
+        mRecyclerViewAllUserListing.setAdapter(mUserListingRecyclerAdapter);
+        mUserListingRecyclerAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onGetChatUsersFailure(String message) {
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
+        Toast.makeText(getActivity(), "Error: " + message, Toast.LENGTH_SHORT).show();
     }
 }

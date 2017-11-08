@@ -17,20 +17,17 @@ import android.widget.Toast;
 import com.inno.dabudabot.whyapp.R;
 import com.inno.dabudabot.whyapp.core.chat.ChatContract;
 import com.inno.dabudabot.whyapp.core.chat.ChatPresenter;
-import com.inno.dabudabot.whyapp.events.PushNotificationEvent;
-import com.inno.dabudabot.whyapp.models.Message;
 import com.inno.dabudabot.whyapp.ui.adapters.ChatRecyclerAdapter;
 import com.inno.dabudabot.whyapp.utils.Constants;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 
 
 
-public class ChatFragment
+public class MessagingFragment
         extends Fragment
         implements ChatContract.View, TextView.OnEditorActionListener {
     private RecyclerView mRecyclerViewChat;
@@ -42,14 +39,12 @@ public class ChatFragment
 
     private ChatPresenter mChatPresenter;
 
-    public static ChatFragment newInstance(String receiver,
-                                           String receiverUid,
-                                           String firebaseToken) {
+    public static MessagingFragment newInstance(String receiver,
+                                                String chatReceiverUid) {
         Bundle args = new Bundle();
         args.putString(Constants.ARG_RECEIVER, receiver);
-        args.putString(Constants.ARG_RECEIVER_UID, receiverUid);
-        args.putString(Constants.ARG_FIREBASE_TOKEN, firebaseToken);
-        ChatFragment fragment = new ChatFragment();
+        args.putString(Constants.ARG_CHAT_RECEIVER, chatReceiverUid);
+        MessagingFragment fragment = new MessagingFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -149,13 +144,5 @@ public class ChatFragment
     @Override
     public void onGetMessagesFailure(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Subscribe
-    public void onPushNotificationEvent(PushNotificationEvent pushNotificationEvent) {
-        if (mChatRecyclerAdapter == null || mChatRecyclerAdapter.getItemCount() == 0) {
-            mChatPresenter.getMessage(FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                    pushNotificationEvent.getUid());
-        }
     }
 }

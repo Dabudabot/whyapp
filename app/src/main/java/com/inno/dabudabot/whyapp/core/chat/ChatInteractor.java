@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 
 import com.inno.dabudabot.whyapp.fcm.FcmNotificationBuilder;
-import com.inno.dabudabot.whyapp.models.Message;
 import com.inno.dabudabot.whyapp.utils.Constants;
 import com.inno.dabudabot.whyapp.utils.SharedPrefUtil;
 import com.google.firebase.database.ChildEventListener;

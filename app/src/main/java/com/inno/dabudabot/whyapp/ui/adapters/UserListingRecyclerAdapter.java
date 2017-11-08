@@ -13,21 +13,20 @@ import java.util.List;
 
 
 
-public class UserListingRecyclerAdapter extends RecyclerView.Adapter<UserListingRecyclerAdapter.ViewHolder> {
+public class UserListingRecyclerAdapter
+        extends RecyclerView.Adapter<UserListingRecyclerAdapter.ViewHolder> {
     private List<User> mUsers;
 
     public UserListingRecyclerAdapter(List<User> users) {
         this.mUsers = users;
     }
 
-    public void add(User user) {
-        mUsers.add(user);
-        notifyItemInserted(mUsers.size() - 1);
-    }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_all_user_listing, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(
+                        R.layout.item_all_user_listing,
+                        parent,
+                        false);
         return new ViewHolder(view);
     }
 
@@ -35,10 +34,10 @@ public class UserListingRecyclerAdapter extends RecyclerView.Adapter<UserListing
     public void onBindViewHolder(ViewHolder holder, int position) {
         User user = mUsers.get(position);
 
-        if (user.getEmail() != null){
-            String alphabet = user.getEmail().substring(0, 1);
+        if (user.getName() != null){
+            String alphabet = user.getName().substring(0, 1);
 
-            holder.txtUsername.setText(user.getEmail());
+            holder.txtUsername.setText(user.getName());
             holder.txtUserAlphabet.setText(alphabet);
           }
     }
@@ -60,8 +59,10 @@ public class UserListingRecyclerAdapter extends RecyclerView.Adapter<UserListing
 
         ViewHolder(View itemView) {
             super(itemView);
-            txtUserAlphabet = (TextView) itemView.findViewById(R.id.text_view_user_alphabet);
-            txtUsername = (TextView) itemView.findViewById(R.id.text_view_username);
+            txtUserAlphabet =
+                    (TextView) itemView.findViewById(R.id.text_view_user_alphabet);
+            txtUsername =
+                    (TextView) itemView.findViewById(R.id.text_view_username);
         }
     }
 }

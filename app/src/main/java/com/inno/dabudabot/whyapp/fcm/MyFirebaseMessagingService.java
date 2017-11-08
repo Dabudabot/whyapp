@@ -12,7 +12,7 @@ import android.util.Log;
 import com.inno.dabudabot.whyapp.R;
 import com.inno.dabudabot.whyapp.WhyMainApp;
 import com.inno.dabudabot.whyapp.events.PushNotificationEvent;
-import com.inno.dabudabot.whyapp.ui.activities.ChatActivity;
+import com.inno.dabudabot.whyapp.ui.activities.MessagingActivity;
 import com.inno.dabudabot.whyapp.utils.Constants;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -70,7 +70,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                                   String receiver,
                                   String receiverUid,
                                   String firebaseToken) {
-        Intent intent = new Intent(this, ChatActivity.class);
+        Intent intent = new Intent(this, MessagingActivity.class);
         intent.putExtra(Constants.ARG_RECEIVER, receiver);
         intent.putExtra(Constants.ARG_RECEIVER_UID, receiverUid);
         intent.putExtra(Constants.ARG_FIREBASE_TOKEN, firebaseToken);

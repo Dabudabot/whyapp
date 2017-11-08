@@ -14,31 +14,26 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseUser;
 import com.inno.dabudabot.whyapp.R;
-import com.inno.dabudabot.whyapp.core.login.LoginContract;
-import com.inno.dabudabot.whyapp.core.login.LoginPresenter;
-import com.inno.dabudabot.whyapp.core.registration.RegisterContract;
-import com.inno.dabudabot.whyapp.core.registration.RegisterPresenter;
-import com.inno.dabudabot.whyapp.core.users.add.AddUserContract;
-import com.inno.dabudabot.whyapp.core.users.add.AddUserPresenter;
+import com.inno.dabudabot.whyapp.controller.LoginController;
+import com.inno.dabudabot.whyapp.listener.LoginView;
+import com.inno.dabudabot.whyapp.controller.RegisterController;
+import com.inno.dabudabot.whyapp.listener.RegisterView;
 import com.inno.dabudabot.whyapp.ui.activities.ChatUsersListingActivity;
-import com.inno.dabudabot.whyapp.ui.activities.UserListingActivity;
 
 /**
- * Created by Daulet on 10/21/17.
+ * Created by Group-6 on 10/21/17.
  * Main content of login\register page
  */
 public class LoginFragment
         extends Fragment
         implements View.OnClickListener,
-        LoginContract.View,
-        RegisterContract.View,
-        AddUserContract.View {
+        LoginView,
+        RegisterView {
+
     private static final String TAG = LoginFragment.class.getSimpleName();
-    private LoginPresenter mLoginPresenter;
-    private RegisterPresenter mRegisterPresenter;
-    private AddUserPresenter mAddUserPresenter;
+    private LoginController loginController;
+    private RegisterController registerController;
 
     private EditText mETxtUsername;
     private Button mBtnLogin;
@@ -78,9 +73,8 @@ public class LoginFragment
     }
 
     private void init() {
-        mLoginPresenter = new LoginPresenter(this);
-        mRegisterPresenter = new RegisterPresenter(this);
-        mAddUserPresenter = new AddUserPresenter(this);
+        loginController = new LoginController(this);
+        registerController = new RegisterController(this);
 
         mProgressDialog = new ProgressDialog(getActivity());
         mProgressDialog.setTitle(getString(R.string.loading));
@@ -102,38 +96,39 @@ public class LoginFragment
     }
 
     private void onLogin(View view) {
-        pass = generatePass();
-        username = mETxtUsername.getText().toString() + "@test.com";
-
-        mLoginPresenter.login(getActivity(), username, pass);
-        mProgressDialog.show();
-    }
-
-    private String generatePass() {
-        return Settings.Secure.getString(
+        pass = Settings.Secure.getString(
                 getContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
+        username = mETxtUsername.getText().toString() + "@test.com";
+
+        loginController.performFirebaseLogin(getActivity(), username, pass);
+        mProgressDialog.show();
     }
 
     @Override
     public void onLoginSuccess(String message) {
         mProgressDialog.dismiss();
-        Toast.makeText(getActivity(), "Logged in successfully", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(),
+                "Logged in successfully",
+                Toast.LENGTH_SHORT).show();
         ChatUsersListingActivity.startActivity(getActivity(),
                 Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
     }
 
     @Override
     public void onLoginFailure(String message) {
-        Toast.makeText(getActivity(), "Registration: " + message, Toast.LENGTH_SHORT).show();
-        mRegisterPresenter.register(getActivity(), username, pass);
+        Toast.makeText(getActivity(),
+                "Registration: " + message,
+                Toast.LENGTH_SHORT).show();
+        registerController.performFirebaseRegistration(getActivity(), username, pass);
     }
 
     @Override
-    public void onRegistrationSuccess(FirebaseUser firebaseUser) {
-        mProgressDialog.setMessage(getString(R.string.adding_user_to_db));
-        Toast.makeText(getActivity(), "Registration Successful!", Toast.LENGTH_SHORT).show();
-        mAddUserPresenter.addUser(getActivity().getApplicationContext(), firebaseUser);
+    public void onRegistrationSuccess(String message) {
+        mProgressDialog.dismiss();
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        ChatUsersListingActivity.startActivity(getActivity(),
+                Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
     }
 
     @Override
@@ -143,19 +138,5 @@ public class LoginFragment
         Log.e(TAG, "onRegistrationFailure: " + message);
         Toast.makeText(getActivity(),
                 "Registration failed!+\n" + message, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onAddUserSuccess(String message) {
-        mProgressDialog.dismiss();
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-        UserListingActivity.startActivity(getActivity(),
-                Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-    }
-
-    @Override
-    public void onAddUserFailure(String message) {
-        mProgressDialog.dismiss();
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 }

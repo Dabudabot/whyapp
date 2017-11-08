@@ -10,8 +10,10 @@ import android.support.v7.widget.Toolbar;
 import com.inno.dabudabot.whyapp.R;
 import com.inno.dabudabot.whyapp.ui.fragments.LoginFragment;
 
+import WhyApp_Model_Group_6_sequential.machine3;
+
 /**
- * Created by Daulet on 10/21/17.
+ * Created by Group-6 on 10/21/17.
  * Login and registration procedure
  */
 public class LoginActivity extends AppCompatActivity {

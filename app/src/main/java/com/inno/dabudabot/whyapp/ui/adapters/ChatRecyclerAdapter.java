@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.inno.dabudabot.whyapp.R;
-import com.inno.dabudabot.whyapp.models.Message;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;

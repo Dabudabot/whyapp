@@ -1,21 +1,23 @@
 package com.inno.dabudabot.whyapp.models;
 
 /**
- * Created by Daulet on 10/21/17.
+ * Created by Group-6 on 10/21/17.
  */
 public class User {
     private String uid;
-    private String email;
+    private String name;
     private String firebaseToken;
+    private Integer id;
 
     public User(){
 
     }
 
-    public User(String uid, String email, String firebaseToken){
+    public User(String uid, String name, String firebaseToken, Integer id){
         this.uid = uid;
-        this.email = email;
+        this.name = name;
         this.firebaseToken = firebaseToken;
+        this.id = id;
     }
 
     public String getUid() {
@@ -26,15 +28,12 @@ public class User {
         this.uid = uid;
     }
 
-    public String getEmail() {
-        if (email != null && email.contains("@test.com")) {
-            return email.substring(0, email.indexOf("@test.com"));
-        }
-        return email;
+    public String getName() {
+        return name;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getFirebaseToken() {
@@ -43,5 +42,13 @@ public class User {
 
     public void setFirebaseToken(String firebaseToken) {
         this.firebaseToken = firebaseToken;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

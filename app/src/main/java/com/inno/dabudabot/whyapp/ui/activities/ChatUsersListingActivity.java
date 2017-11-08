@@ -18,23 +18,21 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.inno.dabudabot.whyapp.R;
+import com.inno.dabudabot.whyapp.controller.LogoutController;
 import com.inno.dabudabot.whyapp.core.logout.LogoutContract;
 import com.inno.dabudabot.whyapp.core.logout.LogoutPresenter;
 import com.inno.dabudabot.whyapp.ui.adapters.ChatUsersListingPagerAdapter;
 
 /**
- * Created by dabudabot on 04.11.17.
+ * Created by Group-6 on 04.11.17.
  */
 
-public class ChatUsersListingActivity
-        extends AppCompatActivity
-        implements LogoutContract.View {
+public class ChatUsersListingActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private TabLayout mTabLayoutUserListing;
     private ViewPager mViewPagerUserListing;
     private FloatingActionButton fab;
-
-    private LogoutPresenter mLogoutPresenter;
+    private LogoutController logout;
 
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, ChatUsersListingActivity.class);
@@ -86,7 +84,7 @@ public class ChatUsersListingActivity
         // attach tab layout with view pager
         mTabLayoutUserListing.setupWithViewPager(mViewPagerUserListing);
 
-        mLogoutPresenter = new LogoutPresenter(this);
+        logout = new LogoutController();
     }
 
     @Override
@@ -99,47 +97,9 @@ public class ChatUsersListingActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_logout:
-                logout();
+                logout.performFirebaseLogout(this);
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void logout() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setTitle(R.string.logout)
-                .setMessage(R.string.are_you_sure)
-                .setPositiveButton(R.string.logout, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        mLogoutPresenter.logout();
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-
-        AlertDialog alert = builder.create();
-        alert.show();
-        Button nbutton = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
-        nbutton.setTextColor(getResources().getColor(R.color.grey_900));
-        Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
-        pbutton.setTextColor(getResources().getColor(R.color.grey_900));
-    }
-
-    @Override
-    public void onLogoutSuccess(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-        LoginActivity.startIntent(this,
-                Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-    }
-
-    @Override
-    public void onLogoutFailure(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

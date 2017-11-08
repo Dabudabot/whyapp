@@ -2,7 +2,6 @@ package com.inno.dabudabot.whyapp.core.users.getall;
 
 import android.text.TextUtils;
 
-import com.inno.dabudabot.whyapp.models.Message;
 import com.inno.dabudabot.whyapp.models.User;
 import com.inno.dabudabot.whyapp.utils.Constants;
 import com.google.firebase.auth.FirebaseAuth;

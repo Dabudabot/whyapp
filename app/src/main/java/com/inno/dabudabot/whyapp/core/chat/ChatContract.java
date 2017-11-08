@@ -2,9 +2,6 @@ package com.inno.dabudabot.whyapp.core.chat;
 
 import android.content.Context;
 
-import com.inno.dabudabot.whyapp.models.Message;
-
-
 
 public interface ChatContract {
     interface View {
