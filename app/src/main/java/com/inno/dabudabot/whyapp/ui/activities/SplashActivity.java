@@ -7,10 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import com.inno.dabudabot.whyapp.R;
 import com.google.firebase.auth.FirebaseAuth;
 
-import WhyApp_Model_Group_6_sequential.machine3;
-
 /**
  * Created by Group-6 on 10/21/17.
+ *
+ * It is possible to say that work starts here
+ *
  * Checking is user logged in or not
  * if logged in redirect the user to user listing activity
  * if not redirect user to login activity
@@ -33,9 +34,11 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                    ChatUsersListingActivity.startActivity(SplashActivity.this);
+                    ChatsListingActivity.startActivity(
+                            SplashActivity.this);
                 } else {
-                    LoginActivity.startIntent(SplashActivity.this);
+                    LoginActivity.startIntent(
+                            SplashActivity.this);
                 }
                 finish();
             }

@@ -7,12 +7,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.inno.dabudabot.whyapp.R;
-import com.inno.dabudabot.whyapp.models.User;
+import group_6_model_sequential.User;
 
 import java.util.List;
 
 
-
+/**
+ * Created by Group-6 on 09.11.17.
+ * Manages users list on view
+ */
 public class UserListingRecyclerAdapter
         extends RecyclerView.Adapter<UserListingRecyclerAdapter.ViewHolder> {
     private List<User> mUsers;
@@ -24,7 +27,7 @@ public class UserListingRecyclerAdapter
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.item_all_user_listing,
+                        R.layout.item_listing,
                         parent,
                         false);
         return new ViewHolder(view);

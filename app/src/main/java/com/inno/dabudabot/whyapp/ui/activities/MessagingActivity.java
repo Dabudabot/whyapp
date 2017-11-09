@@ -10,10 +10,10 @@ import android.support.v7.widget.Toolbar;
 import com.inno.dabudabot.whyapp.WhyMainApp;
 import com.inno.dabudabot.whyapp.R;
 import com.inno.dabudabot.whyapp.ui.fragments.MessagingFragment;
-import com.inno.dabudabot.whyapp.utils.Constants;
+import Util.Constants;
 
 /**
- * Created by Daulet on 10/21/17.
+ * Created by Group-6 on 10/21/17.
  * Chatting screen activity
  */
 public class MessagingActivity extends AppCompatActivity {
@@ -21,16 +21,14 @@ public class MessagingActivity extends AppCompatActivity {
 
     public static void startActivity(Context context, Integer userId) {
         Intent intent = new Intent(context, MessagingActivity.class);
-        intent.putExtra(Constants.ARG_RECEIVER, receiver);
-        intent.putExtra(Constants.ARG_RECEIVER_UID, receiverUid);
-        intent.putExtra(Constants.ARG_FIREBASE_TOKEN, firebaseToken);
+        intent.putExtra(Constants.ARG_ID, userId);
         context.startActivity(intent);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
+        setContentView(R.layout.activity_messaging);
         init();
     }
 
@@ -47,9 +45,7 @@ public class MessagingActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout_content_chat,
                 MessagingFragment.newInstance(
-                        getIntent().getExtras().getString(Constants.ARG_RECEIVER),
-                        getIntent().getExtras().getString(Constants.ARG_RECEIVER_UID),
-                        getIntent().getExtras().getString(Constants.ARG_FIREBASE_TOKEN)),
+                        getIntent().getExtras().getInt(Constants.ARG_ID)),
                 MessagingFragment.class.getSimpleName());
         fragmentTransaction.commit();
     }

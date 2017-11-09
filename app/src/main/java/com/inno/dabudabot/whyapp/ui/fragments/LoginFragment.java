@@ -15,15 +15,19 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.inno.dabudabot.whyapp.R;
-import com.inno.dabudabot.whyapp.controller.LoginController;
+import com.inno.dabudabot.whyapp.controller.auth.LoginController;
 import com.inno.dabudabot.whyapp.listener.LoginView;
-import com.inno.dabudabot.whyapp.controller.RegisterController;
+import com.inno.dabudabot.whyapp.controller.auth.RegisterController;
 import com.inno.dabudabot.whyapp.listener.RegisterView;
-import com.inno.dabudabot.whyapp.ui.activities.ChatUsersListingActivity;
+import com.inno.dabudabot.whyapp.ui.activities.ChatsListingActivity;
 
 /**
  * Created by Group-6 on 10/21/17.
  * Main content of login\register page
+ *
+ * User tries to login,
+ * if user do not exist or device is wrong
+ * registration starts and new user with this data created
  */
 public class LoginFragment
         extends Fragment
@@ -56,7 +60,10 @@ public class LoginFragment
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View fragmentView =
-                inflater.inflate(R.layout.fragment_login, container, false);
+                inflater.inflate(
+                        R.layout.fragment_login,
+                        container,
+                        false);
         bindViews(fragmentView);
         return fragmentView;
     }
@@ -90,12 +97,12 @@ public class LoginFragment
 
         switch (viewId) {
             case R.id.button_login:
-                onLogin(view);
+                onLogin();
                 break;
         }
     }
 
-    private void onLogin(View view) {
+    private void onLogin() {
         pass = Settings.Secure.getString(
                 getContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
@@ -111,7 +118,7 @@ public class LoginFragment
         Toast.makeText(getActivity(),
                 "Logged in successfully",
                 Toast.LENGTH_SHORT).show();
-        ChatUsersListingActivity.startActivity(getActivity(),
+        ChatsListingActivity.startActivity(getActivity(),
                 Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
     }
 
@@ -127,7 +134,7 @@ public class LoginFragment
     public void onRegistrationSuccess(String message) {
         mProgressDialog.dismiss();
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-        ChatUsersListingActivity.startActivity(getActivity(),
+        ChatsListingActivity.startActivity(getActivity(),
                 Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
     }
 

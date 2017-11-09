@@ -1,5 +1,6 @@
 package com.inno.dabudabot.whyapp.ui.fragments;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,38 +13,36 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.inno.dabudabot.whyapp.R;
-import com.inno.dabudabot.whyapp.core.chat.ChatContract;
-import com.inno.dabudabot.whyapp.core.chat.ChatPresenter;
-import com.inno.dabudabot.whyapp.ui.adapters.ChatRecyclerAdapter;
-import com.inno.dabudabot.whyapp.utils.Constants;
-import com.google.firebase.auth.FirebaseAuth;
+import com.inno.dabudabot.whyapp.controller.auth.GenerateIdController;
+import com.inno.dabudabot.whyapp.listener.GenerateIdView;
+import group_6_model_sequential.Content;
+import com.inno.dabudabot.whyapp.ui.adapters.MessagingRecyclerAdapter;
+import Util.Constants;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
 
-
-
+/**
+ * Created by Group-6 on 09.11.17.
+ * Messaging fragment
+ */
 public class MessagingFragment
         extends Fragment
-        implements ChatContract.View, TextView.OnEditorActionListener {
+        implements GenerateIdView,
+        TextView.OnEditorActionListener {
+
     private RecyclerView mRecyclerViewChat;
     private EditText mETxtMessage;
-
     private ProgressDialog mProgressDialog;
+    private MessagingRecyclerAdapter mMessagingRecyclerAdapter;
 
-    private ChatRecyclerAdapter mChatRecyclerAdapter;
+    private GenerateIdController generateIdController;
 
-    private ChatPresenter mChatPresenter;
-
-    public static MessagingFragment newInstance(String receiver,
-                                                String chatReceiverUid) {
+    public static MessagingFragment newInstance(Integer id) {
         Bundle args = new Bundle();
-        args.putString(Constants.ARG_RECEIVER, receiver);
-        args.putString(Constants.ARG_CHAT_RECEIVER, chatReceiverUid);
+        args.putInt(Constants.ARG_ID, id);
         MessagingFragment fragment = new MessagingFragment();
         fragment.setArguments(args);
         return fragment;
@@ -63,8 +62,13 @@ public class MessagingFragment
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View fragmentView = inflater.inflate(R.layout.fragment_chat, container, false);
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View fragmentView = inflater.inflate(
+                R.layout.fragment_messaging,
+                container,
+                false);
         bindViews(fragmentView);
         return fragmentView;
     }
@@ -87,10 +91,7 @@ public class MessagingFragment
         mProgressDialog.setIndeterminate(true);
 
         mETxtMessage.setOnEditorActionListener(this);
-
-        mChatPresenter = new ChatPresenter(this);
-        mChatPresenter.getMessage(FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                getArguments().getString(Constants.ARG_RECEIVER_UID));
+        generateIdController = new GenerateIdController(this);
     }
 
     @Override
@@ -104,45 +105,29 @@ public class MessagingFragment
 
     private void sendMessage() {
         String message = mETxtMessage.getText().toString();
-        String receiver = getArguments().getString(Constants.ARG_RECEIVER);
-        String receiverUid = getArguments().getString(Constants.ARG_RECEIVER_UID);
-        String sender = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        String senderUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        String receiverFirebaseToken = getArguments().getString(Constants.ARG_FIREBASE_TOKEN);
-        Message chatMessage = new Message(sender,
-                receiver,
-                senderUid,
-                receiverUid,
+        Integer id = getArguments().getInt(Constants.ARG_ID);
+        generateIdController.checkInDatabase(
+                getActivity(),
                 message,
-                System.currentTimeMillis());
-        mChatPresenter.sendMessage(getActivity().getApplicationContext(),
-                chatMessage,
-                receiverFirebaseToken);
+                Constants.ARG_CONTENT);
     }
 
     @Override
-    public void onSendMessageSuccess() {
-        mETxtMessage.setText("");
-        Toast.makeText(getActivity(), "Message sent", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onSendMessageFailure(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onGetMessagesSuccess(Message message) {
-        if (mChatRecyclerAdapter == null) {
-            mChatRecyclerAdapter = new ChatRecyclerAdapter(new ArrayList<Message>());
-            mRecyclerViewChat.setAdapter(mChatRecyclerAdapter);
+    public void onGenerateSuccess(Activity activity,
+                                  Object target,
+                                  Integer id) {
+        if (target instanceof String) {
+            Content chatMessage = new Content(id,
+                    (String) target,
+                    System.currentTimeMillis());
+            //sendContentController.send(chatMessage);
+        } else {
+            onGenerateFailure("BAD TYPE");
         }
-        mChatRecyclerAdapter.add(message);
-        mRecyclerViewChat.smoothScrollToPosition(mChatRecyclerAdapter.getItemCount() - 1);
     }
 
     @Override
-    public void onGetMessagesFailure(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+    public void onGenerateFailure(String message) {
+
     }
 }

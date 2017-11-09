@@ -507,6 +507,32 @@ public class BSet<E> extends TreeSet<E> implements Comparable<E> {
 
 	/*@ requires true;
 	 	assignable \nothing;
+	 	ensures (\forall K key; \result.has(key) <==> this.isDefinedAt(key));da
+ */
+	public <KK,VV> BSet<KK> domain() {
+		BSet<KK> res = new BSet<KK>();
+		for(E pair : this) {
+			Pair<KK,VV> p = (Pair<KK,VV>) pair;
+			res.add(p.fst());
+		}
+		return res;
+	}
+
+	/*@ requires true;
+		assignable \nothing;
+		ensures (\forall V value; \result.has(value) <==> (\exists K key; this.has(key, value)));
+	*/
+	public <KK,VV> BSet<VV> range() {
+		BSet<VV> res = new BSet<VV>();
+		for(E pair : this) {
+			Pair<KK,VV> p = (Pair<KK,VV>) pair;
+			res.add(p.snd());
+		}
+		return res;
+	}
+
+	/*@ requires true;
+	 	assignable \nothing;
 	 	ensures \result.equals(last());
 	 */
 	public /*@ pure */ E min() {

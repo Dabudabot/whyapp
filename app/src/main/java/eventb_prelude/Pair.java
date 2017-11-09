@@ -4,9 +4,10 @@ package eventb_prelude;
 /** representation of a pair of elements in Java
  * @author Tim Wahls & Nestor Catano & Victor Rivera
  */
+import java.io.Serializable;
 
 
-public class Pair<K,V> implements Comparable<Pair<K,V>> {
+public class Pair<K,V> implements Comparable<Pair<K,V>>, Serializable {
 	/*@ spec_public */ private final K fst;
 	/*@ spec_public */ private final V snd;
 	
