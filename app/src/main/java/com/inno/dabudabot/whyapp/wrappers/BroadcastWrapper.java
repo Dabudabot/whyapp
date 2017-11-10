@@ -1,4 +1,4 @@
-package whyapp.extensions;
+package com.inno.dabudabot.whyapp.wrappers;
 
 import java.util.Iterator;
 

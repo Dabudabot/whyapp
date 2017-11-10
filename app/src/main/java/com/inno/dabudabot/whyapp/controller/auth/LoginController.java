@@ -83,7 +83,6 @@ public class LoginController {
                     if (TextUtils.equals(
                             user.getUid(),
                             uid)) {
-                        Settings.getInstance().setCurrentId(user.getId());
                         FirebaseDatabase.getInstance()
                                 .getReference()
                                 .child(Constants.NODE_USERS)

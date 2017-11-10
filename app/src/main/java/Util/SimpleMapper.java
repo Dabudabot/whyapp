@@ -388,6 +388,20 @@ public class SimpleMapper {
         merged.set_chatcontentseq(mergeBRelationRelationRelation(one.get_chatcontentseq(), chatcontentseq));
         merged.set_readChatContentSeq(mergeBRelation(one.get_readChatContentSeq(), readChatcontentSeqs));
 
+        BSet<Integer> users = new BSet<>();
+        users.addAll(one.get_user());
+        for (MachineWrapper machineWrapper : machines) {
+            users.addAll(machineWrapper.get_user());
+        }
+
+        BSet<Integer> content = new BSet<>();
+        content.addAll(one.get_content());
+        for (MachineWrapper machineWrapper : machines) {
+            content.addAll(machineWrapper.get_content());
+        }
+
+        merged.set_content(content);
+        merged.set_user(users);
         //CRAP ENDS
         return merged;
     }

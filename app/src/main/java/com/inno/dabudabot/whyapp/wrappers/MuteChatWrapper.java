@@ -1,4 +1,4 @@
-package whyapp.extensions;
+package com.inno.dabudabot.whyapp.wrappers;
 
 import group_6_model_sequential.MachineWrapper;
 import group_6_model_sequential.machine3;

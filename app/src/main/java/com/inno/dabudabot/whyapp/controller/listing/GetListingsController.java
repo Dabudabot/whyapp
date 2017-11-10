@@ -54,14 +54,14 @@ public class GetListingsController {
         for (MachineWrapper machineWrapper :
                 Settings.getInstance().getMachines().values()) {
             for (Pair<Integer, Integer> chat : machineWrapper.get_chat()) {
-                if (chat.fst().equals(Settings.getInstance().getCurrentId())) {
+                if (chat.fst().equals(Settings.getInstance().getCurrentUser().getId())) {
                     for (User user : Settings.getInstance().getUsers().values()) {
                         if (user.getId().equals(chat.snd())) {
                             users.add(user);
                         }
                     }
                 }
-                if (chat.snd().equals(Settings.getInstance().getCurrentId())) {
+                if (chat.snd().equals(Settings.getInstance().getCurrentUser().getId())) {
                     for (User user : Settings.getInstance().getUsers().values()) {
                         if (user.getId().equals(chat.fst())) {
                             users.add(user);

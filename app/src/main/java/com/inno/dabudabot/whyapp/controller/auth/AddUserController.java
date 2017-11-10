@@ -35,9 +35,8 @@ public class AddUserController {
 
         final User user = new User(firebaseUser.getUid(),
                 firebaseUser.getEmail(),
-                new SharedPrefUtil(context).getString(Constants.NODE_FIREBASE_TOKEN),
+                new SharedPrefUtil(context).getString(Constants.NODE_FIREBASE_TOKEN),//it returns null
                 id);
-        Settings.getInstance().setCurrentId(id);
 
         FirebaseDatabase.getInstance()
                 .getReference()

@@ -76,7 +76,7 @@ public class ChatsListingFragment extends Fragment implements
 
     @Override
     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-        selectChatWrapper.run_select_chat(Settings.getInstance().getCurrentId(),
+        selectChatWrapper.run_select_chat(Settings.getInstance().getCurrentUser().getId(),
                 mUserListingRecyclerAdapter.getUser(position).getId());
     }
 

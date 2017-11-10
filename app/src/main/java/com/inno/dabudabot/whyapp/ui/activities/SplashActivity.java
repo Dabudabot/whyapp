@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.inno.dabudabot.whyapp.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.inno.dabudabot.whyapp.controller.sync.InitListeners;
 
 /**
  * Created by Group-6 on 10/21/17.
@@ -34,6 +35,8 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                    InitListeners initListeners = new InitListeners();
+                    initListeners.init();
                     ChatsListingActivity.startActivity(
                             SplashActivity.this);
                 } else {

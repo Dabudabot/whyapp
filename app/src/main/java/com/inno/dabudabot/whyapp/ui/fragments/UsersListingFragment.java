@@ -80,7 +80,7 @@ public class UsersListingFragment extends Fragment implements
     @Override
     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
         createChatSessionWrapper.run_create_chat_session(
-                Settings.getInstance().getCurrentId(),
+                Settings.getInstance().getCurrentUser().getId(),
                 mUserListingRecyclerAdapter.getUser(position).getId()
         );
     }

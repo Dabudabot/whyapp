@@ -29,7 +29,7 @@ public class MessagingRecyclerAdapter
     public MessagingRecyclerAdapter(List<Content> messages,
                                     Integer opponentId) {
         mMessages = messages;
-        currentId = Settings.getInstance().getCurrentId();
+        currentId = Settings.getInstance().getCurrentUser().getId();
         this.opponentId = opponentId;
     }
 

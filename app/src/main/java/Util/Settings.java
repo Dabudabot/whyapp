@@ -20,7 +20,7 @@ import java.util.Map;
 public class Settings {
 
     private static volatile Settings instance;
-    private Integer currentId;
+    private User currentUser;
     private Map<Integer, Content> contents;
     private Map<Integer, User> users;
     private MachineWrapper myMachine;
@@ -53,14 +53,6 @@ public class Settings {
         machines = new HashMap<>();
         machineChangeListeners = new HashMap<>();
         idGen = 0;
-    }
-
-    public Integer getCurrentId() {
-        return currentId;
-    }
-
-    public void setCurrentId(Integer currentId) {
-        this.currentId = currentId;
     }
 
     public Map<Integer, Content> getContents() {
@@ -141,14 +133,26 @@ public class Settings {
 
     public void setMyMachine(MachineWrapper myMachine) {
         this.myMachine = myMachine;
+    }
+
+    public void merge() {
         this.mergedMachine = SimpleMapper.merge(myMachine, machines.values());
     }
 
     public MachineWrapper getMergedMachine() {
+        merge();
         return mergedMachine;
     }
 
     public void setMergedMachine(MachineWrapper mergedMachine) {
         this.mergedMachine = mergedMachine;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
     }
 }

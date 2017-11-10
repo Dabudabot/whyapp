@@ -1,6 +1,5 @@
 package com.inno.dabudabot.whyapp.ui.fragments;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,15 +12,16 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.inno.dabudabot.whyapp.R;
-import com.inno.dabudabot.whyapp.controller.auth.GenerateIdController;
-import com.inno.dabudabot.whyapp.listener.GenerateIdView;
-import group_6_model_sequential.Content;
+import com.inno.dabudabot.whyapp.controller.SendContentController;
+
+import Util.Settings;
+
+import com.inno.dabudabot.whyapp.listener.SendContentView;
 import com.inno.dabudabot.whyapp.ui.adapters.MessagingRecyclerAdapter;
 import Util.Constants;
-
-import org.greenrobot.eventbus.EventBus;
 
 
 /**
@@ -30,7 +30,7 @@ import org.greenrobot.eventbus.EventBus;
  */
 public class MessagingFragment
         extends Fragment
-        implements GenerateIdView,
+        implements SendContentView,
         TextView.OnEditorActionListener {
 
     private RecyclerView mRecyclerViewChat;
@@ -38,7 +38,7 @@ public class MessagingFragment
     private ProgressDialog mProgressDialog;
     private MessagingRecyclerAdapter mMessagingRecyclerAdapter;
 
-    private GenerateIdController generateIdController;
+    private SendContentController sendContentController;
 
     public static MessagingFragment newInstance(Integer id) {
         Bundle args = new Bundle();
@@ -48,17 +48,17 @@ public class MessagingFragment
         return fragment;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        EventBus.getDefault().register(this);
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        EventBus.getDefault().unregister(this);
+//    }
 
     @Nullable
     @Override
@@ -91,7 +91,7 @@ public class MessagingFragment
         mProgressDialog.setIndeterminate(true);
 
         mETxtMessage.setOnEditorActionListener(this);
-        generateIdController = new GenerateIdController(this);
+        sendContentController = new SendContentController(this);
 
         //TODO 7 чтение сообщений в ресайклер
     }
@@ -107,31 +107,21 @@ public class MessagingFragment
 
     private void sendMessage() {
         String message = mETxtMessage.getText().toString();
-        Integer id = getArguments().getInt(Constants.NODE_ID);
-        generateIdController.checkInDatabase(
-                getActivity(),
-                message,
-                Constants.NODE_CONTENTS);
+        sendContentController.send(message,
+                Settings.getInstance().getCurrentUser().getId(),
+                getArguments().getInt(Constants.NODE_ID),
+                getActivity());
     }
 
     @Override
-    public void onGenerateSuccess(Activity activity,
-                                  Object target,
-                                  Integer id) {
-        if (target instanceof String) {
-            Content chatMessage = new Content(id,
-                    (String) target,
-                    System.currentTimeMillis());
-            //sendContentController.send(chatMessage);
-            //TODO 6 SEND MESSAGE
-        } else {
-            onGenerateFailure("BAD TYPE");
-        }
+    public void sendSuccess() {
+        mETxtMessage.setText("");
+        Toast.makeText(getActivity(), "Message sent", Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onGenerateFailure(String message) {
-
+    public void sendFailure(String message) {
+        System.err.println("BAD");
     }
 
     //TODO 8 SELECT MESSAGE DROP MENU - FORWARD\BROADCAST and DELETE
