@@ -1,4 +1,4 @@
-package com.inno.dabudabot.whyapp.wrappers;
+package whyapp.extensions;
 
 import group_6_model_sequential.MachineWrapper;
 import group_6_model_sequential.chatting;
@@ -19,13 +19,19 @@ public class ChattingWrapper extends chatting {
 	
 	@Override
 	public void run_chatting(Integer ch_c, Integer ch_u1, Integer ch_u2){
-        BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>> 
-                                chatcontent_tmp = machineWrapper.get_chatcontent();
-        
         if(guard_chatting(ch_c,ch_u1,ch_u2)) {
-            super.run_chatting(ch_c, ch_u1, ch_u2);
+            BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>> 
+                                chatcontent_tmp = machineWrapper.get_chatcontent();
             
-            machineWrapper.set_chatcontent(modifyChatcontent(ch_u1, ch_u2, ch_c, chatcontent_tmp));
+            Integer contentsize_tmp = machineWrapper.get_contentsize();
+            BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>>
+                                chatcontentseq_tmp = machineWrapper.get_chatcontentseq();
+            
+            super.run_chatting(ch_c, ch_u1, ch_u2);
+            machineWrapper.set_chatcontent(
+                    modifyChatcontent(ch_u1, ch_u2, ch_c, chatcontent_tmp));
+            
+            machineWrapper.set_chatcontentseq((chatcontentseq_tmp.override(new BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>>(new Pair<Integer,BRelation<Integer,BRelation<Integer,Integer>>>(new Integer(contentsize_tmp + 1),new BRelation<Integer,BRelation<Integer,Integer>>(new Pair<Integer,BRelation<Integer,Integer>>(ch_c,(BRelation.cross(new BSet(ch_u1),new BSet(ch_u2)).union(BRelation.cross(new BSet(ch_u2),new BSet(ch_u1)))))))))));
         }
 	}
 	
@@ -48,9 +54,7 @@ public class ChattingWrapper extends chatting {
         BRelation<Integer, BRelation<Integer, Integer>> content_new = 
                 new BRelation<Integer, BRelation<Integer, Integer>>();
         
-        if (chatcontent_tmp.domain().has(u1)) {
-            System.out.println("u1 is in chc");
-            
+        if (chatcontent_tmp.domain().has(u1)) {            
             BRelation<Integer, BRelation<Integer, Integer>> content_old =
                     chatcontent_tmp.elementImage(u1).iterator().next();
             Iterator<Integer> contentIter = content_old.domain().iterator();
@@ -67,14 +71,8 @@ public class ChattingWrapper extends chatting {
         chats_new.add(new Pair<Integer, Integer>(u1, u2));
         chats_new.add(new Pair<Integer, Integer>(u2, u1));
         content_new.add(new Pair<Integer, BRelation<Integer,Integer>>(new_c, chats_new));
-        
-        System.out.println("content_new: " + content_new);
-        
         chc_new.add(u1, content_new);
         
-        System.out.println("chc_new: " + chc_new);
-        
-        chatcontent_tmp.override(chc_new);
-        return chatcontent_tmp;
+        return chatcontent_tmp.override(chc_new);
     }
 }

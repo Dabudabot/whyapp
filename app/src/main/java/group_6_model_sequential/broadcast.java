@@ -47,10 +47,10 @@ public class broadcast{
 			machine.set_chatcontent(null); // Set Comprehension: feature not supported by EventB2Java
 			machine.set_inactive((inactive_tmp.union((BRelation.cross(b_ul,new BSet<Integer>(b_u)).union(BRelation.cross(new BSet<Integer>(b_u),b_ul))).difference(machine.get_active()))));
 			machine.set_toread((toread_tmp.union(BRelation.cross(b_ul,new BSet<Integer>(b_u)).difference(machine.get_active()))));
-		//!	machine.set_toreadcon((toreadcon_tmp.override(new BRelation<Integer,BSet<Integer>>(new Pair<Integer,BSet<Integer>>(b_c,BRelation.cross(b_ul,new BSet<Integer>(b_u)).difference(machine.get_active()))))));
+		//	machine.set_toreadcon((toreadcon_tmp.override(new BRelation<Integer,BSet<Integer>>(new Pair<Integer,BSet<Integer>>(b_c,BRelation.cross(b_ul,new BSet<Integer>(b_u)).difference(machine.get_active()))))));
 			machine.set_owner((owner_tmp.union(new BRelation<Integer,Integer>(new Pair<Integer,Integer>(b_c,b_u)))));
 			machine.set_contentsize(new Integer(contentsize_tmp + 1));
-		//!	machine.set_chatcontentseq((chatcontentseq_tmp.override(new BRelation<Integer,BRelation<Integer,BSet<Integer>>>(new Pair<Integer,BRelation<Integer,BSet<Integer>>>(new Integer(contentsize_tmp + 1),new BRelation<Integer,BSet<Integer>>(new Pair<Integer,BSet<Integer>>(b_c,(BRelation.cross(new BSet<Integer>(b_u),b_ul).union(BRelation.cross(b_ul,new BSet<Integer>(b_u)))))))))));
+		//	machine.set_chatcontentseq((chatcontentseq_tmp.override(new BRelation<Integer,BRelation<Integer,BSet<Integer>>>(new Pair<Integer,BRelation<Integer,BSet<Integer>>>(new Integer(contentsize_tmp + 1),new BRelation<Integer,BSet<Integer>>(new Pair<Integer,BSet<Integer>>(b_c,(BRelation.cross(new BSet<Integer>(b_u),b_ul).union(BRelation.cross(b_ul,new BSet<Integer>(b_u)))))))))));
 
 			System.out.println("broadcast executed b_c: " + b_c + " b_u: " + b_u + " b_ul: " + b_ul + " ");
 		}

@@ -47,10 +47,10 @@ public class forward{
 			machine.set_chatcontent(null); // Set Comprehension: feature not supported by EventB2Java
 			machine.set_inactive((inactive_tmp.union(BRelation.cross(f_ul,new BSet<Integer>(f_u)).difference(machine.get_active()))));
 			machine.set_toread((toread_tmp.union(BRelation.cross(f_ul,new BSet<Integer>(f_u)).difference(machine.get_active()))));
-		//!	machine.set_toreadcon((toreadcon_tmp.override(new BRelation<Integer,BSet<Integer>>(new Pair<Integer,BSet<Integer>>(f_c,BRelation.cross(f_ul,new BSet<Integer>(f_u)).difference(machine.get_active()))))));
+		//	machine.set_toreadcon((toreadcon_tmp.override(new BRelation<Integer,BSet<Integer>>(new Pair<Integer,BSet<Integer>>(f_c,BRelation.cross(f_ul,new BSet<Integer>(f_u)).difference(machine.get_active()))))));
 			machine.set_owner((owner_tmp.union(new BRelation<Integer,Integer>(new Pair<Integer,Integer>(f_c,f_u)))));
 			machine.set_contentsize(new Integer(contentsize_tmp + 1));
-		//!	machine.set_chatcontentseq((chatcontentseq_tmp.override(new BRelation<Integer,BRelation<Integer,BSet<Integer>>>(new Pair<Integer,BRelation<Integer,BSet<Integer>>>(new Integer(contentsize_tmp + 1),new BRelation<Integer,BSet<Integer>>(new Pair<Integer,BSet<Integer>>(f_c,(BRelation.cross(new BSet<Integer>(f_u),f_ul).union(BRelation.cross(f_ul,new BSet<Integer>(f_u)))))))))));
+		//	machine.set_chatcontentseq((chatcontentseq_tmp.override(new BRelation<Integer,BRelation<Integer,BSet<Integer>>>(new Pair<Integer,BRelation<Integer,BSet<Integer>>>(new Integer(contentsize_tmp + 1),new BRelation<Integer,BSet<Integer>>(new Pair<Integer,BSet<Integer>>(f_c,(BRelation.cross(new BSet<Integer>(f_u),f_ul).union(BRelation.cross(f_ul,new BSet<Integer>(f_u)))))))))));
 
 			System.out.println("forward executed f_c: " + f_c + " f_u: " + f_u + " f_ul: " + f_ul + " ");
 		}

@@ -25,7 +25,7 @@ public class mute_chat{
 	/*@ public normal_behavior
 		requires guard_mute_chat(mc_u1,mc_u2);
 		assignable machine.muted, machine.active, machine.inactive;
-		ensures guard_mute_chat(mc_u1,mc_u2) &&  machine.get_muted().equals(\old((machine.get_muted().override(new BRelation<Integer,Integer>(new Pair<Integer,Integer>(mc_u1,mc_u2)))))) &&  machine.get_active().equals(\old(machine.get_active().difference(new BRelation<Integer,Integer>(new Pair<Integer,Integer>(mc_u1,mc_u2))))) &&  machine.get_inactive().equals(\old((machine.get_inactive().union(new BRelation<Integer,Integer>(new Pair<Integer,Integer>(mc_u1,mc_u2)))))); 
+		ensures guard_mute_chat(mc_u1,mc_u2) &&  machine.get_muted().equals(\old((machine.get_muted().union(new BRelation<Integer,Integer>(new Pair<Integer,Integer>(mc_u1,mc_u2)))))) &&  machine.get_active().equals(\old(machine.get_active().difference(new BRelation<Integer,Integer>(new Pair<Integer,Integer>(mc_u1,mc_u2))))) &&  machine.get_inactive().equals(\old((machine.get_inactive().union(new BRelation<Integer,Integer>(new Pair<Integer,Integer>(mc_u1,mc_u2)))))); 
 	 also
 		requires !guard_mute_chat(mc_u1,mc_u2);
 		assignable \nothing;
@@ -36,7 +36,7 @@ public class mute_chat{
 			BRelation<Integer,Integer> active_tmp = machine.get_active();
 			BRelation<Integer,Integer> inactive_tmp = machine.get_inactive();
 
-			machine.set_muted((muted_tmp.override(new BRelation<Integer,Integer>(new Pair<Integer,Integer>(mc_u1,mc_u2)))));
+			machine.set_muted((muted_tmp.union(new BRelation<Integer,Integer>(new Pair<Integer,Integer>(mc_u1,mc_u2)))));
 			machine.set_active(active_tmp.difference(new BRelation<Integer,Integer>(new Pair<Integer,Integer>(mc_u1,mc_u2))));
 			machine.set_inactive((inactive_tmp.union(new BRelation<Integer,Integer>(new Pair<Integer,Integer>(mc_u1,mc_u2)))));
 
