@@ -30,6 +30,9 @@ public class User {
     }
 
     public String getName() {
+        if (name.contains("@")) {
+            return name.substring(0, name.indexOf("@"));
+        }
         return name;
     }
 

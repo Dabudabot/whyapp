@@ -57,7 +57,7 @@ public class ChatsListingActivity extends AppCompatActivity {
     }
 
     private void init() {
-        // set on click event ЧТО ТУТ НЕ ТАК?
+        // set on click
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

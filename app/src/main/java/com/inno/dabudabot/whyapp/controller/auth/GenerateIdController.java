@@ -30,17 +30,15 @@ public class GenerateIdController {
                 FirebaseDatabase.getInstance()
                         .getReference().child(node);
 
-        final Integer tempId = Settings.getInstance().generateCurrentId();
-
         database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                int salt = 0;
-                while (dataSnapshot.hasChild(tempId.toString() + salt)) {
-                    salt++;
+                int id = Settings.getInstance().getIdGen();
+                while (dataSnapshot.hasChild(String.valueOf(id))) {
+                    id++;
                 }
-                listener.onGenerateSuccess(activity, target,
-                        Integer.parseInt(tempId.toString() + salt));
+                Settings.getInstance().setIdGen(id);
+                listener.onGenerateSuccess(activity, target, id);
             }
 
             @Override

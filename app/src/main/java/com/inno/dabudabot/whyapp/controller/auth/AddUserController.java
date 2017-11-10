@@ -6,10 +6,12 @@ import android.support.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.inno.dabudabot.whyapp.R;
 import com.inno.dabudabot.whyapp.listener.AddUserView;
+
+import Util.SimpleMapper;
+import group_6_model_sequential.MachineWrapper;
 import group_6_model_sequential.User;
 import Util.Constants;
 import Util.Settings;
@@ -19,7 +21,6 @@ import Util.SharedPrefUtil;
  * Created by Group-6 on 07.11.17.
  * controller adds new user into base
  */
-
 public class AddUserController {
 
     private AddUserView listener;
@@ -30,24 +31,25 @@ public class AddUserController {
 
     public void addUserToDatabase(final Context context,
                                   FirebaseUser firebaseUser,
-                                  Integer id) {
-        DatabaseReference database =
-                FirebaseDatabase.getInstance()
-                        .getReference().child(Constants.ARG_USER);
+                                  final Integer id) {
 
-        User user = new User(firebaseUser.getUid(),
+        final User user = new User(firebaseUser.getUid(),
                 firebaseUser.getEmail(),
-                new SharedPrefUtil(context).getString(Constants.ARG_TOKEN),
+                new SharedPrefUtil(context).getString(Constants.NODE_FIREBASE_TOKEN),
                 id);
         Settings.getInstance().setCurrentId(id);
 
-        database.child(Constants.ARG_USER)
+        FirebaseDatabase.getInstance()
+                .getReference()
+                .child(Constants.NODE_USERS)
                 .child(user.getId().toString())
                 .setValue(user)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
+                            MachineWrapper machineWrapper = new MachineWrapper();
+                            SimpleMapper.toDatabaseReference(machineWrapper, id);
                             listener.onAddUserSuccess(
                                     context.getString(R.string.user_successfully_added));
                         } else {
@@ -57,5 +59,4 @@ public class AddUserController {
                     }
                 });
     }
-
 }

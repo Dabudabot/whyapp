@@ -17,7 +17,6 @@ import java.util.List;
  * Created by Group-6 on 09.11.17.
  * Manages messages view
  */
-//TODO:NEED MACHINE
 public class MessagingRecyclerAdapter
         extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_ME = 1;
@@ -65,6 +64,7 @@ public class MessagingRecyclerAdapter
         } else {
             configureOtherChatViewHolder((OtherChatViewHolder) holder, position);
         }*/
+        //TODO 7 READING FROM LOCAL
         configureMyChatViewHolder((MyChatViewHolder) holder, position);
     }
 

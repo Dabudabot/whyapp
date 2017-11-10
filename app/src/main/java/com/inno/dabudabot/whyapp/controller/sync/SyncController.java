@@ -16,7 +16,6 @@ import eventb_prelude.Pair;
  * Created by Group-6 on 07.11.17.
  * Controller send machine to firebase
  */
-//TODO: NEED MACHINE
 public class SyncController {
     //sync whole machine
 /*

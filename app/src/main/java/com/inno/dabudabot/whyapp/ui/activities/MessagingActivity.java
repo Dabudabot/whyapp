@@ -11,6 +11,7 @@ import com.inno.dabudabot.whyapp.WhyMainApp;
 import com.inno.dabudabot.whyapp.R;
 import com.inno.dabudabot.whyapp.ui.fragments.MessagingFragment;
 import Util.Constants;
+import Util.Settings;
 
 /**
  * Created by Group-6 on 10/21/17.
@@ -21,7 +22,7 @@ public class MessagingActivity extends AppCompatActivity {
 
     public static void startActivity(Context context, Integer userId) {
         Intent intent = new Intent(context, MessagingActivity.class);
-        intent.putExtra(Constants.ARG_ID, userId);
+        intent.putExtra(Constants.NODE_ID, userId);
         context.startActivity(intent);
     }
 
@@ -38,14 +39,15 @@ public class MessagingActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
 
         // set toolbar title
-        mToolbar.setTitle(getIntent().getExtras().getString(Constants.ARG_RECEIVER));
+        mToolbar.setTitle(Settings.getInstance().getUsers().get(
+                getIntent().getExtras().getInt(Constants.NODE_ID)).getName());
 
         // set the register screen fragment
         FragmentTransaction fragmentTransaction =
                 getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout_content_chat,
                 MessagingFragment.newInstance(
-                        getIntent().getExtras().getInt(Constants.ARG_ID)),
+                        getIntent().getExtras().getInt(Constants.NODE_ID)),
                 MessagingFragment.class.getSimpleName());
         fragmentTransaction.commit();
     }
@@ -61,4 +63,8 @@ public class MessagingActivity extends AppCompatActivity {
         super.onPause();
         WhyMainApp.setChatActivityOpen(false);
     }
+
+    //TODO 10 add menu with mute unmute and delete
+
+    //TODO 11 muted sign
 }

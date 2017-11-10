@@ -55,7 +55,7 @@ public class RegisterController implements GenerateIdView, AddUserView {
                             generateIdController.checkInDatabase(
                                     activity,
                                     task.getResult().getUser(),
-                                    Constants.ARG_USER);
+                                    Constants.NODE_USERS);
                         }
                     }
                 });
@@ -82,7 +82,6 @@ public class RegisterController implements GenerateIdView, AddUserView {
 
     @Override
     public void onAddUserSuccess(String message) {
-        //init listeners
         listener.onRegistrationSuccess(message);
     }
 

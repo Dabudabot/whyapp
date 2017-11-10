@@ -1,223 +1,167 @@
 package com.inno.dabudabot.whyapp.controller.sync;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.inno.dabudabot.whyapp.listener.InitListenerView;
 import group_6_model_sequential.Content;
+import group_6_model_sequential.MachineWrapper;
 import group_6_model_sequential.User;
 import Util.Constants;
 import Util.Settings;
 import Util.SimpleMapper;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
 
 /**
  * Created by Group-6 on 07.11.17.
+ * Listeners initialization
  */
-//TODO: INIT MACHINE LISTENER
 public class InitListeners {
-/*
-    private InitListenerView listener;
-    private machine3 mac;
-
-    public InitListeners(InitListenerView listener) {
-        this.listener = listener;
-        mac = MachineWrapper.getInstance();
-    }
 
     public void init() {
-        FirebaseDatabase.getInstance()
-                .getReference()
-                .child(Constants.ARG_ACTIVE).addValueEventListener(
-                        new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    mac.set_active(SimpleMapper.toBRelation(dataSnapshot));
-                }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    listener.onInitListenersFailure(databaseError.getMessage());
-                }
-        });
-        FirebaseDatabase.getInstance()
-                .getReference()
-                .child(Constants.ARG_CHAT).addValueEventListener(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        mac.set_chat(SimpleMapper.toBRelation(dataSnapshot));
-                    }
+        ChildEventListener newUser = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Integer id = Integer.parseInt(dataSnapshot.getKey());
+                User user = dataSnapshot.getValue(User.class);
+                Settings.getInstance().getUsers().put(id, user);
+            }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        listener.onInitListenersFailure(databaseError.getMessage());
-                    }
-                });
-        FirebaseDatabase.getInstance()
-                .getReference()
-                .child(Constants.ARG_CHATCONTENT).addValueEventListener(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        mac.set_chatcontent(SimpleMapper.toBRelationRelationRelation(dataSnapshot));
-                    }
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        listener.onInitListenersFailure(databaseError.getMessage());
-                    }
-                });
-        FirebaseDatabase.getInstance()
-                .getReference()
-                .child(Constants.ARG_CHATCONTENTSEQ).addValueEventListener(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        mac.set_chatcontentseq(SimpleMapper.toBRelationRelationRelation(dataSnapshot));
-                    }
+            }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        listener.onInitListenersFailure(databaseError.getMessage());
-                    }
-                });
-        FirebaseDatabase.getInstance()
-                .getReference()
-                .child(Constants.ARG_CONTENT).addValueEventListener(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        mac.set_content(SimpleMapper.toBSet(dataSnapshot));
-                        Iterator<DataSnapshot> ints = dataSnapshot.getChildren().iterator();
-                        Map<Integer, Content> contents = new HashMap<>();
-                        while (ints.hasNext()) {
-                            DataSnapshot child = ints.next();
-                            Integer i = child.getValue(Integer.class);
-                            Content content = child.child(String.valueOf(i))
-                                    .getValue(Content.class);
-                            contents.put(i, content);
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        ChildEventListener newContent = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Integer id = Integer.parseInt(dataSnapshot.getKey());
+                Content content = dataSnapshot.getValue(Content.class);
+                Settings.getInstance().getContents().put(id, content);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        ChildEventListener newMachine = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Integer id = Integer.parseInt(dataSnapshot.getKey());
+                if (!id.equals(Settings.getInstance().getCurrentId())) {
+                    MachineWrapper machineWrapper =
+                            SimpleMapper.toMachine(dataSnapshot);
+                    Settings.getInstance().putMachines(id, machineWrapper);
+
+
+                    ValueEventListener machineChangeListener = new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Integer id = Integer.parseInt(dataSnapshot.getKey());
+                            MachineWrapper machineWrapper =
+                                    SimpleMapper.toMachine(dataSnapshot);
+                            Settings.getInstance().putMachines(id, machineWrapper);
                         }
-                        Settings.getInstance().setContents(contents);
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        listener.onInitListenersFailure(databaseError.getMessage());
-                    }
-                });
-        FirebaseDatabase.getInstance()
-                .getReference()
-                .child(Constants.ARG_INACTIVE).addValueEventListener(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        mac.set_inactive(SimpleMapper.toBRelation(dataSnapshot));
-                    }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        listener.onInitListenersFailure(databaseError.getMessage());
-                    }
-                });
-        FirebaseDatabase.getInstance()
-                .getReference()
-                .child(Constants.ARG_CONTENTSIZE).addValueEventListener(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        mac.set_contentsize(dataSnapshot.getValue(Integer.class));
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        listener.onInitListenersFailure(databaseError.getMessage());
-                    }
-                });
-        FirebaseDatabase.getInstance()
-                .getReference()
-                .child(Constants.ARG_MUTED).addValueEventListener(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        mac.set_muted(SimpleMapper.toBRelation(dataSnapshot));
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        listener.onInitListenersFailure(databaseError.getMessage());
-                    }
-                });
-        FirebaseDatabase.getInstance()
-                .getReference()
-                .child(Constants.ARG_OWNER).addValueEventListener(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        mac.set_owner(SimpleMapper.toBRelation(dataSnapshot));
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        listener.onInitListenersFailure(databaseError.getMessage());
-                    }
-                });
-        FirebaseDatabase.getInstance()
-                .getReference()
-                .child(Constants.ARG_TOREAD).addValueEventListener(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        mac.set_toread(SimpleMapper.toBRelation(dataSnapshot));
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        listener.onInitListenersFailure(databaseError.getMessage());
-                    }
-                });
-        FirebaseDatabase.getInstance()
-                .getReference()
-                .child(Constants.ARG_TOREADCON).addValueEventListener(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        mac.set_toreadcon(SimpleMapper.toBRelationRelation(dataSnapshot));
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        listener.onInitListenersFailure(databaseError.getMessage());
-                    }
-                });
-        FirebaseDatabase.getInstance()
-                .getReference()
-                .child(Constants.ARG_USER).addValueEventListener(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        mac.set_user(SimpleMapper.toBSet(dataSnapshot));
-                        Iterator<DataSnapshot> ints = dataSnapshot.getChildren().iterator();
-                        Map<Integer, User> users = new HashMap<>();
-                        while (ints.hasNext()) {
-                            DataSnapshot child = ints.next();
-                            Integer i = child.getValue(Integer.class);
-                            User user = child.child(String.valueOf(i))
-                                    .getValue(User.class);
-                            users.put(i, user);
                         }
-                        Settings.getInstance().setUsers(users);
+                    };
+
+                    Settings.getInstance().getMachineChangeListeners().put(id, machineChangeListener);
+                    FirebaseDatabase.getInstance()
+                            .getReference()
+                            .child(Constants.NODE_MACHINES)
+                            .child(String.valueOf(id))
+                            .addValueEventListener(machineChangeListener);
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        Settings.getInstance().setNewUserListener(newUser);
+        FirebaseDatabase.getInstance()
+                .getReference()
+                .child(Constants.NODE_USERS).addChildEventListener(newUser);
+        Settings.getInstance().setNewContentListener(newContent);
+        FirebaseDatabase.getInstance()
+                .getReference()
+                .child(Constants.NODE_CONTENTS).addChildEventListener(newContent);
+        Settings.getInstance().setNewMachineListener(newMachine);
+        FirebaseDatabase.getInstance()
+                .getReference()
+                .child(Constants.NODE_MACHINES).addChildEventListener(newMachine);
+
+        FirebaseDatabase.getInstance()
+                .getReference()
+                .child(Constants.NODE_MACHINES)
+                .child(String.valueOf(Settings.getInstance().getCurrentId()))
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Settings.getInstance().setMyMachine(
+                                SimpleMapper.toMachine(dataSnapshot));
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        listener.onInitListenersFailure(databaseError.getMessage());
+
                     }
                 });
-    }*/
+    }
 }

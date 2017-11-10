@@ -14,8 +14,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.inno.dabudabot.whyapp.controller.sync.InitListeners;
-import com.inno.dabudabot.whyapp.listener.InitListenerView;
 import com.inno.dabudabot.whyapp.listener.LoginView;
 import group_6_model_sequential.User;
 import Util.Constants;
@@ -31,14 +29,12 @@ import static android.content.ContentValues.TAG;
  * controller logs in user
  */
 
-public class LoginController implements InitListenerView {
+public class LoginController {
 
     private LoginView listener;
-    private InitListeners initListeners;
 
     public LoginController(LoginView listener) {
         this.listener = listener;
-        this.initListeners = new InitListeners();
     }
 
     public void performFirebaseLogin(final Activity activity,
@@ -58,7 +54,7 @@ public class LoginController implements InitListenerView {
                             updateFirebaseToken(task.getResult().getUser().getUid(),
                                     new SharedPrefUtil(activity.getApplicationContext())
                                             .getString(
-                                                    Constants.ARG_TOKEN,
+                                                    Constants.NODE_FIREBASE_TOKEN,
                                                     null));
                         } else {
                             if (task.getException() != null) {
@@ -74,7 +70,7 @@ public class LoginController implements InitListenerView {
     private void updateFirebaseToken(final String uid, final String token) {
         DatabaseReference database =
                 FirebaseDatabase.getInstance()
-                        .getReference().child(Constants.ARG_USER);
+                        .getReference().child(Constants.NODE_USERS);
 
         database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -90,11 +86,10 @@ public class LoginController implements InitListenerView {
                         Settings.getInstance().setCurrentId(user.getId());
                         FirebaseDatabase.getInstance()
                                 .getReference()
-                                .child(Constants.ARG_USER)
+                                .child(Constants.NODE_USERS)
                                 .child(user.getId().toString())
-                                .child(Constants.ARG_TOKEN)
+                                .child(Constants.NODE_FIREBASE_TOKEN)
                                 .setValue(token);
-                        //initListeners.init();
                     }
                 }
             }
@@ -103,15 +98,5 @@ public class LoginController implements InitListenerView {
                 Log.e(TAG, "tokeUpdateFailed: " + databaseError.getMessage());
             }
         });
-    }
-
-    @Override
-    public void onInitListenersSuccess() {
-
-    }
-
-    @Override
-    public void onInitListenersFailure(String message) {
-        Log.e(TAG, "init failure: " + message);
     }
 }

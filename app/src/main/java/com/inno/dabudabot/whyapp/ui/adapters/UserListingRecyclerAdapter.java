@@ -68,4 +68,6 @@ public class UserListingRecyclerAdapter
                     (TextView) itemView.findViewById(R.id.text_view_username);
         }
     }
+
+    //TODO 12 NEW MESSAGE SIGN
 }
