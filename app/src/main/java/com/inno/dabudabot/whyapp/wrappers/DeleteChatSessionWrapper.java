@@ -16,6 +16,7 @@ public class DeleteChatSessionWrapper extends delete_chat_session {
         machineWrapper = m;
     }
     
+    
     @Override
     public void run_delete_chat_session(Integer dcs_u1, Integer dcs_u2){
         BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>> 

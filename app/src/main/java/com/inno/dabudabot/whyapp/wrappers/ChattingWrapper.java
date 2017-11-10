@@ -44,7 +44,7 @@ public class ChattingWrapper extends chatting {
      * @param chatcontent_tmp
      * @return
      */
-    private BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>> 
+    protected BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>> 
     modifyChatcontent(Integer u1, Integer u2, Integer new_c,
     BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>> chatcontent_tmp) {
         

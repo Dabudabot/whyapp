@@ -50,7 +50,7 @@ public class chatting{
 			machine.set_toreadcon((toreadcon_tmp.override(new BRelation<Integer,BRelation<Integer,Integer>>(new Pair<Integer,BRelation<Integer,Integer>>(ch_c,new BRelation<Integer,Integer>(new Pair<Integer,Integer>(ch_u2,ch_u1)).difference(machine.get_active()))))));
 			machine.set_owner((owner_tmp.override(new BRelation<Integer,Integer>(new Pair<Integer,Integer>(ch_c,ch_u1)))));
 			machine.set_contentsize(new Integer(contentsize_tmp + 1));
-		//	machine.set_chatcontentseq((chatcontentseq_tmp.override(new BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>>(new Pair<Integer,BRelation<Integer,BRelation<Integer,Integer>>>(new Integer(contentsize_tmp + 1),new BRelation<Integer,BRelation<Integer,Integer>>(new Pair<Integer,BRelation<Integer,Integer>>(ch_c,(BRelation.cross(new BSet(ch_u1),new BSet(ch_u2)).union(BRelation.cross(new BSet(ch_u2),new BSet(ch_u1)))))))))));
+		//	machine.set_chatcontentseq((chatcontentseq_tmp.override(new BRelation<Integer,BRelation<Integer,BSet<Integer>>>(new Pair<Integer,BRelation<Integer,BSet<Integer>>>(new Integer(contentsize_tmp + 1),new BRelation<Integer,BSet<Integer>>(new Pair<Integer,BSet<Integer>>(ch_c,(BRelation.cross(new BSet<Integer>(ch_u1),new BSet<Integer>(ch_u2)).union(BRelation.cross(new BSet<Integer>(ch_u2),new BSet<Integer>(ch_u1)))))))))));
 
 			System.out.println("chatting executed ch_c: " + ch_c + " ch_u1: " + ch_u1 + " ch_u2: " + ch_u2 + " ");
 		}

@@ -17,9 +17,9 @@ public class unmute_chat{
 	/*@ public normal_behavior
 		requires true;
  		assignable \nothing;
-		ensures \result <==> (machine.get_user().has(umc_u1) && machine.get_user().has(umc_u2) && machine.get_chat().has(new Pair<Integer,Integer>(umc_u1,umc_u2)) && machine.get_muted().has(new Pair<Integer,Integer>(umc_u1,umc_u2))); */
+		ensures \result <==> (machine.get_chat().has(new Pair<Integer,Integer>(umc_u1,umc_u2)) && machine.get_muted().has(new Pair<Integer,Integer>(umc_u1,umc_u2)) && machine.get_user().has(umc_u1) && machine.get_user().has(umc_u2)); */
 	public /*@ pure */ boolean guard_unmute_chat( Integer umc_u1, Integer umc_u2) {
-		return (machine.get_user().has(umc_u1) && machine.get_user().has(umc_u2) && machine.get_chat().has(new Pair<Integer,Integer>(umc_u1,umc_u2)) && machine.get_muted().has(new Pair<Integer,Integer>(umc_u1,umc_u2)));
+		return (machine.get_chat().has(new Pair<Integer,Integer>(umc_u1,umc_u2)) && machine.get_muted().has(new Pair<Integer,Integer>(umc_u1,umc_u2)) && machine.get_user().has(umc_u1) && machine.get_user().has(umc_u2));
 	}
 
 	/*@ public normal_behavior
