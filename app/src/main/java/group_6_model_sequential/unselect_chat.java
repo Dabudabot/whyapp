@@ -17,9 +17,9 @@ public class unselect_chat{
 	/*@ public normal_behavior
 		requires true;
  		assignable \nothing;
-		ensures \result <==> (machine.get_user().has(usc_u1) && machine.get_user().has(usc_u2) && machine.get_chat().has(new Pair<Integer,Integer>(usc_u1,usc_u2)) && machine.get_active().has(new Pair<Integer,Integer>(usc_u1,usc_u2)) && !machine.get_inactive().has(new Pair<Integer,Integer>(usc_u1,usc_u2))); */
+		ensures \result <==> (machine.get_chat().has(new Pair<Integer,Integer>(usc_u1,usc_u2)) && machine.get_active().has(new Pair<Integer,Integer>(usc_u1,usc_u2)) && machine.get_user().has(usc_u1) && machine.get_user().has(usc_u2) && !machine.get_inactive().has(new Pair<Integer,Integer>(usc_u1,usc_u2))); */
 	public /*@ pure */ boolean guard_unselect_chat( Integer usc_u1, Integer usc_u2) {
-		return (machine.get_user().has(usc_u1) && machine.get_user().has(usc_u2) && machine.get_chat().has(new Pair<Integer,Integer>(usc_u1,usc_u2)) && machine.get_active().has(new Pair<Integer,Integer>(usc_u1,usc_u2)) && !machine.get_inactive().has(new Pair<Integer,Integer>(usc_u1,usc_u2)));
+		return (machine.get_chat().has(new Pair<Integer,Integer>(usc_u1,usc_u2)) && machine.get_active().has(new Pair<Integer,Integer>(usc_u1,usc_u2)) && machine.get_user().has(usc_u1) && machine.get_user().has(usc_u2) && !machine.get_inactive().has(new Pair<Integer,Integer>(usc_u1,usc_u2)));
 	}
 
 	/*@ public normal_behavior

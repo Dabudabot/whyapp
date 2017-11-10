@@ -17,9 +17,9 @@ public class forward{
 	/*@ public normal_behavior
 		requires true;
  		assignable \nothing;
-		ensures \result <==> (machine.get_user().has(f_u) && !f_ul.has(f_u) && f_ul.isSubset(machine.get_user()) && machine.CONTENT.has(f_c) && !machine.get_content().has(f_c) && !BRelation.cross(new BSet<Integer>(f_u),f_ul).isSubset(machine.get_muted()) && !BRelation.cross(f_ul,new BSet<Integer>(f_u)).isSubset(machine.get_muted()) && f_ul.isSubset(machine.get_chat().image(new BSet<Integer>(f_u))) && !machine.get_toreadcon().domain().has(f_c) && !machine.get_owner().domain().has(f_c) &&  (\forall Integer f_uu;machine.get_chatcontent().domain().has(f_uu) && !machine.get_chatcontent().apply(f_uu).domain().has(f_c)) &&  (\forall Integer f_i;new Enumerated(new Integer(1),machine.get_contentsize()).has(f_i) && machine.get_chatcontentseq().domain().has(f_i) && !machine.get_chatcontentseq().apply(f_i).domain().has(f_c)) &&  (\forall Integer f_uu;machine.get_chatcontent().domain().has(f_uu) && !machine.get_chatcontent().apply(f_uu).domain().has(f_c))); */
+		ensures \result <==> (f_ul.isSubset(machine.get_user()) && machine.CONTENT.has(f_c) && !machine.get_content().has(f_c) && !BRelation.cross(new BSet<Integer>(f_u),f_ul).isSubset(machine.get_muted()) && !BRelation.cross(f_ul,new BSet<Integer>(f_u)).isSubset(machine.get_muted()) && f_ul.isSubset(machine.get_chat().image(new BSet<Integer>(f_u))) && machine.get_user().has(f_u) && !f_ul.has(f_u) && !machine.get_toreadcon().domain().has(f_c) && !machine.get_owner().domain().has(f_c) &&  (\forall Integer f_uu;machine.get_chatcontent().domain().has(f_uu) && !machine.get_chatcontent().apply(f_uu).domain().has(f_c)) &&  (\forall Integer f_i;new Enumerated(new Integer(1),machine.get_contentsize()).has(f_i) && machine.get_chatcontentseq().domain().has(f_i) && !machine.get_chatcontentseq().apply(f_i).domain().has(f_c)) &&  (\forall Integer f_uu;machine.get_chatcontent().domain().has(f_uu) && !machine.get_chatcontent().apply(f_uu).domain().has(f_c))); */
 	public /*@ pure */ boolean guard_forward( Integer f_c, Integer f_u, BSet<Integer> f_ul) {
-		return (machine.get_user().has(f_u) && !f_ul.has(f_u) && f_ul.isSubset(machine.get_user()) && machine.CONTENT.has(f_c) && !machine.get_content().has(f_c) && !BRelation.cross(new BSet<Integer>(f_u),f_ul).isSubset(machine.get_muted()) && !BRelation.cross(f_ul,new BSet<Integer>(f_u)).isSubset(machine.get_muted()) && f_ul.isSubset(machine.get_chat().image(new BSet<Integer>(f_u))) && !machine.get_toreadcon().domain().has(f_c) && !machine.get_owner().domain().has(f_c) && true && true && true);
+		return (f_ul.isSubset(machine.get_user()) && machine.CONTENT.has(f_c) && !machine.get_content().has(f_c) && !BRelation.cross(new BSet<Integer>(f_u),f_ul).isSubset(machine.get_muted()) && !BRelation.cross(f_ul,new BSet<Integer>(f_u)).isSubset(machine.get_muted()) && f_ul.isSubset(machine.get_chat().image(new BSet<Integer>(f_u))) && machine.get_user().has(f_u) && !f_ul.has(f_u) && !machine.get_toreadcon().domain().has(f_c) && !machine.get_owner().domain().has(f_c) && true && true && true);
 	}
 
 	/*@ public normal_behavior
@@ -47,10 +47,10 @@ public class forward{
 			machine.set_chatcontent(null); // Set Comprehension: feature not supported by EventB2Java
 			machine.set_inactive((inactive_tmp.union(BRelation.cross(f_ul,new BSet<Integer>(f_u)).difference(machine.get_active()))));
 			machine.set_toread((toread_tmp.union(BRelation.cross(f_ul,new BSet<Integer>(f_u)).difference(machine.get_active()))));
-		//!	machine.set_toreadcon((toreadcon_tmp.override(new BRelation<Integer,BSet<Integer>>(new Pair<Integer,BSet<Integer>>(f_c,BRelation.cross(f_ul,new BSet<Integer>(f_u)).difference(machine.get_active()))))));
+		//	machine.set_toreadcon((toreadcon_tmp.override(new BRelation<Integer,BSet<Integer>>(new Pair<Integer,BSet<Integer>>(f_c,BRelation.cross(f_ul,new BSet<Integer>(f_u)).difference(machine.get_active()))))));
 			machine.set_owner((owner_tmp.union(new BRelation<Integer,Integer>(new Pair<Integer,Integer>(f_c,f_u)))));
 			machine.set_contentsize(new Integer(contentsize_tmp + 1));
-		//!	machine.set_chatcontentseq((chatcontentseq_tmp.override(new BRelation<Integer,BRelation<Integer,BSet<Integer>>>(new Pair<Integer,BRelation<Integer,BSet<Integer>>>(new Integer(contentsize_tmp + 1),new BRelation<Integer,BSet<Integer>>(new Pair<Integer,BSet<Integer>>(f_c,(BRelation.cross(new BSet<Integer>(f_u),f_ul).union(BRelation.cross(f_ul,new BSet<Integer>(f_u)))))))))));
+		//	machine.set_chatcontentseq((chatcontentseq_tmp.override(new BRelation<Integer,BRelation<Integer,BSet<Integer>>>(new Pair<Integer,BRelation<Integer,BSet<Integer>>>(new Integer(contentsize_tmp + 1),new BRelation<Integer,BSet<Integer>>(new Pair<Integer,BSet<Integer>>(f_c,(BRelation.cross(new BSet<Integer>(f_u),f_ul).union(BRelation.cross(f_ul,new BSet<Integer>(f_u)))))))))));
 
 			System.out.println("forward executed f_c: " + f_c + " f_u: " + f_u + " f_ul: " + f_ul + " ");
 		}

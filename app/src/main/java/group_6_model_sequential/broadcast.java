@@ -17,9 +17,9 @@ public class broadcast{
 	/*@ public normal_behavior
 		requires true;
  		assignable \nothing;
-		ensures \result <==> (machine.get_user().has(b_u) && !b_ul.has(b_u) && b_ul.isSubset(machine.get_user()) && machine.CONTENT.has(b_c) && !machine.get_content().has(b_c) && !BRelation.cross(new BSet<Integer>(b_u),b_ul).isSubset(machine.get_muted()) && !BRelation.cross(b_ul,new BSet<Integer>(b_u)).isSubset(machine.get_muted()) && !machine.get_toreadcon().domain().has(b_c) && !machine.get_owner().domain().has(b_c) &&  (\forall Integer b_uu;machine.get_chatcontent().domain().has(b_uu) && !machine.get_chatcontent().apply(b_uu).domain().has(b_c)) &&  (\forall Integer b_i;new Enumerated(new Integer(1),machine.get_contentsize()).has(b_i) && machine.get_chatcontentseq().domain().has(b_i) && !machine.get_chatcontentseq().apply(b_i).domain().has(b_c)) &&  (\forall Integer b_uu;machine.get_chatcontent().domain().has(b_uu) && !machine.get_chatcontent().apply(b_uu).domain().has(b_c))); */
+		ensures \result <==> (b_ul.isSubset(machine.get_user()) && machine.CONTENT.has(b_c) && !machine.get_content().has(b_c) && !BRelation.cross(new BSet<Integer>(b_u),b_ul).isSubset(machine.get_muted()) && !BRelation.cross(b_ul,new BSet<Integer>(b_u)).isSubset(machine.get_muted()) && machine.get_user().has(b_u) && !b_ul.has(b_u) && !machine.get_toreadcon().domain().has(b_c) && !machine.get_owner().domain().has(b_c) &&  (\forall Integer b_uu;machine.get_chatcontent().domain().has(b_uu) && !machine.get_chatcontent().apply(b_uu).domain().has(b_c)) &&  (\forall Integer b_i;new Enumerated(new Integer(1),machine.get_contentsize()).has(b_i) && machine.get_chatcontentseq().domain().has(b_i) && !machine.get_chatcontentseq().apply(b_i).domain().has(b_c)) &&  (\forall Integer b_uu;machine.get_chatcontent().domain().has(b_uu) && !machine.get_chatcontent().apply(b_uu).domain().has(b_c))); */
 	public /*@ pure */ boolean guard_broadcast( Integer b_c, Integer b_u, BSet<Integer> b_ul) {
-		return (machine.get_user().has(b_u) && !b_ul.has(b_u) && b_ul.isSubset(machine.get_user()) && machine.CONTENT.has(b_c) && !machine.get_content().has(b_c) && !BRelation.cross(new BSet<Integer>(b_u),b_ul).isSubset(machine.get_muted()) && !BRelation.cross(b_ul,new BSet<Integer>(b_u)).isSubset(machine.get_muted()) && !machine.get_toreadcon().domain().has(b_c) && !machine.get_owner().domain().has(b_c) && true && true && true);
+		return (b_ul.isSubset(machine.get_user()) && machine.CONTENT.has(b_c) && !machine.get_content().has(b_c) && !BRelation.cross(new BSet<Integer>(b_u),b_ul).isSubset(machine.get_muted()) && !BRelation.cross(b_ul,new BSet<Integer>(b_u)).isSubset(machine.get_muted()) && machine.get_user().has(b_u) && !b_ul.has(b_u) && !machine.get_toreadcon().domain().has(b_c) && !machine.get_owner().domain().has(b_c) && true && true && true);
 	}
 
 	/*@ public normal_behavior
@@ -47,10 +47,10 @@ public class broadcast{
 			machine.set_chatcontent(null); // Set Comprehension: feature not supported by EventB2Java
 			machine.set_inactive((inactive_tmp.union((BRelation.cross(b_ul,new BSet<Integer>(b_u)).union(BRelation.cross(new BSet<Integer>(b_u),b_ul))).difference(machine.get_active()))));
 			machine.set_toread((toread_tmp.union(BRelation.cross(b_ul,new BSet<Integer>(b_u)).difference(machine.get_active()))));
-		//!	machine.set_toreadcon((toreadcon_tmp.override(new BRelation<Integer,BSet<Integer>>(new Pair<Integer,BSet<Integer>>(b_c,BRelation.cross(b_ul,new BSet<Integer>(b_u)).difference(machine.get_active()))))));
+		//	machine.set_toreadcon((toreadcon_tmp.override(new BRelation<Integer,BSet<Integer>>(new Pair<Integer,BSet<Integer>>(b_c,BRelation.cross(b_ul,new BSet<Integer>(b_u)).difference(machine.get_active()))))));
 			machine.set_owner((owner_tmp.union(new BRelation<Integer,Integer>(new Pair<Integer,Integer>(b_c,b_u)))));
 			machine.set_contentsize(new Integer(contentsize_tmp + 1));
-		//!	machine.set_chatcontentseq((chatcontentseq_tmp.override(new BRelation<Integer,BRelation<Integer,BSet<Integer>>>(new Pair<Integer,BRelation<Integer,BSet<Integer>>>(new Integer(contentsize_tmp + 1),new BRelation<Integer,BSet<Integer>>(new Pair<Integer,BSet<Integer>>(b_c,(BRelation.cross(new BSet<Integer>(b_u),b_ul).union(BRelation.cross(b_ul,new BSet<Integer>(b_u)))))))))));
+		//	machine.set_chatcontentseq((chatcontentseq_tmp.override(new BRelation<Integer,BRelation<Integer,BSet<Integer>>>(new Pair<Integer,BRelation<Integer,BSet<Integer>>>(new Integer(contentsize_tmp + 1),new BRelation<Integer,BSet<Integer>>(new Pair<Integer,BSet<Integer>>(b_c,(BRelation.cross(new BSet<Integer>(b_u),b_ul).union(BRelation.cross(b_ul,new BSet<Integer>(b_u)))))))))));
 
 			System.out.println("broadcast executed b_c: " + b_c + " b_u: " + b_u + " b_ul: " + b_ul + " ");
 		}

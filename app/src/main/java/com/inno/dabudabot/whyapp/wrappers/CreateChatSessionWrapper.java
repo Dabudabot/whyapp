@@ -1,4 +1,4 @@
-package com.inno.dabudabot.whyapp.wrappers;
+package whyapp.extensions;
 
 import group_6_model_sequential.MachineWrapper;
 import group_6_model_sequential.create_chat_session;

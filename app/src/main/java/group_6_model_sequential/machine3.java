@@ -82,7 +82,6 @@ public class machine3{
 		 (\forall Integer u;  (\forall Integer c;  (\forall Integer u1;  (\forall Integer u2;((chatcontent.domain().has(u) && chatcontent.apply(u).domain().has(c) && chatcontent.apply(u).apply(c).has(new Pair<Integer,Integer>(u1,u2))) ==> (u.equals(u1) || u.equals(u2))))))) &&
 		 (\forall Integer u;  (\forall Integer c;  (\forall Integer u1;  (\forall Integer u2;((chatcontent.domain().has(u) && chatcontent.apply(u).domain().has(c) && chatcontent.apply(u).apply(c).has(new Pair<Integer,Integer>(u1,u2))) ==> (chat.has(new Pair<Integer,Integer>(u1,u2)))))))) &&
 		 (\forall Integer u1;  (\forall Integer u2;((user.has(u1) && user.has(u2) && chat.has(new Pair<Integer,Integer>(u1,u2))) ==> (!u1.equals(u2))))) &&
-		 (\forall Pair<Integer,Integer> cs1;  (\forall Pair<Integer,Integer> cs2;  (\forall Integer u1;  (\forall Integer u2;((user.has(u1) && user.has(u2) && cs1.equals(new Pair<Integer,Integer>(u1,u2)) && cs2.equals(new Pair<Integer,Integer>(u1,u2)) && chat.has(cs1) && chat.has(cs2)) ==> (cs1.equals(cs2))))))) &&
 		 toread.domain().isSubset(user) && toread.range().isSubset(user) && BRelation.cross(user,user).has(toread) &&
 		toread.isSubset(chat) &&
 		inactive.isSubset(chat) &&
@@ -90,7 +89,6 @@ public class machine3{
 		(active.intersection(toread)).equals(BSet.EMPTY) &&
 		(active.intersection(inactive)).equals(BSet.EMPTY) &&
 		 toreadcon.domain().isSubset(content) && toreadcon.range().isSubset(((BRelation.cross(user,user)).pow())) && toreadcon.isaFunction() && BRelation.cross(content,((BRelation.cross(user,user)).pow())).has(toreadcon) &&
-		 (\forall Integer u;  (\forall Integer c;  (\forall Integer u1;  (\forall Integer u2;((chatcontent.domain().has(u) && content.has(c) && chatcontent.apply(u).domain().has(c) && chat.has(new Pair<Integer,Integer>(u1,u2)) && chatcontent.apply(u).apply(c).has(new Pair<Integer,Integer>(u1,u2)) && toreadcon.domain().has(c) && toreadcon.apply(c).has(new Pair<Integer,Integer>(u1,u2))) ==> (toread.has(new Pair<Integer,Integer>(u1,u2)))))))) &&
 		toreadcon.domain().isSubset(content) &&
 		 owner.domain().equals(content) && owner.range().isSubset(user) && owner.isaFunction() && BRelation.cross(content,user).has(owner) &&
 		owner.domain().equals(content) &&
