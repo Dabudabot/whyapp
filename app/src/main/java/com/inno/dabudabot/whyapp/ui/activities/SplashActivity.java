@@ -20,7 +20,8 @@ import com.inno.dabudabot.whyapp.listener.InitListenersView;
  */
 public class SplashActivity extends AppCompatActivity implements InitListenersView {
     private static final int SPLASH_TIME_MS = 2000;
-
+    private Handler mHandler;
+    private Runnable mRunnable;
     /**
      * Runs at creation of current activity
      * @param savedInstanceState default state
@@ -30,10 +31,10 @@ public class SplashActivity extends AppCompatActivity implements InitListenersVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        Handler mHandler = new Handler();
+        mHandler = new Handler();
         final InitListeners initListeners = new InitListeners(this);
 
-        Runnable mRunnable = new Runnable() {
+        mRunnable = new Runnable() {
             @Override
             public void run() {
                 if (FirebaseAuth.getInstance().getCurrentUser() != null) {
@@ -52,6 +53,7 @@ public class SplashActivity extends AppCompatActivity implements InitListenersVi
     @Override
     public void onInitSuccess() {
         ChatsListingActivity.startActivity(SplashActivity.this);
+
     }
 
     @Override
