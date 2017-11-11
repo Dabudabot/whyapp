@@ -140,7 +140,7 @@ public class Settings {
     }
 
     public MachineWrapper getMergedMachine() {
-        merge();
+        //merge();
         return mergedMachine;
     }
 

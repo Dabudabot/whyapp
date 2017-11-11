@@ -8,6 +8,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.inno.dabudabot.whyapp.listener.InitListenersView;
 
 import java.util.Iterator;
 
@@ -25,15 +26,57 @@ import Util.SimpleMapper;
  */
 public class InitListeners {
 
-    private void initNew() {
-        ChildEventListener newContent = new ChildEventListener() {
+    private InitListenersView listener;
+
+    public InitListeners(InitListenersView listener) {
+        this.listener = listener;
+    }
+
+    public void init() {
+        FirebaseDatabase.getInstance()
+                .getReference()
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot child : dataSnapshot.child(Constants.NODE_USERS)
+                                .getChildren()) {
+                            User user = child.getValue(User.class);
+                            if (TextUtils.equals(FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                                    user.getUid())) {
+                                Settings.getInstance().setCurrentUser(user);
+                                Settings.getInstance().setMyMachine(
+                                        SimpleMapper.toMachine(
+                                                dataSnapshot.child(Constants.NODE_MACHINES)
+                                                        .child(String.valueOf(user.getUid()))));
+
+                                initUser();
+                                initContent();
+                                initMachines();
+                            }
+                            Settings.getInstance().getUsers().put(user.getId(), user);
+                        }
+                        for (DataSnapshot child : dataSnapshot.child(Constants.NODE_MACHINES)
+                                .getChildren()) {
+                            MachineWrapper machineWrapper = SimpleMapper.toMachine(child);
+                            Settings.getInstance().putMachines(Integer.parseInt(child.getKey()), machineWrapper);
+                        }
+                        listener.onInitSuccess();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        listener.onInitFailure();
+                    }
+                });
+    }
+
+    private void initUser() {
+        ChildEventListener newUser = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Integer id = Integer.parseInt(dataSnapshot.getKey());
-                Content content = dataSnapshot.getValue(Content.class);
-                Settings.getInstance().getContents().put(id, content);
-                //Settings.getInstance().getMyMachine().get_content().add(id);
-                //Settings.getInstance().merge();
+                User user = dataSnapshot.getValue(User.class);
+                Settings.getInstance().getUsers().put(id, user);
             }
 
             @Override
@@ -56,11 +99,14 @@ public class InitListeners {
 
             }
         };
-        Settings.getInstance().setNewContentListener(newContent);
+
+        Settings.getInstance().setNewUserListener(newUser);
         FirebaseDatabase.getInstance()
                 .getReference()
-                .child(Constants.NODE_CONTENTS).addChildEventListener(newContent);
+                .child(Constants.NODE_USERS).addChildEventListener(newUser);
+    }
 
+    private void initMachines() {
         ChildEventListener newMachine = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -120,61 +166,13 @@ public class InitListeners {
                 .child(Constants.NODE_MACHINES).addChildEventListener(newMachine);
     }
 
-    private void initMyMachine() {
-        FirebaseDatabase.getInstance()
-                .getReference()
-                .child(Constants.NODE_MACHINES)
-                .child(String.valueOf(Settings.getInstance().getCurrentUser().getId()))
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Settings.getInstance().setMyMachine(
-                                SimpleMapper.toMachine(dataSnapshot));
-                        initUser();
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-    }
-
-    public void init() {
-        FirebaseDatabase.getInstance()
-                .getReference()
-                .child(Constants.NODE_USERS)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Iterator<DataSnapshot> childs = dataSnapshot.getChildren().iterator();
-                        while(childs.hasNext()) {
-                            DataSnapshot child = childs.next();
-                            User user = child.getValue(User.class);
-                            if (TextUtils.equals(FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                                    user.getUid())) {
-                                Settings.getInstance().setCurrentUser(child.getValue(User.class));
-                            }
-                        }
-                        initMyMachine();
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-    }
-
-    public void initUser() {
-        ChildEventListener newUser = new ChildEventListener() {
+    private void initContent() {
+        ChildEventListener newContent = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Integer id = Integer.parseInt(dataSnapshot.getKey());
-                User user = dataSnapshot.getValue(User.class);
-                Settings.getInstance().getUsers().put(id, user);
-                Settings.getInstance().getMyMachine().get_user().add(id);
-                initNew();
+                Content content = dataSnapshot.getValue(Content.class);
+                Settings.getInstance().getContents().put(id, content);
             }
 
             @Override
@@ -197,10 +195,9 @@ public class InitListeners {
 
             }
         };
-
-        Settings.getInstance().setNewUserListener(newUser);
+        Settings.getInstance().setNewContentListener(newContent);
         FirebaseDatabase.getInstance()
                 .getReference()
-                .child(Constants.NODE_USERS).addChildEventListener(newUser);
+                .child(Constants.NODE_CONTENTS).addChildEventListener(newContent);
     }
 }

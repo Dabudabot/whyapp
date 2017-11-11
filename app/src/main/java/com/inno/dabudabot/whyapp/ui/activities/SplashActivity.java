@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.inno.dabudabot.whyapp.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.inno.dabudabot.whyapp.controller.sync.InitListeners;
+import com.inno.dabudabot.whyapp.listener.InitListenersView;
 
 /**
  * Created by Group-6 on 10/21/17.
@@ -17,7 +18,7 @@ import com.inno.dabudabot.whyapp.controller.sync.InitListeners;
  * if logged in redirect the user to user listing activity
  * if not redirect user to login activity
  */
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends AppCompatActivity implements InitListenersView {
     private static final int SPLASH_TIME_MS = 2000;
 
     /**
@@ -30,15 +31,13 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         Handler mHandler = new Handler();
+        final InitListeners initListeners = new InitListeners(this);
 
         Runnable mRunnable = new Runnable() {
             @Override
             public void run() {
                 if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                    InitListeners initListeners = new InitListeners();
                     initListeners.init();
-                    ChatsListingActivity.startActivity(
-                            SplashActivity.this);
                 } else {
                     LoginActivity.startIntent(
                             SplashActivity.this);
@@ -48,5 +47,15 @@ public class SplashActivity extends AppCompatActivity {
         };
 
         mHandler.postDelayed(mRunnable, SPLASH_TIME_MS);
+    }
+
+    @Override
+    public void onInitSuccess() {
+        ChatsListingActivity.startActivity(SplashActivity.this);
+    }
+
+    @Override
+    public void onInitFailure() {
+        LoginActivity.startIntent(SplashActivity.this);
     }
 }
