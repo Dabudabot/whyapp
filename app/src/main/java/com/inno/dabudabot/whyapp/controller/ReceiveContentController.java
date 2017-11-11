@@ -34,12 +34,19 @@ public class ReceiveContentController {
         listener.onReceiveSuccess();
     }
 
-    public static void sendNotify() {
-        for (ReceiveContentView listener : listeners) {
-            ReadingWrapper readingWrapper =
-                    new ReadingWrapper(Settings.getInstance().getMergedMachine());
-            readingWrapper.run_reading(listener.getSender(), listener.getReceiver());
-            listener.onReceiveSuccess();
+    public static void sendNotify(Integer mine, Integer other) {
+        if (listeners != null) {
+            for (ReceiveContentView listener : listeners) {
+                if (listener.getSender().equals(mine)
+                        || listener.getReceiver().equals(mine)
+                        || listener.getSender().equals(other)
+                        || listener.getReceiver().equals(other)) {
+                    ReadingWrapper readingWrapper =
+                            new ReadingWrapper(Settings.getInstance().getMergedMachine());
+                    readingWrapper.run_reading(listener.getSender(), listener.getReceiver());
+                    listener.onReceiveSuccess();
+                }
+            }
         }
     }
 }

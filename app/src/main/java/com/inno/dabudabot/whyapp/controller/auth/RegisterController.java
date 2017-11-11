@@ -49,7 +49,7 @@ public class RegisterController implements GenerateIdView, AddUserView {
                                 listener.onRegistrationFailure(
                                         task.getException().getMessage());
                             } else {
-                                listener.onRegistrationFailure("BAD");
+                                listener.onRegistrationFailure("Reg - BAD");
                             }
                         } else {
                             generateIdController.checkInDatabase(

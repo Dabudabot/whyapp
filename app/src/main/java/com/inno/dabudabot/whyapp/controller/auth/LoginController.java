@@ -60,7 +60,7 @@ public class LoginController {
                             if (task.getException() != null) {
                                 listener.onLoginFailure(task.getException().getMessage());
                             } else {
-                                listener.onLoginFailure("BAD");
+                                listener.onLoginFailure("Login - BAD");
                             }
                         }
                     }

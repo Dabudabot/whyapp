@@ -67,15 +67,9 @@ public class ChatsListingFragment extends Fragment implements
     public void onResume() {
         super.onResume();
         getListingsController.getChatsListing();
-        selectChatWrapper = new SelectChatWrapper(
-                Settings.getInstance().getMergedMachine(),
-                getActivity());
     }
 
     private void init() {
-        selectChatWrapper = new SelectChatWrapper(
-                Settings.getInstance().getMergedMachine(),
-                getActivity());
         getListingsController = new GetListingsController(this);
         getListingsController.getChatsListing();
 
@@ -85,6 +79,9 @@ public class ChatsListingFragment extends Fragment implements
 
     @Override
     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+        selectChatWrapper = new SelectChatWrapper(
+                Settings.getInstance().getMergedMachine(),
+                getActivity());
         selectChatWrapper.run_select_chat(Settings.getInstance().getCurrentUser().getId(),
                 mUserListingRecyclerAdapter.getUser(position).getId());
     }

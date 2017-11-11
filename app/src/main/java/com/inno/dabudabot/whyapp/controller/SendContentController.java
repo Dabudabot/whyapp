@@ -66,7 +66,7 @@ public class SendContentController implements GenerateIdView {
                                 chattingWrapper.run_chatting(id, senderId, receiverId);
                                 listener.sendSuccess();
                             } else {
-                                listener.sendFailure("BAD");
+                                listener.sendFailure("SEND - BAD");
                             }
                         }
                     });

@@ -12,8 +12,11 @@ import group_6_model_sequential.Content;
 import group_6_model_sequential.MachineWrapper;
 import group_6_model_sequential.User;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Group-6 on 07.11.17.
@@ -60,7 +63,6 @@ public class Settings {
 
     public void putContents(Integer id, Content content) {
         contents.put(id, content);
-        ReceiveContentController.sendNotify();
     }
 
     public Map<Integer, Content> getContents() {
@@ -143,9 +145,13 @@ public class Settings {
     }
 
     public void merge() {
+        Set<MachineWrapper> allEx = new HashSet<>();
+        for (Integer i : machines.keySet()) {
+            allEx.add(machines.get(i));
+        }
         this.mergedMachine =
                 SimpleMapper.merge(myMachine,
-                        machines.values(),
+                        allEx,
                         users.values(),
                         contents.values());
     }

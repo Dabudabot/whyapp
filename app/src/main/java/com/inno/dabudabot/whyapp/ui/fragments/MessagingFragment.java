@@ -134,7 +134,7 @@ public class MessagingFragment
 
     @Override
     public void sendFailure(String message) {
-        System.err.println("BAD");
+        System.err.println("Messaging - BAD");
     }
 
     @Override

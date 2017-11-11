@@ -1,5 +1,7 @@
 package com.inno.dabudabot.whyapp.wrappers;
 
+import com.inno.dabudabot.whyapp.controller.ReceiveContentController;
+
 import Util.Settings;
 import Util.SimpleMapper;
 import group_6_model_sequential.MachineWrapper;
@@ -37,6 +39,7 @@ public class ChattingWrapper extends chatting {
             Settings.getInstance().setMyMachine(machineWrapper);
             SimpleMapper.toDatabaseReference(machineWrapper,
                     Settings.getInstance().getCurrentUser().getId());
+            ReceiveContentController.sendNotify(ch_u1, ch_u2);
         }
 	}
 	

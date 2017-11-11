@@ -34,7 +34,7 @@ public class MessagingRecyclerAdapter
 
     public void add(Integer messageId) {
         mMessages.add(Settings.getInstance().getContents().get(messageId));
-        notifyItemInserted(mMessages.size() - 1);
+        notifyDataSetChanged();
     }
 
     @Override

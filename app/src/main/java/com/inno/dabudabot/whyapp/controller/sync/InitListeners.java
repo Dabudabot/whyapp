@@ -9,6 +9,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.inno.dabudabot.whyapp.controller.ReceiveContentController;
 import com.inno.dabudabot.whyapp.ui.activities.ChatsListingActivity;
 
 import group_6_model_sequential.Content;
@@ -154,6 +155,7 @@ public class InitListeners {
                             MachineWrapper machineWrapper =
                                     SimpleMapper.toMachine(dataSnapshot);
                             Settings.getInstance().putMachines(id, machineWrapper);
+                            ReceiveContentController.sendNotify(Settings.getInstance().getCurrentUser().getId(), id);
                         }
 
                         @Override
