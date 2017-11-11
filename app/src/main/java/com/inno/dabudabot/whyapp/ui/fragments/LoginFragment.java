@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.inno.dabudabot.whyapp.R;
 import com.inno.dabudabot.whyapp.controller.auth.LoginController;
 import com.inno.dabudabot.whyapp.controller.sync.InitListeners;
-import com.inno.dabudabot.whyapp.listener.InitListenersView;
 import com.inno.dabudabot.whyapp.listener.LoginView;
 import com.inno.dabudabot.whyapp.controller.auth.RegisterController;
 import com.inno.dabudabot.whyapp.listener.RegisterView;
@@ -35,13 +34,11 @@ public class LoginFragment
         extends Fragment
         implements View.OnClickListener,
         LoginView,
-        RegisterView,
-        InitListenersView{
+        RegisterView {
 
     private static final String TAG = LoginFragment.class.getSimpleName();
     private LoginController loginController;
     private RegisterController registerController;
-    private InitListeners initListeners;
 
     private EditText mETxtUsername;
     private Button mBtnLogin;
@@ -79,7 +76,6 @@ public class LoginFragment
     private void init() {
         loginController = new LoginController(this);
         registerController = new RegisterController(this);
-        initListeners = new InitListeners(this);
 
         mProgressDialog = new ProgressDialog(getActivity());
         mProgressDialog.setTitle(getString(R.string.loading));
@@ -116,7 +112,8 @@ public class LoginFragment
         Toast.makeText(getActivity(),
                 "Logged in successfully",
                 Toast.LENGTH_SHORT).show();
-        initListeners.init();
+        ChatsListingActivity.startActivity(getActivity(),
+                Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
     }
 
     @Override
@@ -131,8 +128,8 @@ public class LoginFragment
     public void onRegistrationSuccess(String message) {
         mProgressDialog.dismiss();
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-        initListeners.init();
-
+        ChatsListingActivity.startActivity(getActivity(),
+                Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
     }
 
     @Override
@@ -142,16 +139,5 @@ public class LoginFragment
         Log.e(TAG, "onRegistrationFailure: " + message);
         Toast.makeText(getActivity(),
                 "Registration failed!+\n" + message, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onInitSuccess() {
-        ChatsListingActivity.startActivity(getActivity(),
-                Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-    }
-
-    @Override
-    public void onInitFailure() {
-
     }
 }

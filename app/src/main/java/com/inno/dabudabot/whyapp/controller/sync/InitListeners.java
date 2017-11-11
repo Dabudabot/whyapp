@@ -1,5 +1,6 @@
 package com.inno.dabudabot.whyapp.controller.sync;
 
+import android.content.Context;
 import android.text.TextUtils;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -8,9 +9,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.inno.dabudabot.whyapp.listener.InitListenersView;
-
-import java.util.Iterator;
+import com.inno.dabudabot.whyapp.ui.activities.ChatsListingActivity;
 
 import group_6_model_sequential.Content;
 import group_6_model_sequential.MachineWrapper;
@@ -26,13 +25,7 @@ import Util.SimpleMapper;
  */
 public class InitListeners {
 
-    private InitListenersView listener;
-
-    public InitListeners(InitListenersView listener) {
-        this.listener = listener;
-    }
-
-    public void init() {
+    public void init(final Context context) {
         FirebaseDatabase.getInstance()
                 .getReference()
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -60,12 +53,50 @@ public class InitListeners {
                             MachineWrapper machineWrapper = SimpleMapper.toMachine(child);
                             Settings.getInstance().putMachines(Integer.parseInt(child.getKey()), machineWrapper);
                         }
-                        listener.onInitSuccess();
+                        ChatsListingActivity.onInitSuccess(context);
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        listener.onInitFailure();
+                        System.err.println("BAD-BAD-BAD");
+                    }
+                });
+    }
+
+    public void init(final Context context, final int flags) {
+        FirebaseDatabase.getInstance()
+                .getReference()
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot child : dataSnapshot.child(Constants.NODE_USERS)
+                                .getChildren()) {
+                            User user = child.getValue(User.class);
+                            if (TextUtils.equals(FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                                    user.getUid())) {
+                                Settings.getInstance().setCurrentUser(user);
+                                Settings.getInstance().setMyMachine(
+                                        SimpleMapper.toMachine(
+                                                dataSnapshot.child(Constants.NODE_MACHINES)
+                                                        .child(String.valueOf(user.getUid()))));
+
+                                initUser();
+                                initContent();
+                                initMachines();
+                            }
+                            Settings.getInstance().getUsers().put(user.getId(), user);
+                        }
+                        for (DataSnapshot child : dataSnapshot.child(Constants.NODE_MACHINES)
+                                .getChildren()) {
+                            MachineWrapper machineWrapper = SimpleMapper.toMachine(child);
+                            Settings.getInstance().putMachines(Integer.parseInt(child.getKey()), machineWrapper);
+                        }
+                        ChatsListingActivity.onInitSuccess(context, flags);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        System.out.println("BAD_BAD");
                     }
                 });
     }

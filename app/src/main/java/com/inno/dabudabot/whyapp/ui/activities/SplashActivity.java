@@ -6,8 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.inno.dabudabot.whyapp.R;
 import com.google.firebase.auth.FirebaseAuth;
-import com.inno.dabudabot.whyapp.controller.sync.InitListeners;
-import com.inno.dabudabot.whyapp.listener.InitListenersView;
 
 /**
  * Created by Group-6 on 10/21/17.
@@ -18,10 +16,9 @@ import com.inno.dabudabot.whyapp.listener.InitListenersView;
  * if logged in redirect the user to user listing activity
  * if not redirect user to login activity
  */
-public class SplashActivity extends AppCompatActivity implements InitListenersView {
+public class SplashActivity extends AppCompatActivity {
     private static final int SPLASH_TIME_MS = 2000;
-    private Handler mHandler;
-    private Runnable mRunnable;
+
     /**
      * Runs at creation of current activity
      * @param savedInstanceState default state
@@ -31,14 +28,13 @@ public class SplashActivity extends AppCompatActivity implements InitListenersVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        mHandler = new Handler();
-        final InitListeners initListeners = new InitListeners(this);
+        Handler mHandler = new Handler();
 
-        mRunnable = new Runnable() {
+        Runnable mRunnable = new Runnable() {
             @Override
             public void run() {
                 if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                    initListeners.init();
+                    ChatsListingActivity.startActivity(SplashActivity.this);
                 } else {
                     LoginActivity.startIntent(
                             SplashActivity.this);
@@ -48,16 +44,5 @@ public class SplashActivity extends AppCompatActivity implements InitListenersVi
         };
 
         mHandler.postDelayed(mRunnable, SPLASH_TIME_MS);
-    }
-
-    @Override
-    public void onInitSuccess() {
-        ChatsListingActivity.startActivity(SplashActivity.this);
-
-    }
-
-    @Override
-    public void onInitFailure() {
-        LoginActivity.startIntent(SplashActivity.this);
     }
 }

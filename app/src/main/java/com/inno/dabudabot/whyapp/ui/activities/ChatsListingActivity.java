@@ -14,6 +14,7 @@ import android.view.View;
 
 import com.inno.dabudabot.whyapp.R;
 import com.inno.dabudabot.whyapp.controller.auth.LogoutController;
+import com.inno.dabudabot.whyapp.controller.sync.InitListeners;
 import com.inno.dabudabot.whyapp.ui.adapters.ChatsListingAdapter;
 
 /**
@@ -28,15 +29,25 @@ public class ChatsListingActivity extends AppCompatActivity {
     private FloatingActionButton fab;
     private LogoutController logout;
 
-    public static void startActivity(Context context) {
+    public static void onInitSuccess(Context context) {
         Intent intent = new Intent(context, ChatsListingActivity.class);
         context.startActivity(intent);
     }
 
-    public static void startActivity(Context context, int flags) {
+    public static void onInitSuccess(Context context, int flags) {
         Intent intent = new Intent(context, ChatsListingActivity.class);
         intent.setFlags(flags);
         context.startActivity(intent);
+    }
+
+    public static void startActivity(Context context) {
+        InitListeners initListeners = new InitListeners();
+        initListeners.init(context);
+    }
+
+    public static void startActivity(Context context, int flags) {
+        InitListeners initListeners = new InitListeners();
+        initListeners.init(context, flags);
     }
 
     @Override
