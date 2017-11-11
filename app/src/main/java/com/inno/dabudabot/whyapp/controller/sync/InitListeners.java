@@ -197,13 +197,14 @@ public class InitListeners {
                 .child(Constants.NODE_MACHINES).addChildEventListener(newMachine);
     }
 
+    //move it
     private void initContent() {
         ChildEventListener newContent = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Integer id = Integer.parseInt(dataSnapshot.getKey());
                 Content content = dataSnapshot.getValue(Content.class);
-                Settings.getInstance().getContents().put(id, content);
+                Settings.getInstance().putContents(id, content);
             }
 
             @Override

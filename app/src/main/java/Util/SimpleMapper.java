@@ -392,10 +392,10 @@ public class SimpleMapper {
         for (MachineWrapper machineWrapper : machines) {
             chatcontentseq.add(machineWrapper.get_chatcontentseq());
         }
-        Set<BRelation<Integer, Integer>> readChatcontentSeqs = new HashSet<>();
-        for (MachineWrapper machineWrapper : machines) {
-            readChatcontentSeqs.add(machineWrapper.get_readChatContentSeq());
-        }
+//        Set<BRelation<Integer, Integer>> readChatcontentSeqs = new HashSet<>();
+//        for (MachineWrapper machineWrapper : machines) {
+//            readChatcontentSeqs.add(machineWrapper.get_readChatContentSeq());
+//        }
 
         merged.set_chat(mergeBRelation(one.get_chat(), chats));
         merged.set_active(mergeBRelation(one.get_active(), actives));
@@ -407,7 +407,7 @@ public class SimpleMapper {
         merged.set_owner(mergeBRelation(one.get_owner(), owners));
         merged.set_contentsize(cs);
         merged.set_chatcontentseq(mergeBRelationRelationRelation(one.get_chatcontentseq(), chatcontentseq));
-        merged.set_readChatContentSeq(mergeBRelation(one.get_readChatContentSeq(), readChatcontentSeqs));
+        merged.set_readChatContentSeq(one.get_readChatContentSeq());
 
         BSet<Integer> usersOne = new BSet<>();
         usersOne.addAll(one.get_user());

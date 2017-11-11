@@ -2,6 +2,8 @@ package com.inno.dabudabot.whyapp.wrappers;
 
 import java.util.Iterator;
 
+import Util.Settings;
+import Util.SimpleMapper;
 import eventb_prelude.BRelation;
 import eventb_prelude.Pair;
 import group_6_model_sequential.MachineWrapper;
@@ -28,6 +30,9 @@ public class ReadingWrapper extends reading {
             super.run_reading(u1, u2);
             machineWrapper.set_readChatContentSeq(
                     modifyReadChatcontentSeq(u1, u2, chatcontentseq_tmp));
+            Settings.getInstance().setMyMachine(machineWrapper);
+            SimpleMapper.toDatabaseReference(machineWrapper,
+                    Settings.getInstance().getCurrentUser().getId());
         }
     }
     

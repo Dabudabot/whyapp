@@ -1,12 +1,16 @@
 package com.inno.dabudabot.whyapp.ui.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.inno.dabudabot.whyapp.R;
+
+import eventb_prelude.Pair;
 import group_6_model_sequential.Content;
 import Util.Settings;
 
@@ -23,18 +27,13 @@ public class MessagingRecyclerAdapter
     private static final int VIEW_TYPE_OTHER = 2;
 
     private List<Content> mMessages;
-    private Integer currentId;
-    private Integer opponentId;
 
-    public MessagingRecyclerAdapter(List<Content> messages,
-                                    Integer opponentId) {
+    public MessagingRecyclerAdapter(List<Content> messages) {
         mMessages = messages;
-        currentId = Settings.getInstance().getCurrentUser().getId();
-        this.opponentId = opponentId;
     }
 
-    public void add(Content message) {
-        mMessages.add(message);
+    public void add(Integer messageId) {
+        mMessages.add(Settings.getInstance().getContents().get(messageId));
         notifyItemInserted(mMessages.size() - 1);
     }
 
@@ -57,15 +56,18 @@ public class MessagingRecyclerAdapter
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        /*
-        if (TextUtils.equals(mMessages.get(position).getSenderUid(),
-                FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-            configureMyChatViewHolder((MyChatViewHolder) holder, position);
-        } else {
-            configureOtherChatViewHolder((OtherChatViewHolder) holder, position);
-        }*/
-        //TODO 7 READING FROM LOCAL
-        configureMyChatViewHolder((MyChatViewHolder) holder, position);
+        Content current = mMessages.get(position);
+        Integer myId = Settings.getInstance().getCurrentUser().getId();
+        for (Pair<Integer, Integer> ownership :
+                Settings.getInstance().getMyMachine().get_owner()) {
+            if (ownership.fst().equals(current.getId())
+                    && ownership.snd().equals(myId)) {
+                configureMyChatViewHolder((MyChatViewHolder) holder, position);
+            } else if (ownership.fst().equals(current.getId())
+                    && !ownership.snd().equals(myId)) {
+                configureOtherChatViewHolder((OtherChatViewHolder) holder, position);
+            }
+        }
     }
 
     private void configureMyChatViewHolder(MyChatViewHolder myChatViewHolder, int position) {
@@ -92,14 +94,19 @@ public class MessagingRecyclerAdapter
 
     @Override
     public int getItemViewType(int position) {
-        /*
-        if (TextUtils.equals(mMessages.get(position).getSenderUid(),
-                FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-            return VIEW_TYPE_ME;
-        } else {
-            return VIEW_TYPE_OTHER;
-        }*/
-        return VIEW_TYPE_ME;
+        Content current = mMessages.get(position);
+        Integer myId = Settings.getInstance().getCurrentUser().getId();
+        for (Pair<Integer, Integer> ownership :
+                Settings.getInstance().getMyMachine().get_owner()) {
+            if (ownership.fst().equals(current.getId())
+                    && ownership.snd().equals(myId)) {
+                return VIEW_TYPE_ME;
+            } else if (ownership.fst().equals(current.getId())
+                    && !ownership.snd().equals(myId)) {
+                return VIEW_TYPE_OTHER;
+            }
+        }
+        return VIEW_TYPE_OTHER;
     }
 
     private static class MyChatViewHolder extends RecyclerView.ViewHolder {

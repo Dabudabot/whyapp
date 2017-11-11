@@ -15,15 +15,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.inno.dabudabot.whyapp.R;
+import com.inno.dabudabot.whyapp.controller.ReceiveContentController;
 import com.inno.dabudabot.whyapp.controller.SendContentController;
 
 import Util.Settings;
 
+import com.inno.dabudabot.whyapp.listener.ReceiveContentView;
 import com.inno.dabudabot.whyapp.listener.SendContentView;
 import com.inno.dabudabot.whyapp.ui.adapters.MessagingRecyclerAdapter;
 import com.inno.dabudabot.whyapp.wrappers.UnselectChatWrapper;
 
+import java.util.ArrayList;
+
 import Util.Constants;
+import eventb_prelude.Pair;
+import group_6_model_sequential.Content;
 
 
 /**
@@ -33,15 +39,17 @@ import Util.Constants;
 public class MessagingFragment
         extends Fragment
         implements SendContentView,
+        ReceiveContentView,
         TextView.OnEditorActionListener {
 
-    private RecyclerView mRecyclerViewChat;
     private EditText mETxtMessage;
     private ProgressDialog mProgressDialog;
-    private MessagingRecyclerAdapter mMessagingRecyclerAdapter;
 
     private SendContentController sendContentController;
     private UnselectChatWrapper unselectChatWrapper;
+
+    private RecyclerView mRecyclerViewChat;
+    private MessagingRecyclerAdapter mMessagingRecyclerAdapter;
 
     public static MessagingFragment newInstance(Integer id) {
         Bundle args = new Bundle();
@@ -59,6 +67,7 @@ public class MessagingFragment
             unselectChatWrapper.run_unselect_chat(
                     Settings.getInstance().getCurrentUser().getId(),
                     getArguments().getInt(Constants.NODE_ID));
+            ReceiveContentController.unsubscribe(this);
             super.onStop();
         }
     }
@@ -97,7 +106,7 @@ public class MessagingFragment
         sendContentController = new SendContentController(this);
         unselectChatWrapper = new UnselectChatWrapper(Settings.getInstance().getMergedMachine());
 
-        //TODO 7 чтение сообщений в ресайклер
+        ReceiveContentController.subscribe(this);
     }
 
     @Override
@@ -126,6 +135,33 @@ public class MessagingFragment
     @Override
     public void sendFailure(String message) {
         System.err.println("BAD");
+    }
+
+    @Override
+    public void onReceiveSuccess() {
+        mMessagingRecyclerAdapter = new MessagingRecyclerAdapter(new ArrayList<Content>());
+        mRecyclerViewChat.setAdapter(mMessagingRecyclerAdapter);
+
+        for (Pair<Integer, Integer> m
+                : Settings.getInstance().getMyMachine().get_readChatContentSeq()) {
+            mMessagingRecyclerAdapter.add(m.snd());
+            mRecyclerViewChat.smoothScrollToPosition(mMessagingRecyclerAdapter.getItemCount() - 1);
+        }
+    }
+
+    @Override
+    public void onReceiveFailure(String message) {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public Integer getSender() {
+        return Settings.getInstance().getCurrentUser().getId();
+    }
+
+    @Override
+    public Integer getReceiver() {
+        return getArguments().getInt(Constants.NODE_ID);
     }
 
     //TODO 8 SELECT MESSAGE DROP MENU - FORWARD\BROADCAST and DELETE

@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.ValueEventListener;
+import com.inno.dabudabot.whyapp.controller.ReceiveContentController;
 
 import eventb_prelude.BRelation;
 import eventb_prelude.Pair;
@@ -55,6 +56,11 @@ public class Settings {
         machines = new HashMap<>();
         machineChangeListeners = new HashMap<>();
         idGen = 0;
+    }
+
+    public void putContents(Integer id, Content content) {
+        contents.put(id, content);
+        ReceiveContentController.sendNotify();
     }
 
     public Map<Integer, Content> getContents() {
