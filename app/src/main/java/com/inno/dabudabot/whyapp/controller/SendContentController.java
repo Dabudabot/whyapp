@@ -61,7 +61,8 @@ public class SendContentController implements GenerateIdView {
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
+                            if (task.isSuccessful() &&
+                                    chattingWrapper.guard_chatting(id, senderId, receiverId)) {
                                 chattingWrapper.run_chatting(id, senderId, receiverId);
                                 listener.sendSuccess();
                             } else {

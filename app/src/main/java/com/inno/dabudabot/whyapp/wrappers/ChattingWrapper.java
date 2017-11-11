@@ -1,5 +1,7 @@
 package com.inno.dabudabot.whyapp.wrappers;
 
+import Util.Settings;
+import Util.SimpleMapper;
 import group_6_model_sequential.MachineWrapper;
 import group_6_model_sequential.chatting;
 import group_6_model_sequential.machine3;
@@ -32,6 +34,9 @@ public class ChattingWrapper extends chatting {
                     modifyChatcontent(ch_u1, ch_u2, ch_c, chatcontent_tmp));
             
             machineWrapper.set_chatcontentseq((chatcontentseq_tmp.override(new BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>>(new Pair<Integer,BRelation<Integer,BRelation<Integer,Integer>>>(new Integer(contentsize_tmp + 1),new BRelation<Integer,BRelation<Integer,Integer>>(new Pair<Integer,BRelation<Integer,Integer>>(ch_c,(BRelation.cross(new BSet(ch_u1),new BSet(ch_u2)).union(BRelation.cross(new BSet(ch_u2),new BSet(ch_u1)))))))))));
+            Settings.getInstance().setMyMachine(machineWrapper);
+            SimpleMapper.toDatabaseReference(machineWrapper,
+                    Settings.getInstance().getCurrentUser().getId());
         }
 	}
 	

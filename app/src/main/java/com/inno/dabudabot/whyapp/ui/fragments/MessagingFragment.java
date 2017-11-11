@@ -51,12 +51,6 @@ public class MessagingFragment
         return fragment;
     }
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        EventBus.getDefault().register(this);
-//    }
-//
     @Override
     public void onStop() {
         if (unselectChatWrapper.guard_unselect_chat(

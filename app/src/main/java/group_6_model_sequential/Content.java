@@ -12,6 +12,9 @@ public class Content {
     private String message;
     private long timestamp;
 
+    public Content() {
+    }
+
     public Content(Integer id,
                    String message,
                    long timestamp) {
