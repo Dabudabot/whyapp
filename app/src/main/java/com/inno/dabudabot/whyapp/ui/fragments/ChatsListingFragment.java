@@ -63,6 +63,15 @@ public class ChatsListingFragment extends Fragment implements
         init();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getListingsController.getChatsListing();
+        selectChatWrapper = new SelectChatWrapper(
+                Settings.getInstance().getMergedMachine(),
+                getActivity());
+    }
+
     private void init() {
         selectChatWrapper = new SelectChatWrapper(
                 Settings.getInstance().getMergedMachine(),

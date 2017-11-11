@@ -21,6 +21,8 @@ import Util.Settings;
 
 import com.inno.dabudabot.whyapp.listener.SendContentView;
 import com.inno.dabudabot.whyapp.ui.adapters.MessagingRecyclerAdapter;
+import com.inno.dabudabot.whyapp.wrappers.UnselectChatWrapper;
+
 import Util.Constants;
 
 
@@ -39,6 +41,7 @@ public class MessagingFragment
     private MessagingRecyclerAdapter mMessagingRecyclerAdapter;
 
     private SendContentController sendContentController;
+    private UnselectChatWrapper unselectChatWrapper;
 
     public static MessagingFragment newInstance(Integer id) {
         Bundle args = new Bundle();
@@ -54,11 +57,17 @@ public class MessagingFragment
 //        EventBus.getDefault().register(this);
 //    }
 //
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        EventBus.getDefault().unregister(this);
-//    }
+    @Override
+    public void onStop() {
+        if (unselectChatWrapper.guard_unselect_chat(
+                Settings.getInstance().getCurrentUser().getId(),
+                getArguments().getInt(Constants.NODE_ID))) {
+            unselectChatWrapper.run_unselect_chat(
+                    Settings.getInstance().getCurrentUser().getId(),
+                    getArguments().getInt(Constants.NODE_ID));
+            super.onStop();
+        }
+    }
 
     @Nullable
     @Override
@@ -92,6 +101,7 @@ public class MessagingFragment
 
         mETxtMessage.setOnEditorActionListener(this);
         sendContentController = new SendContentController(this);
+        unselectChatWrapper = new UnselectChatWrapper(Settings.getInstance().getMergedMachine());
 
         //TODO 7 чтение сообщений в ресайклер
     }

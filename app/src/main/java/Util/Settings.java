@@ -1,5 +1,7 @@
 package Util;
 
+import android.app.Activity;
+
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.ValueEventListener;
 
@@ -88,7 +90,6 @@ public class Settings {
 
     public void putMachines(Integer key, MachineWrapper machine) {
         machines.put(key, machine);
-        this.mergedMachine = SimpleMapper.merge(myMachine, machines.values());
     }
 
     public void setMachines(Map<Integer, MachineWrapper> machines) {
@@ -136,11 +137,15 @@ public class Settings {
     }
 
     public void merge() {
-        this.mergedMachine = SimpleMapper.merge(myMachine, machines.values());
+        this.mergedMachine =
+                SimpleMapper.merge(myMachine,
+                        machines.values(),
+                        users.values(),
+                        contents.values());
     }
 
     public MachineWrapper getMergedMachine() {
-        //merge();
+        merge();
         return mergedMachine;
     }
 

@@ -11,7 +11,9 @@ import java.util.Set;
 import eventb_prelude.BRelation;
 import eventb_prelude.BSet;
 import eventb_prelude.Pair;
+import group_6_model_sequential.Content;
 import group_6_model_sequential.MachineWrapper;
+import group_6_model_sequential.User;
 
 /**
  * Created by Group-6 on 08.11.17.
@@ -132,6 +134,15 @@ public class SimpleMapper {
     private static void fromBRelation(BRelation<Integer, Integer> relation,
                                       Integer currentId,
                                       String node) {
+        if (relation.isEmpty()) {
+            FirebaseDatabase.getInstance()
+                    .getReference()
+                    .child(Constants.NODE_MACHINES)
+                    .child(String.valueOf(currentId))
+                    .child(node)
+                    .removeValue();
+        }
+
         int iterator = 0;
         for (Pair<Integer, Integer> pair : relation) {
             FirebaseDatabase.getInstance()
@@ -328,7 +339,17 @@ public class SimpleMapper {
     }
 
     public static MachineWrapper merge(MachineWrapper one,
-                                       Collection<MachineWrapper> machines) {
+                                       Collection<MachineWrapper> machines,
+                                       Collection<User> users,
+                                       Collection<Content> contents) {
+
+        for (User user : users) {
+            one.get_user().add(user.getId());
+        }
+        for (Content content : contents) {
+            one.get_content().add(content.getId());
+        }
+
         MachineWrapper merged = new MachineWrapper();
 //CRAP!
         Set<BRelation<Integer, Integer>> chats = new HashSet<>();
@@ -388,20 +409,20 @@ public class SimpleMapper {
         merged.set_chatcontentseq(mergeBRelationRelationRelation(one.get_chatcontentseq(), chatcontentseq));
         merged.set_readChatContentSeq(mergeBRelation(one.get_readChatContentSeq(), readChatcontentSeqs));
 
-        BSet<Integer> users = new BSet<>();
-        users.addAll(one.get_user());
+        BSet<Integer> usersOne = new BSet<>();
+        usersOne.addAll(one.get_user());
         for (MachineWrapper machineWrapper : machines) {
-            users.addAll(machineWrapper.get_user());
+            usersOne.addAll(machineWrapper.get_user());
         }
 
-        BSet<Integer> content = new BSet<>();
-        content.addAll(one.get_content());
+        BSet<Integer> contentsOne = new BSet<>();
+        contentsOne.addAll(one.get_content());
         for (MachineWrapper machineWrapper : machines) {
-            content.addAll(machineWrapper.get_content());
+            contentsOne.addAll(machineWrapper.get_content());
         }
 
-        merged.set_content(content);
-        merged.set_user(users);
+        merged.set_content(contentsOne);
+        merged.set_user(usersOne);
         //CRAP ENDS
         return merged;
     }

@@ -71,6 +71,23 @@ public class GetListingsController {
             }
         }
 
+        for (Pair<Integer, Integer> chat : Settings.getInstance().getMyMachine().get_chat()) {
+            if (chat.fst().equals(Settings.getInstance().getCurrentUser().getId())) {
+                for (User user : Settings.getInstance().getUsers().values()) {
+                    if (user.getId().equals(chat.snd())) {
+                        users.add(user);
+                    }
+                }
+            }
+            if (chat.snd().equals(Settings.getInstance().getCurrentUser().getId())) {
+                for (User user : Settings.getInstance().getUsers().values()) {
+                    if (user.getId().equals(chat.fst())) {
+                        users.add(user);
+                    }
+                }
+            }
+        }
+
         listener.onGetListingsSuccess(new ArrayList<>(users));
     }
 

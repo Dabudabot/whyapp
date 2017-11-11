@@ -24,6 +24,7 @@ public class CreateChatSessionWrapper extends create_chat_session {
     public void run_create_chat_session(Integer ccs_u1, Integer ccs_u2) {
         if (super.guard_create_chat_session(ccs_u1, ccs_u2)) {
             super.run_create_chat_session(ccs_u1, ccs_u2);
+            Settings.getInstance().setMyMachine(machineWrapper);
             SimpleMapper.toDatabaseReference(machineWrapper,
                     Settings.getInstance().getCurrentUser().getId());
             MessagingActivity.startActivity(activity, ccs_u2);
