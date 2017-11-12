@@ -27,7 +27,7 @@ public class Constants {
     public static final String NODE_OWNER = "owner";
     public static final String NODE_CONTENTSIZE = "contentsize";
     public static final String NODE_CHATCONTENTSEQ = "chatcontentseq";
-    public static final String NODE_READCHATCONTENTSEQ = "readchatcontentseq";
+    public static final String NODE_READCHATCONTENTSEQ = "readChatContentSeq";
     public static final String NODE_CONTENT = "content";
     public static final String NODE_USER = "user";
 

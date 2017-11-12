@@ -312,17 +312,18 @@ public class SimpleMapper {
     }
 
     public static void toDatabaseReference(machine3 machine) {
-        fromBRelation(machine.get_chat(), Constants.NODE_CHAT);
-        fromBRelation(machine.get_active(), Constants.NODE_ACTIVE);
+        //fromBRelation(machine.get_chat(), Constants.NODE_CHAT);
+        //fromBRelation(machine.get_active(), Constants.NODE_ACTIVE);
         fromBRelation(machine.get_muted(), Constants.NODE_MUTED);
-        fromBRelationRelationRelation(machine.get_chatcontent(), Constants.NODE_CHATCONTENT);
-        fromBRelation(machine.get_toread(), Constants.NODE_TOREAD);
-        fromBRelation(machine.get_inactive(), Constants.NODE_INACTIVE);
-        fromBRelationRelation(machine.get_toreadcon(), Constants.NODE_TOREADCON);
-        fromBRelation(machine.get_owner(), Constants.NODE_OWNER);
-        fromInteger(machine.get_contentsize(), Constants.NODE_CONTENTSIZE);
-        fromBRelationRelationRelation(machine.get_chatcontentseq(), Constants.NODE_CHATCONTENTSEQ);
-        fromBRelation(machine.get_readChatContentSeq(), Constants.NODE_READCHATCONTENTSEQ);
+        //fromBRelationRelationRelation(machine.get_chatcontent(), Constants.NODE_CHATCONTENT);
+        //fromBRelation(machine.get_toread(), Constants.NODE_TOREAD);
+        //fromBRelation(machine.get_inactive(), Constants.NODE_INACTIVE);
+        //fromBRelationRelation(machine.get_toreadcon(), Constants.NODE_TOREADCON);
+        //fromBRelation(machine.get_owner(), Constants.NODE_OWNER);
+        //fromInteger(machine.get_contentsize(), Constants.NODE_CONTENTSIZE);
+        //fromBRelationRelationRelation(machine.get_chatcontentseq(), Constants.NODE_CHATCONTENTSEQ);
+        //fromBRelation(machine.get_readChatContentSeq(), Constants.NODE_READCHATCONTENTSEQ);
+        toFirebaseString(machine);
     }
 
     private static String fromBR(BRelation<Integer, Integer> rel, String node) {
