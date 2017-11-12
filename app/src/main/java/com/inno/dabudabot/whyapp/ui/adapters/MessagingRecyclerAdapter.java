@@ -37,6 +37,10 @@ public class MessagingRecyclerAdapter
         notifyDataSetChanged();
     }
 
+    public Content getContent(int position) {
+        return mMessages.get(position);
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());

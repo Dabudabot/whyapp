@@ -22,4 +22,9 @@
     <string name="logout">Logout</string>
     <string name="are_you_sure">Are you sure ?</string>
     <string name="cancel">Cancel</string>
+
+    <string name="broadcast">Broadcast</string>
+    <string name="delete_chat">Delete</string>
+    <string name="muteunmute">Mute/Unmute</string>
+    <string name="forward">Forward</string>
 </resources>

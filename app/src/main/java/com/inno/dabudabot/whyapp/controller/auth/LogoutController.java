@@ -28,7 +28,7 @@ public class LogoutController {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                            //TODO 9 clear settings
+
                             FirebaseAuth.getInstance().signOut();
                             LoginActivity.startIntent(activity.getApplicationContext(),
                                     Intent.FLAG_ACTIVITY_CLEAR_TASK |

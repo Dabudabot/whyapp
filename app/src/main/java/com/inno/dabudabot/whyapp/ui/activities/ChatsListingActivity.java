@@ -94,7 +94,7 @@ public class ChatsListingActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_user_listing, menu);
+        getMenuInflater().inflate(R.menu.menu_general, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

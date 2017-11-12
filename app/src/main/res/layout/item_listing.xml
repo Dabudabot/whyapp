@@ -16,14 +16,14 @@
         android:id="@+id/text_view_user_alphabet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/circle_accent"
+        android:background="@drawable/circle_accent_muted"
         android:gravity="center"
         android:maxEms="1"
         android:textAllCaps="true"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/grey_100"
         android:textStyle="bold"
-        tools:text="a" />
+        tools:text="M" />
 
     <android.support.v4.widget.Space
         android:layout_width="@dimen/space_avg"

@@ -1,5 +1,8 @@
 package com.inno.dabudabot.whyapp.ui.adapters;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,7 +10,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.inno.dabudabot.whyapp.R;
+
+import Util.Settings;
+import eventb_prelude.Pair;
 import group_6_model_sequential.User;
+import group_6_model_sequential.machine3;
 
 import java.util.List;
 
@@ -36,13 +43,31 @@ public class UserListingRecyclerAdapter
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         User user = mUsers.get(position);
+        if (user.getName() != null) {
 
-        if (user.getName() != null){
+            machine3 machine = Settings.getInstance().getMachine();
             String alphabet = user.getName().substring(0, 1);
+            int back = R.drawable.circle_accent;
+
+            for (Pair<Integer, Integer> pair : machine.get_toread()) {
+                if (pair.snd().equals(user.getId())
+                    || pair.fst().equals(user.getId())) {
+                    alphabet = "!";
+                    back = R.drawable.circle_accent_warn;
+                }
+            }
+            for (Pair<Integer, Integer> pair : machine.get_muted()) {
+                if (pair.snd().equals(user.getId())
+                        || pair.fst().equals(user.getId())) {
+                    alphabet = "M";
+                    back = R.drawable.circle_accent_muted;
+                }
+            }
 
             holder.txtUsername.setText(user.getName());
             holder.txtUserAlphabet.setText(alphabet);
-          }
+            holder.txtUserAlphabet.setBackgroundResource(back);
+        }
     }
 
     @Override
@@ -68,6 +93,4 @@ public class UserListingRecyclerAdapter
                     (TextView) itemView.findViewById(R.id.text_view_username);
         }
     }
-
-    //TODO 12 NEW MESSAGE SIGN
 }

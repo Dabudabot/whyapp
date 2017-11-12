@@ -63,8 +63,4 @@ public class MessagingActivity extends AppCompatActivity {
         super.onPause();
         WhyMainApp.setChatActivityOpen(false);
     }
-
-    //TODO 10 add menu with mute unmute and delete
-
-    //TODO 11 muted sign
 }

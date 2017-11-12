@@ -16,6 +16,8 @@ import com.inno.dabudabot.whyapp.listener.GetListingsView;
 import Util.Settings;
 import group_6_model_sequential.User;
 import com.inno.dabudabot.whyapp.ui.adapters.UserListingRecyclerAdapter;
+import com.inno.dabudabot.whyapp.ui.dialogs.ChatsDialog;
+import com.inno.dabudabot.whyapp.ui.dialogs.MessagingDialog;
 import com.inno.dabudabot.whyapp.wrappers.SelectChatWrapper;
 
 import Util.ItemClickSupport;
@@ -28,7 +30,8 @@ import java.util.List;
  */
 public class ChatsListingFragment extends Fragment implements
         GetListingsView,
-        ItemClickSupport.OnItemClickListener {
+        ItemClickSupport.OnItemClickListener,
+        ItemClickSupport.OnItemLongClickListener {
 
     private RecyclerView mRecyclerViewAllUserListing;
 
@@ -85,6 +88,8 @@ public class ChatsListingFragment extends Fragment implements
                 getActivity());
     }
 
+
+
     @Override
     public void onGetListingsSuccess(List<User> users) {
         mUserListingRecyclerAdapter = new UserListingRecyclerAdapter(users);
@@ -95,5 +100,14 @@ public class ChatsListingFragment extends Fragment implements
     @Override
     public void onGetListingsFailure(String message) {
         Toast.makeText(getActivity(), "Error: " + message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onItemLongClicked(RecyclerView recyclerView, int position, View v) {
+        ChatsDialog cdd =
+                new ChatsDialog(getActivity(),
+                        mUserListingRecyclerAdapter.getUser(position).getId());
+        cdd.show();
+        return true;
     }
 }

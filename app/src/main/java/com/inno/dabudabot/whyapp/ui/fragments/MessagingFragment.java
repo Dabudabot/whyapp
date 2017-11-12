@@ -18,11 +18,13 @@ import com.inno.dabudabot.whyapp.R;
 import com.inno.dabudabot.whyapp.controller.ReceiveContentController;
 import com.inno.dabudabot.whyapp.controller.SendContentController;
 
+import Util.ItemClickSupport;
 import Util.Settings;
 
 import com.inno.dabudabot.whyapp.listener.ReceiveContentView;
 import com.inno.dabudabot.whyapp.listener.SendContentView;
 import com.inno.dabudabot.whyapp.ui.adapters.MessagingRecyclerAdapter;
+import com.inno.dabudabot.whyapp.ui.dialogs.MessagingDialog;
 import com.inno.dabudabot.whyapp.wrappers.UnselectChatWrapper;
 
 import java.util.ArrayList;
@@ -41,7 +43,8 @@ public class MessagingFragment
         extends Fragment
         implements SendContentView,
         ReceiveContentView,
-        TextView.OnEditorActionListener {
+        TextView.OnEditorActionListener,
+        ItemClickSupport.OnItemClickListener {
 
     private EditText mETxtMessage;
     private ProgressDialog mProgressDialog;
@@ -168,5 +171,11 @@ public class MessagingFragment
         return getArguments().getInt(Constants.NODE_ID);
     }
 
-    //TODO 8 SELECT MESSAGE DROP MENU - FORWARD\BROADCAST and DELETE
+    @Override
+    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+        MessagingDialog cdd =
+                new MessagingDialog(getActivity(),
+                        mMessagingRecyclerAdapter.getContent(position).getId());
+        cdd.show();
+    }
 }
