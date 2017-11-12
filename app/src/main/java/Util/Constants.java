@@ -16,7 +16,7 @@ public class Constants {
     public static final String NODE_MESSAGE = "message";
     public static final String NODE_TIMESTAMP = "timestamp";
 
-    public static final String NODE_MACHINES = "machines";
+    public static final String NODE_MACHINE = "machine";
     public static final String NODE_CHAT = "chat";
     public static final String NODE_ACTIVE = "active";
     public static final String NODE_MUTED = "muted";
@@ -33,4 +33,6 @@ public class Constants {
 
     public static final String NODE_FST = "fst";
     public static final String NODE_SND = "snd";
+
+    public static final String NODE_DATA = "data";
 }

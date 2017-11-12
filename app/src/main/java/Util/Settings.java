@@ -1,22 +1,19 @@
 package Util;
 
-import android.app.Activity;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.ValueEventListener;
-import com.inno.dabudabot.whyapp.controller.ReceiveContentController;
+import com.inno.dabudabot.whyapp.controller.listing.GetListingsController;
+import com.inno.dabudabot.whyapp.controller.sync.GetChatContentController;
+import com.inno.dabudabot.whyapp.listener.GetChatContentView;
 
 import eventb_prelude.BRelation;
-import eventb_prelude.Pair;
 import group_6_model_sequential.Content;
-import group_6_model_sequential.MachineWrapper;
+import group_6_model_sequential.machine3;
 import group_6_model_sequential.User;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by Group-6 on 07.11.17.
@@ -29,16 +26,14 @@ public class Settings {
     private User currentUser;
     private Map<Integer, Content> contents;
     private Map<Integer, User> users;
-    private MachineWrapper myMachine;
-    private Map<Integer, MachineWrapper> machines;
-    private MachineWrapper mergedMachine;
+    private machine3 machine;
 
     private ChildEventListener newUserListener;
-    private ChildEventListener newContentListener;
-    private ChildEventListener newMachineListener;
-    private Map<Integer, ValueEventListener> machineChangeListeners;
+    private ValueEventListener chatcontentChangeListener;
+    private ValueEventListener mutedChangeListener;
 
     private int idGen;
+    private volatile Boolean busy;
 
     public static Settings getInstance() {
         Settings localInstance = instance;
@@ -56,13 +51,39 @@ public class Settings {
     private Settings() {
         contents = new HashMap<>();
         users = new HashMap<>();
-        machines = new HashMap<>();
-        machineChangeListeners = new HashMap<>();
         idGen = 0;
+        busy = false;
     }
 
-    public void putContents(Integer id, Content content) {
-        contents.put(id, content);
+    public void commitMachine() {
+        SimpleMapper.toDatabaseReference(machine);
+    }
+
+    public void commitMachine(machine3 machine) {
+        this.machine = machine;
+        SimpleMapper.toDatabaseReference(machine);
+    }
+
+    public void uptDataMachine(machine3 machine) {
+
+        this.machine.set_chatcontent(machine.get_chatcontent());
+        this.machine.set_chat(machine.get_chat());
+        this.machine.set_chatcontentseq(machine.get_chatcontentseq());
+        this.machine.set_content(machine.get_content());
+        this.machine.set_contentsize(machine.get_contentsize());
+        this.machine.set_owner(machine.get_owner());
+        this.machine.set_toread(machine.get_toread());
+        this.machine.set_toreadcon(machine.get_toreadcon());
+
+        //TODO new data change
+    }
+
+    public void uptMuted(BRelation<Integer, Integer> muted) {
+        machine.set_muted(muted);
+    }
+
+    public void uptUser(Integer userId) {
+        machine.get_user().add(userId);
     }
 
     public Map<Integer, Content> getContents() {
@@ -92,18 +113,6 @@ public class Settings {
         this.idGen = id;
     }
 
-    public Map<Integer, MachineWrapper> getMachines() {
-        return machines;
-    }
-
-    public void putMachines(Integer key, MachineWrapper machine) {
-        machines.put(key, machine);
-    }
-
-    public void setMachines(Map<Integer, MachineWrapper> machines) {
-        this.machines = machines;
-    }
-
     public ChildEventListener getNewUserListener() {
         return newUserListener;
     }
@@ -112,64 +121,43 @@ public class Settings {
         this.newUserListener = newUserListener;
     }
 
-    public ChildEventListener getNewContentListener() {
-        return newContentListener;
-    }
-
-    public void setNewContentListener(ChildEventListener newContentListener) {
-        this.newContentListener = newContentListener;
-    }
-
-    public ChildEventListener getNewMachineListener() {
-        return newMachineListener;
-    }
-
-    public void setNewMachineListener(ChildEventListener newMachineListener) {
-        this.newMachineListener = newMachineListener;
-    }
-
-    public Map<Integer, ValueEventListener> getMachineChangeListeners() {
-        return machineChangeListeners;
-    }
-
-    public void setMachineChangeListeners(Map<Integer, ValueEventListener> machineChangeListeners) {
-        this.machineChangeListeners = machineChangeListeners;
-    }
-
-    public MachineWrapper getMyMachine() {
-        return myMachine;
-    }
-
-    public void setMyMachine(MachineWrapper myMachine) {
-        this.myMachine = myMachine;
-    }
-
-    public void merge() {
-        Set<MachineWrapper> allEx = new HashSet<>();
-        for (Integer i : machines.keySet()) {
-            allEx.add(machines.get(i));
-        }
-        this.mergedMachine =
-                SimpleMapper.merge(myMachine,
-                        allEx,
-                        users.values(),
-                        contents.values());
-    }
-
-    public MachineWrapper getMergedMachine() {
-        merge();
-        return mergedMachine;
-    }
-
-    public void setMergedMachine(MachineWrapper mergedMachine) {
-        this.mergedMachine = mergedMachine;
-    }
-
     public User getCurrentUser() {
         return currentUser;
     }
 
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
+    }
+
+    public machine3 getMachine() {
+        return machine;
+    }
+
+    public void setMachine(machine3 machine) {
+        this.machine = machine;
+    }
+
+    public Boolean getBusy() {
+        return busy;
+    }
+
+    public void setBusy(Boolean busy) {
+        this.busy = busy;
+    }
+
+    public ValueEventListener getChatcontentChangeListener() {
+        return chatcontentChangeListener;
+    }
+
+    public void setChatcontentChangeListener(ValueEventListener chatcontentChangeListener) {
+        this.chatcontentChangeListener = chatcontentChangeListener;
+    }
+
+    public ValueEventListener getMutedChangeListener() {
+        return mutedChangeListener;
+    }
+
+    public void setMutedChangeListener(ValueEventListener mutedChangeListener) {
+        this.mutedChangeListener = mutedChangeListener;
     }
 }

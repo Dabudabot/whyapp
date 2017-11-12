@@ -1,6 +1,7 @@
 package com.inno.dabudabot.whyapp.wrappers;
 
-import group_6_model_sequential.MachineWrapper;
+import Util.Settings;
+import group_6_model_sequential.machine3;
 import group_6_model_sequential.delete_chat_session;
 import group_6_model_sequential.machine3;
 
@@ -8,33 +9,30 @@ import java.util.Iterator;
 
 import eventb_prelude.*;
 
-public class DeleteChatSessionWrapper extends delete_chat_session {
-    protected MachineWrapper machineWrapper;
+public class DeleteChatSessionWrapper {
 
-    public DeleteChatSessionWrapper(MachineWrapper m) {
-        super(m);
-        machineWrapper = m;
-    }
-    
-    
-    @Override
-    public void run_delete_chat_session(Integer dcs_u1, Integer dcs_u2){
+    public DeleteChatSessionWrapper() {}
+
+    public void runDeleteChatSession(Integer dcs_u1, Integer dcs_u2, machine3 m){
         BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>> 
-                            chatcontent_tmp = machineWrapper.get_chatcontent();
+                            chatcontent_tmp = m.get_chatcontent();
         BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>>
-                            chatcontentseq_tmp = machineWrapper.get_chatcontentseq();
+                            chatcontentseq_tmp = m.get_chatcontentseq();
         BRelation<Integer,BRelation<Integer,Integer>>
-                            toreadcon_tmp = machineWrapper.get_toreadcon();
-        
-        if(guard_delete_chat_session(dcs_u1,dcs_u2)) {
-            super.run_delete_chat_session(dcs_u1, dcs_u2);
+                            toreadcon_tmp = m.get_toreadcon();
+        delete_chat_session delete_chat_session = new delete_chat_session(m);
+        if(delete_chat_session.guard_delete_chat_session(dcs_u1,dcs_u2)) {
+            Settings.getInstance().setBusy(true);
+            delete_chat_session.run_delete_chat_session(dcs_u1, dcs_u2);
             
-            machineWrapper.set_chatcontent(
+            m.set_chatcontent(
                     modifyChatcontent(dcs_u1, dcs_u2, chatcontent_tmp));
-            machineWrapper.set_chatcontentseq(
+            m.set_chatcontentseq(
                     modifyChatcontentSeq(dcs_u1, dcs_u2, chatcontentseq_tmp));
-            machineWrapper.set_toreadcon(
+            m.set_toreadcon(
                     modifyToreadcon(dcs_u1, dcs_u2, toreadcon_tmp));
+            Settings.getInstance().commitMachine(m);
+            Settings.getInstance().setBusy(false);
         }
     }
     

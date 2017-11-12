@@ -10,7 +10,7 @@ public class Tests {
 	 * Test for set comprehension bug.
 	 */
 	private static void test_del_ch_ses_chc() {
-		machine3 machine = new MachineWrapper();
+		machine3 machine = new machine3();
 
 		Integer u1 = 1;//Utilities.someVal(new BSet<Integer>((new Enumerated(1,Utilities.max_integer))));
 		Integer u2 = 2;//Utilities.someVal(new BSet<Integer>((new Enumerated(1,Utilities.max_integer))));
@@ -57,7 +57,7 @@ public class Tests {
 
 
 	private static void test_change_chc() {
-        machine3 machine = new MachineWrapper();
+        machine3 machine = new machine3();
 
         Integer u1 = 1;//Utilities.someVal(new BSet<Integer>((new Enumerated(1,Utilities.max_integer))));
         Integer u2 = 2;//Utilities.someVal(new BSet<Integer>((new Enumerated(1,Utilities.max_integer))));

@@ -12,7 +12,7 @@ import com.inno.dabudabot.whyapp.listener.GetListingsView;
 import Util.Settings;
 import eventb_prelude.BRelation;
 import eventb_prelude.Pair;
-import group_6_model_sequential.MachineWrapper;
+import group_6_model_sequential.machine3;
 import group_6_model_sequential.User;
 import Util.Constants;
 
@@ -51,27 +51,8 @@ public class GetListingsController {
     public void getChatsListing() {
         Set<User> users = new HashSet<>();
 
-        for (MachineWrapper machineWrapper :
-                Settings.getInstance().getMachines().values()) {
-            for (Pair<Integer, Integer> chat : machineWrapper.get_chat()) {
-                if (chat.fst().equals(Settings.getInstance().getCurrentUser().getId())) {
-                    for (User user : Settings.getInstance().getUsers().values()) {
-                        if (user.getId().equals(chat.snd())) {
-                            users.add(user);
-                        }
-                    }
-                }
-                if (chat.snd().equals(Settings.getInstance().getCurrentUser().getId())) {
-                    for (User user : Settings.getInstance().getUsers().values()) {
-                        if (user.getId().equals(chat.fst())) {
-                            users.add(user);
-                        }
-                    }
-                }
-            }
-        }
-
-        for (Pair<Integer, Integer> chat : Settings.getInstance().getMyMachine().get_chat()) {
+        for (Pair<Integer, Integer> chat :
+                Settings.getInstance().getMachine().get_chat()) {
             if (chat.fst().equals(Settings.getInstance().getCurrentUser().getId())) {
                 for (User user : Settings.getInstance().getUsers().values()) {
                     if (user.getId().equals(chat.snd())) {

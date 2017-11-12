@@ -6,28 +6,22 @@ import com.inno.dabudabot.whyapp.ui.activities.MessagingActivity;
 
 import Util.Settings;
 import Util.SimpleMapper;
-import group_6_model_sequential.MachineWrapper;
+import group_6_model_sequential.machine3;
 import group_6_model_sequential.create_chat_session;
 import group_6_model_sequential.machine3;
 
-public class CreateChatSessionWrapper extends create_chat_session {
-    protected MachineWrapper machineWrapper;
-    private Activity activity;
+public class CreateChatSessionWrapper {
 
-    public CreateChatSessionWrapper(MachineWrapper m, Activity activity) {
-        super(m);
-        machineWrapper = m;
-        this.activity = activity;
-    }
+    public CreateChatSessionWrapper() {}
 
-    @Override
-    public void run_create_chat_session(Integer ccs_u1, Integer ccs_u2) {
-        if (super.guard_create_chat_session(ccs_u1, ccs_u2)) {
-            super.run_create_chat_session(ccs_u1, ccs_u2);
-            Settings.getInstance().setMyMachine(machineWrapper);
-            SimpleMapper.toDatabaseReference(machineWrapper,
-                    Settings.getInstance().getCurrentUser().getId());
-            MessagingActivity.startActivity(activity, ccs_u2);
+    public void runCreateChatSession(Integer ccs_u1, Integer ccs_u2, machine3 m, Activity a) {
+        create_chat_session create_chat_session = new create_chat_session(m);
+        if (create_chat_session.guard_create_chat_session(ccs_u1, ccs_u2)) {
+            Settings.getInstance().setBusy(true);
+            create_chat_session.run_create_chat_session(ccs_u1, ccs_u2);
+            Settings.getInstance().commitMachine(m);
+            Settings.getInstance().setBusy(false);
+            MessagingActivity.startActivity(a, ccs_u2);
         }
     }
 }

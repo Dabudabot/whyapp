@@ -14,7 +14,7 @@ import com.inno.dabudabot.whyapp.controller.listing.GetListingsController;
 import com.inno.dabudabot.whyapp.listener.GetListingsView;
 
 import Util.Settings;
-import group_6_model_sequential.MachineWrapper;
+import group_6_model_sequential.machine3;
 import group_6_model_sequential.User;
 
 import com.inno.dabudabot.whyapp.ui.activities.MessagingActivity;
@@ -67,10 +67,7 @@ public class UsersListingFragment extends Fragment implements
     }
 
     private void init() {
-        createChatSessionWrapper =
-                new CreateChatSessionWrapper(
-                        Settings.getInstance().getMergedMachine(),
-                        getActivity());
+        createChatSessionWrapper = new CreateChatSessionWrapper();
         getListingsController = new GetListingsController(this);
         getListingsController.getUsersListing();
         ItemClickSupport.addTo(mRecyclerViewAllUserListing)
@@ -79,9 +76,11 @@ public class UsersListingFragment extends Fragment implements
 
     @Override
     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-        createChatSessionWrapper.run_create_chat_session(
+        createChatSessionWrapper.runCreateChatSession(
                 Settings.getInstance().getCurrentUser().getId(),
-                mUserListingRecyclerAdapter.getUser(position).getId()
+                mUserListingRecyclerAdapter.getUser(position).getId(),
+                Settings.getInstance().getMachine(),
+                getActivity()
         );
     }
 

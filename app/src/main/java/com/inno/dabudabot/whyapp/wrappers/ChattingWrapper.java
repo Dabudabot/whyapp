@@ -1,45 +1,38 @@
 package com.inno.dabudabot.whyapp.wrappers;
 
-import com.inno.dabudabot.whyapp.controller.ReceiveContentController;
-
 import Util.Settings;
-import Util.SimpleMapper;
-import group_6_model_sequential.MachineWrapper;
-import group_6_model_sequential.chatting;
 import group_6_model_sequential.machine3;
+import group_6_model_sequential.chatting;
 
 import java.util.Iterator;
 
 import eventb_prelude.*;
 
-public class ChattingWrapper extends chatting {
-    protected MachineWrapper machineWrapper;
+public class ChattingWrapper {
     
-	public ChattingWrapper(MachineWrapper m) {
-		super(m);
-		machineWrapper = m;
-	}
-	
-	
-	@Override
-	public void run_chatting(Integer ch_c, Integer ch_u1, Integer ch_u2){
-        if(guard_chatting(ch_c,ch_u1,ch_u2)) {
+	public ChattingWrapper() {}
+
+	public boolean guardChatting(Integer ch_c, Integer ch_u1, Integer ch_u2, machine3 m) {
+        return new chatting(m).guard_chatting(ch_c, ch_u1, ch_u2);
+    }
+
+	public void runChatting(Integer ch_c, Integer ch_u1, Integer ch_u2, machine3 m){
+	    chatting chatting = new chatting(m);
+        if(chatting.guard_chatting(ch_c,ch_u1,ch_u2)) {
             BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>> 
-                                chatcontent_tmp = machineWrapper.get_chatcontent();
+                                chatcontent_tmp = m.get_chatcontent();
             
-            Integer contentsize_tmp = machineWrapper.get_contentsize();
+            Integer contentsize_tmp = m.get_contentsize();
             BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>>
-                                chatcontentseq_tmp = machineWrapper.get_chatcontentseq();
-            
-            super.run_chatting(ch_c, ch_u1, ch_u2);
-            machineWrapper.set_chatcontent(
+                                chatcontentseq_tmp = m.get_chatcontentseq();
+
+            chatting.run_chatting(ch_c, ch_u1, ch_u2);
+            m.set_chatcontent(
                     modifyChatcontent(ch_u1, ch_u2, ch_c, chatcontent_tmp));
             
-            machineWrapper.set_chatcontentseq((chatcontentseq_tmp.override(new BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>>(new Pair<Integer,BRelation<Integer,BRelation<Integer,Integer>>>(new Integer(contentsize_tmp + 1),new BRelation<Integer,BRelation<Integer,Integer>>(new Pair<Integer,BRelation<Integer,Integer>>(ch_c,(BRelation.cross(new BSet(ch_u1),new BSet(ch_u2)).union(BRelation.cross(new BSet(ch_u2),new BSet(ch_u1)))))))))));
-            Settings.getInstance().setMyMachine(machineWrapper);
-            SimpleMapper.toDatabaseReference(machineWrapper,
-                    Settings.getInstance().getCurrentUser().getId());
-            ReceiveContentController.sendNotify(ch_u1, ch_u2);
+            m.set_chatcontentseq((chatcontentseq_tmp.override(new BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>>(new Pair<Integer,BRelation<Integer,BRelation<Integer,Integer>>>(new Integer(contentsize_tmp + 1),new BRelation<Integer,BRelation<Integer,Integer>>(new Pair<Integer,BRelation<Integer,Integer>>(ch_c,(BRelation.cross(new BSet(ch_u1),new BSet(ch_u2)).union(BRelation.cross(new BSet(ch_u2),new BSet(ch_u1)))))))))));
+            Settings.getInstance().commitMachine(m);
+            //ReceiveContentController.sendNotify(ch_u1, ch_u2);
         }
 	}
 	

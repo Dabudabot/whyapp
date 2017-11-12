@@ -6,37 +6,29 @@ import Util.Settings;
 import Util.SimpleMapper;
 import eventb_prelude.BRelation;
 import eventb_prelude.Pair;
-import group_6_model_sequential.MachineWrapper;
+import group_6_model_sequential.machine3;
 import group_6_model_sequential.machine3;
 import group_6_model_sequential.reading;
 
-public class ReadingWrapper extends reading {
-    protected MachineWrapper machineWrapper;
+public class ReadingWrapper {
     
-    public ReadingWrapper(MachineWrapper m) {
-        super(m);
-        machineWrapper = m;
-    }
+    public ReadingWrapper() {}
 
-    
-    @Override
-    public void run_reading(Integer u1, Integer u2) {
-        if(guard_reading(u1, u2)) {
-            BRelation<Integer,Integer> readChatContentSeq_tmp =
-                                machineWrapper.get_readChatContentSeq();
+    public void runReading(Integer u1, Integer u2, machine3 m) {
+        reading reading = new reading(m);
+        if(reading.guard_reading(u1, u2)) {
+            Settings.getInstance().setBusy(true);
             BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>>
-                                chatcontentseq_tmp = machineWrapper.get_chatcontentseq();
-            
-            super.run_reading(u1, u2);
-            machineWrapper.set_readChatContentSeq(
+                                chatcontentseq_tmp = m.get_chatcontentseq();
+
+            reading.run_reading(u1, u2);
+            m.set_readChatContentSeq(
                     modifyReadChatcontentSeq(u1, u2, chatcontentseq_tmp));
-            Settings.getInstance().setMyMachine(machineWrapper);
-            SimpleMapper.toDatabaseReference(machineWrapper,
-                    Settings.getInstance().getCurrentUser().getId());
+            Settings.getInstance().commitMachine(m);
+            Settings.getInstance().setBusy(false);
         }
     }
-    
-    
+
     protected BRelation<Integer,Integer> modifyReadChatcontentSeq(Integer u1, Integer u2,
             BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>> chatcontentseq_tmp) {
         

@@ -29,8 +29,10 @@ public class ReceiveContentController {
     }
 
     private static void sendAll(ReceiveContentView listener) {
-        ReadingWrapper readingWrapper = new ReadingWrapper(Settings.getInstance().getMergedMachine());
-        readingWrapper.run_reading(listener.getSender(), listener.getReceiver());
+        new ReadingWrapper().runReading(
+                listener.getSender(),
+                listener.getReceiver(),
+                Settings.getInstance().getMachine());
         listener.onReceiveSuccess();
     }
 
@@ -41,9 +43,10 @@ public class ReceiveContentController {
                         || listener.getReceiver().equals(mine)
                         || listener.getSender().equals(other)
                         || listener.getReceiver().equals(other)) {
-                    ReadingWrapper readingWrapper =
-                            new ReadingWrapper(Settings.getInstance().getMergedMachine());
-                    readingWrapper.run_reading(listener.getSender(), listener.getReceiver());
+                    new ReadingWrapper().runReading(
+                            listener.getSender(),
+                            listener.getReceiver(),
+                            Settings.getInstance().getMachine());
                     listener.onReceiveSuccess();
                 }
             }

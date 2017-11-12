@@ -2,39 +2,40 @@ package com.inno.dabudabot.whyapp.wrappers;
 
 import java.util.Iterator;
 
+import Util.Settings;
 import eventb_prelude.BRelation;
 import eventb_prelude.BSet;
 import eventb_prelude.Pair;
-import group_6_model_sequential.MachineWrapper;
+import group_6_model_sequential.machine3;
 import group_6_model_sequential.delete_content;
 import group_6_model_sequential.machine3;
 
-public class DeleteContentWrapper extends delete_content {
-    protected MachineWrapper machineWrapper;
+public class DeleteContentWrapper {
     
-    public DeleteContentWrapper(MachineWrapper m) {
-        super(m);
-        machineWrapper = m;
-    }
+    public DeleteContentWrapper() {}
 
-    
-    @Override
-    public void run_delete_content(Integer dc_c, Integer dc_u1, Integer dc_u2, Integer dc_i){
-        if(guard_delete_content(dc_c,dc_u1,dc_u2,dc_i)) {
+    public void runDeleteContent(Integer dc_c,
+                                 Integer dc_u1,
+                                 Integer dc_u2,
+                                 Integer dc_i,
+                                 machine3 m) {
+        delete_content delete_content = new delete_content(m);
+        if(delete_content.guard_delete_content(dc_c,dc_u1,dc_u2,dc_i)) {
+            Settings.getInstance().setBusy(true);
             BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>> 
-                                    chatcontent_tmp = machineWrapper.get_chatcontent();
+                                    chatcontent_tmp = m.get_chatcontent();
             BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>>
-                                    chatcontentseq_tmp = machineWrapper.get_chatcontentseq();
+                                    chatcontentseq_tmp = m.get_chatcontentseq();
 
-            super.run_delete_content(dc_c, dc_u1, dc_u2, dc_i);
-            machineWrapper.set_chatcontent(
+            delete_content.run_delete_content(dc_c, dc_u1, dc_u2, dc_i);
+            m.set_chatcontent(
                     modifyChatcontent(dc_c, dc_u1, dc_u2, chatcontent_tmp));
-            machineWrapper.set_chatcontentseq(
+            m.set_chatcontentseq(
                     modifyChatcontentSeq(dc_c, dc_u1, dc_u2, dc_i, chatcontentseq_tmp));
+            Settings.getInstance().commitMachine(m);
+            Settings.getInstance().setBusy(false);
         }
     }
-    
-    
     
     /**
      * ChatcontentSeq change through set comprehension implementation.

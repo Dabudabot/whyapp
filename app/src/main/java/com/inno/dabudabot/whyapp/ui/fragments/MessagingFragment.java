@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import Util.Constants;
 import eventb_prelude.Pair;
 import group_6_model_sequential.Content;
+import group_6_model_sequential.machine3;
 
 
 /**
@@ -61,12 +62,15 @@ public class MessagingFragment
 
     @Override
     public void onStop() {
-        if (unselectChatWrapper.guard_unselect_chat(
+        machine3 m = Settings.getInstance().getMachine();
+        if (unselectChatWrapper.guardUnselectChat(
                 Settings.getInstance().getCurrentUser().getId(),
-                getArguments().getInt(Constants.NODE_ID))) {
-            unselectChatWrapper.run_unselect_chat(
+                getArguments().getInt(Constants.NODE_ID),
+                m)) {
+            unselectChatWrapper.runUnselectChat(
                     Settings.getInstance().getCurrentUser().getId(),
-                    getArguments().getInt(Constants.NODE_ID));
+                    getArguments().getInt(Constants.NODE_ID),
+                    m);
             ReceiveContentController.unsubscribe(this);
             super.onStop();
         }
@@ -104,7 +108,7 @@ public class MessagingFragment
 
         mETxtMessage.setOnEditorActionListener(this);
         sendContentController = new SendContentController(this);
-        unselectChatWrapper = new UnselectChatWrapper(Settings.getInstance().getMergedMachine());
+        unselectChatWrapper = new UnselectChatWrapper();
 
         ReceiveContentController.subscribe(this);
     }
@@ -143,7 +147,7 @@ public class MessagingFragment
         mRecyclerViewChat.setAdapter(mMessagingRecyclerAdapter);
 
         for (Pair<Integer, Integer> m
-                : Settings.getInstance().getMyMachine().get_readChatContentSeq()) {
+                : Settings.getInstance().getMachine().get_readChatContentSeq()) {
             mMessagingRecyclerAdapter.add(m.snd());
             mRecyclerViewChat.smoothScrollToPosition(mMessagingRecyclerAdapter.getItemCount() - 1);
         }

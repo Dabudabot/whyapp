@@ -59,7 +59,7 @@ public class MessagingRecyclerAdapter
         Content current = mMessages.get(position);
         Integer myId = Settings.getInstance().getCurrentUser().getId();
         for (Pair<Integer, Integer> ownership :
-                Settings.getInstance().getMyMachine().get_owner()) {
+                Settings.getInstance().getMachine().get_owner()) {
             if (ownership.fst().equals(current.getId())
                     && ownership.snd().equals(myId)) {
                 configureMyChatViewHolder((MyChatViewHolder) holder, position);
@@ -97,7 +97,7 @@ public class MessagingRecyclerAdapter
         Content current = mMessages.get(position);
         Integer myId = Settings.getInstance().getCurrentUser().getId();
         for (Pair<Integer, Integer> ownership :
-                Settings.getInstance().getMyMachine().get_owner()) {
+                Settings.getInstance().getMachine().get_owner()) {
             if (ownership.fst().equals(current.getId())
                     && ownership.snd().equals(myId)) {
                 return VIEW_TYPE_ME;

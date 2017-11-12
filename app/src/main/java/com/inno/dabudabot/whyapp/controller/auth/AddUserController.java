@@ -11,7 +11,7 @@ import com.inno.dabudabot.whyapp.R;
 import com.inno.dabudabot.whyapp.listener.AddUserView;
 
 import Util.SimpleMapper;
-import group_6_model_sequential.MachineWrapper;
+import group_6_model_sequential.machine3;
 import group_6_model_sequential.User;
 import Util.Constants;
 import Util.Settings;
@@ -47,10 +47,24 @@ public class AddUserController {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            MachineWrapper machineWrapper = new MachineWrapper();
-                            SimpleMapper.toDatabaseReference(machineWrapper, id);
-                            listener.onAddUserSuccess(
-                                    context.getString(R.string.user_successfully_added));
+                            FirebaseDatabase.getInstance()
+                                    .getReference()
+                                    .child(Constants.NODE_MACHINE)
+                                    .child(Constants.NODE_USER)
+                                    .child(user.getId().toString())
+                                    .setValue(user.getId())
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                listener.onAddUserSuccess(
+                                                        context.getString(R.string.user_successfully_added));
+                                            } else {
+                                                listener.onAddUserFailure(
+                                                        context.getString(R.string.user_unable_to_add));
+                                            }
+                                        }
+                                    });
                         } else {
                             listener.onAddUserFailure(
                                     context.getString(R.string.user_unable_to_add));

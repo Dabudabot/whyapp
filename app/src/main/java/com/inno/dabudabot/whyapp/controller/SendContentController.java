@@ -14,6 +14,7 @@ import com.inno.dabudabot.whyapp.wrappers.ChattingWrapper;
 import Util.Constants;
 import Util.Settings;
 import group_6_model_sequential.Content;
+import group_6_model_sequential.machine3;
 
 /**
  * Created by dabudabot on 10.11.17.
@@ -25,12 +26,10 @@ public class SendContentController implements GenerateIdView {
     private GenerateIdController generateIdController;
     private Integer senderId;
     private Integer receiverId;
-    private ChattingWrapper chattingWrapper;
 
     public SendContentController(SendContentView listener) {
         this.listener = listener;
         generateIdController = new GenerateIdController(this);
-        chattingWrapper = new ChattingWrapper(Settings.getInstance().getMergedMachine());
     }
 
     public void send(String message,
@@ -61,9 +60,11 @@ public class SendContentController implements GenerateIdView {
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
+                            machine3 m =  Settings.getInstance().getMachine();
+                            ChattingWrapper chattingWrapper = new ChattingWrapper();
                             if (task.isSuccessful() &&
-                                    chattingWrapper.guard_chatting(id, senderId, receiverId)) {
-                                chattingWrapper.run_chatting(id, senderId, receiverId);
+                                    chattingWrapper.guardChatting(id, senderId, receiverId, m)) {
+                                chattingWrapper.runChatting(id, senderId, receiverId, m);
                                 listener.sendSuccess();
                             } else {
                                 listener.sendFailure("SEND - BAD");

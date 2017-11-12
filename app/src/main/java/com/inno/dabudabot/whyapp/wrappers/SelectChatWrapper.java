@@ -6,28 +6,22 @@ import com.inno.dabudabot.whyapp.ui.activities.MessagingActivity;
 
 import Util.Settings;
 import Util.SimpleMapper;
-import group_6_model_sequential.MachineWrapper;
+import group_6_model_sequential.machine3;
 import group_6_model_sequential.machine3;
 import group_6_model_sequential.select_chat;
 
-public class SelectChatWrapper extends select_chat {
-    protected MachineWrapper machineWrapper;
-    private Activity activity;
+public class SelectChatWrapper {
     
-	public SelectChatWrapper(MachineWrapper m, Activity activity) {
-		super(m);
-		machineWrapper = m;
-		this.activity = activity;
-	}
+	public SelectChatWrapper() {}
 
-	@Override
-	public void run_select_chat(Integer sc_u1, Integer sc_u2) {
-        if (super.guard_select_chat(sc_u1, sc_u2)) {
-            super.run_select_chat(sc_u1, sc_u2);
-            Settings.getInstance().setMyMachine(machineWrapper);
-            SimpleMapper.toDatabaseReference(machineWrapper,
-                    Settings.getInstance().getCurrentUser().getId());
-            MessagingActivity.startActivity(activity, sc_u2);
+	public void runSelectChat(Integer sc_u1, Integer sc_u2, machine3 m, Activity a) {
+	    select_chat select_chat = new select_chat(m);
+        if (select_chat.guard_select_chat(sc_u1, sc_u2)) {
+            Settings.getInstance().setBusy(true);
+            select_chat.run_select_chat(sc_u1, sc_u2);
+            Settings.getInstance().commitMachine(m);
+            Settings.getInstance().setBusy(false);
+            MessagingActivity.startActivity(a, sc_u2);
         }
 	}
 }

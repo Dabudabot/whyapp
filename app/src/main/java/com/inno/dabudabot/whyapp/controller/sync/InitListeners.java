@@ -12,8 +12,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.inno.dabudabot.whyapp.controller.ReceiveContentController;
 import com.inno.dabudabot.whyapp.ui.activities.ChatsListingActivity;
 
+import eventb_prelude.BRelation;
 import group_6_model_sequential.Content;
-import group_6_model_sequential.MachineWrapper;
+import group_6_model_sequential.machine3;
 import group_6_model_sequential.User;
 import Util.Constants;
 import Util.Settings;
@@ -38,28 +39,33 @@ public class InitListeners {
                             if (TextUtils.equals(FirebaseAuth.getInstance().getCurrentUser().getUid(),
                                     user.getUid())) {
                                 Settings.getInstance().setCurrentUser(user);
-                                Settings.getInstance().setMyMachine(
-                                        SimpleMapper.toMachine(
-                                                dataSnapshot.child(Constants.NODE_MACHINES)
-                                                        .child(String.valueOf(user.getUid()))));
+                                machine3 machine =
+                                        SimpleMapper.toMachine(dataSnapshot.child(Constants.NODE_MACHINE));
+                                Settings.getInstance().setMachine(machine);
+//                                if (!machine.get_user().contains(user.getId())) {
+//                                    machine.get_user().add(user.getId());
+//                                    Settings.getInstance().commitMachine(machine);
+//                                } else {
+//                                    Settings.getInstance().setMachine(machine);
+//                                }
 
+                                initData();
+                                initMuted();
                                 initUser();
-                                initContent();
-                                initMachines();
                             }
                             Settings.getInstance().getUsers().put(user.getId(), user);
                         }
-                        for (DataSnapshot child : dataSnapshot.child(Constants.NODE_MACHINES)
+                        for (DataSnapshot child : dataSnapshot.child(Constants.NODE_CONTENTS)
                                 .getChildren()) {
-                            MachineWrapper machineWrapper = SimpleMapper.toMachine(child);
-                            Settings.getInstance().putMachines(Integer.parseInt(child.getKey()), machineWrapper);
+                            Content content = child.getValue(Content.class);
+                            Settings.getInstance().getContents().put(content.getId(), content);
                         }
                         ChatsListingActivity.onInitSuccess(context);
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        System.err.println("BAD-BAD-BAD");
+                        System.out.println("BAD init");
                     }
                 });
     }
@@ -76,39 +82,90 @@ public class InitListeners {
                             if (TextUtils.equals(FirebaseAuth.getInstance().getCurrentUser().getUid(),
                                     user.getUid())) {
                                 Settings.getInstance().setCurrentUser(user);
-                                Settings.getInstance().setMyMachine(
-                                        SimpleMapper.toMachine(
-                                                dataSnapshot.child(Constants.NODE_MACHINES)
-                                                        .child(String.valueOf(user.getUid()))));
+                                machine3 machine =
+                                        SimpleMapper.toMachine(dataSnapshot.child(Constants.NODE_MACHINE));
+                                Settings.getInstance().setMachine(machine);
+//                                if (!machine.get_user().contains(user.getId())) {
+//                                    machine.get_user().add(user.getId());
+//                                    Settings.getInstance().commitMachine(machine);
+//                                } else {
+//                                    Settings.getInstance().setMachine(machine);
+//                                }
 
+                                initData();
+                                initMuted();
                                 initUser();
-                                initContent();
-                                initMachines();
                             }
                             Settings.getInstance().getUsers().put(user.getId(), user);
                         }
-                        for (DataSnapshot child : dataSnapshot.child(Constants.NODE_MACHINES)
+                        for (DataSnapshot child : dataSnapshot.child(Constants.NODE_CONTENTS)
                                 .getChildren()) {
-                            MachineWrapper machineWrapper = SimpleMapper.toMachine(child);
-                            Settings.getInstance().putMachines(Integer.parseInt(child.getKey()), machineWrapper);
+                            Content content = child.getValue(Content.class);
+                            Settings.getInstance().getContents().put(content.getId(), content);
                         }
                         ChatsListingActivity.onInitSuccess(context, flags);
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        System.out.println("BAD_BAD");
+                        System.err.println("BAD init");
                     }
                 });
     }
 
+    private void initData() {
+        ValueEventListener dataChangeListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                machine3 machine = SimpleMapper.fromFirebaseString(
+                        Settings.getInstance().getMachine(),
+                        dataSnapshot.getValue(String.class));
+                Settings.getInstance().uptDataMachine(machine);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.err.println("BAD init chatcontent");
+            }
+        };
+
+        Settings.getInstance().setChatcontentChangeListener(dataChangeListener);
+        FirebaseDatabase.getInstance()
+                .getReference()
+                .child(Constants.NODE_MACHINE)
+                .child(Constants.NODE_DATA)
+                .addValueEventListener(dataChangeListener);
+    }
+
+    private void initMuted() {
+        ValueEventListener mutedChangeListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                BRelation<Integer, Integer> muted = SimpleMapper.toBRelation(dataSnapshot);
+                Settings.getInstance().uptMuted(muted);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.err.println("BAD init muted");
+            }
+        };
+
+        Settings.getInstance().setMutedChangeListener(mutedChangeListener);
+        FirebaseDatabase.getInstance()
+                .getReference()
+                .child(Constants.NODE_MACHINE)
+                .child(Constants.NODE_MUTED)
+                .addValueEventListener(mutedChangeListener);
+    }
+
     private void initUser() {
-        ChildEventListener newUser = new ChildEventListener() {
+        ChildEventListener addUserListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Integer id = Integer.parseInt(dataSnapshot.getKey());
                 User user = dataSnapshot.getValue(User.class);
-                Settings.getInstance().getUsers().put(id, user);
+                Settings.getInstance().getUsers().put(user.getId(), user);
+                Settings.getInstance().uptUser(user.getId());
             }
 
             @Override
@@ -132,106 +189,10 @@ public class InitListeners {
             }
         };
 
-        Settings.getInstance().setNewUserListener(newUser);
+        Settings.getInstance().setNewUserListener(addUserListener);
         FirebaseDatabase.getInstance()
                 .getReference()
-                .child(Constants.NODE_USERS).addChildEventListener(newUser);
-    }
-
-    private void initMachines() {
-        ChildEventListener newMachine = new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Integer id = Integer.parseInt(dataSnapshot.getKey());
-                if (!id.equals(Settings.getInstance().getCurrentUser().getId())) {
-                    MachineWrapper machineWrapper =
-                            SimpleMapper.toMachine(dataSnapshot);
-                    Settings.getInstance().putMachines(id, machineWrapper);
-
-                    ValueEventListener machineChangeListener = new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            Integer id = Integer.parseInt(dataSnapshot.getKey());
-                            MachineWrapper machineWrapper =
-                                    SimpleMapper.toMachine(dataSnapshot);
-                            Settings.getInstance().putMachines(id, machineWrapper);
-                            ReceiveContentController.sendNotify(Settings.getInstance().getCurrentUser().getId(), id);
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    };
-
-                    Settings.getInstance().getMachineChangeListeners().put(id, machineChangeListener);
-                    FirebaseDatabase.getInstance()
-                            .getReference()
-                            .child(Constants.NODE_MACHINES)
-                            .child(String.valueOf(id))
-                            .addValueEventListener(machineChangeListener);
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-        Settings.getInstance().setNewMachineListener(newMachine);
-        FirebaseDatabase.getInstance()
-                .getReference()
-                .child(Constants.NODE_MACHINES).addChildEventListener(newMachine);
-    }
-
-    //move it
-    private void initContent() {
-        ChildEventListener newContent = new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Integer id = Integer.parseInt(dataSnapshot.getKey());
-                Content content = dataSnapshot.getValue(Content.class);
-                Settings.getInstance().putContents(id, content);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-        Settings.getInstance().setNewContentListener(newContent);
-        FirebaseDatabase.getInstance()
-                .getReference()
-                .child(Constants.NODE_CONTENTS).addChildEventListener(newContent);
+                .child(Constants.NODE_USERS)
+                .addChildEventListener(addUserListener);
     }
 }

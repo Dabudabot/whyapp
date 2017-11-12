@@ -2,38 +2,40 @@ package com.inno.dabudabot.whyapp.wrappers;
 
 import java.util.Iterator;
 
+import Util.Settings;
 import eventb_prelude.BRelation;
 import eventb_prelude.BSet;
 import eventb_prelude.Pair;
-import group_6_model_sequential.MachineWrapper;
+import group_6_model_sequential.machine3;
 import group_6_model_sequential.forward;
 import group_6_model_sequential.machine3;
 
-public class ForwardWrapper extends forward {
-    protected MachineWrapper machineWrapper;
+public class ForwardWrapper {
     
-    public ForwardWrapper(MachineWrapper m) {
-        super(m);
-        machineWrapper = m;
-    }
-    
-    
-    @Override
-    public void run_forward(Integer f_c, Integer f_u, BSet<Integer> f_ul) {
-        if(guard_forward(f_c,f_u,f_ul)) {
+    public ForwardWrapper() {}
+
+    public void run_forward(Integer f_c,
+                            Integer f_u,
+                            BSet<Integer> f_ul,
+                            machine3 m) {
+        forward forward = new forward(m);
+        if(forward.guard_forward(f_c,f_u,f_ul)) {
+            Settings.getInstance().setBusy(true);
             BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>>
-                                chatcontent_tmp = machineWrapper.get_chatcontent();
+                                chatcontent_tmp = m.get_chatcontent();
             BRelation<Integer,BRelation<Integer,Integer>>
-                                toreadcon_tmp = machineWrapper.get_toreadcon();
-            Integer contentsize_tmp = machineWrapper.get_contentsize();
+                                toreadcon_tmp = m.get_toreadcon();
+            Integer contentsize_tmp = m.get_contentsize();
             BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>>
-                                chatcontentseq_tmp = machineWrapper.get_chatcontentseq();
+                                chatcontentseq_tmp = m.get_chatcontentseq();
             
-            super.run_forward(f_c, f_u, f_ul);
-            machineWrapper.set_chatcontent(
+            forward.run_forward(f_c, f_u, f_ul);
+            m.set_chatcontent(
                     modifyChatcontent(f_c, f_u, f_ul, chatcontent_tmp));
-            machineWrapper.set_toreadcon((toreadcon_tmp.override(new BRelation<Integer,BRelation<Integer,Integer>>(new Pair<Integer,BRelation<Integer,Integer>>(f_c,BRelation.cross(f_ul,new BSet<Integer>(f_u)).difference(machineWrapper.get_active()))))));
-            machineWrapper.set_chatcontentseq((chatcontentseq_tmp.override(new BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>>(new Pair<Integer,BRelation<Integer,BRelation<Integer,Integer>>>(new Integer(contentsize_tmp + 1),new BRelation<Integer,BRelation<Integer,Integer>>(new Pair<Integer,BRelation<Integer,Integer>>(f_c,(BRelation.cross(new BSet<Integer>(f_u),f_ul).union(BRelation.cross(f_ul,new BSet<Integer>(f_u)))))))))));
+            m.set_toreadcon((toreadcon_tmp.override(new BRelation<Integer,BRelation<Integer,Integer>>(new Pair<Integer,BRelation<Integer,Integer>>(f_c,BRelation.cross(f_ul,new BSet<Integer>(f_u)).difference(m.get_active()))))));
+            m.set_chatcontentseq((chatcontentseq_tmp.override(new BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>>(new Pair<Integer,BRelation<Integer,BRelation<Integer,Integer>>>(new Integer(contentsize_tmp + 1),new BRelation<Integer,BRelation<Integer,Integer>>(new Pair<Integer,BRelation<Integer,Integer>>(f_c,(BRelation.cross(new BSet<Integer>(f_u),f_ul).union(BRelation.cross(f_ul,new BSet<Integer>(f_u)))))))))));
+            Settings.getInstance().commitMachine(m);
+            Settings.getInstance().setBusy(false);
         }
     }
     
