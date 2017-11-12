@@ -17,9 +17,9 @@ public class select_chat{
 	/*@ public normal_behavior
 		requires true;
  		assignable \nothing;
-		ensures \result <==> (machine.get_user().has(sc_u1) && machine.get_user().has(sc_u2) && machine.get_chat().has(new Pair<Integer,Integer>(sc_u1,sc_u2)) && !machine.get_active().has(new Pair<Integer,Integer>(sc_u1,sc_u2)) && !machine.get_muted().has(new Pair<Integer,Integer>(sc_u1,sc_u2))); */
+		ensures \result <==> (machine.get_user().has(sc_u1) && machine.get_user().has(sc_u2) && machine.get_chat().has(new Pair<Integer,Integer>(sc_u1,sc_u2)) && !machine.get_muted().has(new Pair<Integer,Integer>(sc_u1,sc_u2))); */
 	public /*@ pure */ boolean guard_select_chat( Integer sc_u1, Integer sc_u2) {
-		return (machine.get_user().has(sc_u1) && machine.get_user().has(sc_u2) && machine.get_chat().has(new Pair<Integer,Integer>(sc_u1,sc_u2)) && !machine.get_active().has(new Pair<Integer,Integer>(sc_u1,sc_u2)) && !machine.get_muted().has(new Pair<Integer,Integer>(sc_u1,sc_u2)));
+		return (machine.get_user().has(sc_u1) && machine.get_user().has(sc_u2) && machine.get_chat().has(new Pair<Integer,Integer>(sc_u1,sc_u2)) && !machine.get_muted().has(new Pair<Integer,Integer>(sc_u1,sc_u2)));
 	}
 
 	/*@ public normal_behavior

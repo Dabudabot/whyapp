@@ -39,31 +39,31 @@ public class machine3{
 
 
 	/******Variable definitions******/
-	/*@ spec_public */ private BRelation<Integer,Integer> 										active;				//not listen, not write				-done
+	/*@ spec_public */ private BRelation<Integer,Integer> active;
 
-	/*@ spec_public */ private BRelation<Integer,Integer> 										chat;				//->single-listen, write
+	/*@ spec_public */ private BRelation<Integer,Integer> chat;
 
-	/*@ spec_public */ private BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>> chatcontent;		//edit-listen, write
+	/*@ spec_public */ private BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>> chatcontent;
 
-	/*@ spec_public */ private BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>> chatcontentseq;		//->single-listen, write
+	/*@ spec_public */ private BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>> chatcontentseq;
 
-	/*@ spec_public */ private BSet<Integer> 													content;			//->single-listen-child-by-id, write
+	/*@ spec_public */ private BSet<Integer> content;
 
-	/*@ spec_public */ private Integer															contentsize;		//->single-listen, write
+	/*@ spec_public */ private Integer contentsize;
 
-	/*@ spec_public */ private BRelation<Integer,Integer> 										inactive;			//not listen, not write				-done
+	/*@ spec_public */ private BRelation<Integer,Integer> inactive;
 
-	/*@ spec_public */ private BRelation<Integer,Integer> 										muted;				//edit-listen, write				-done
+	/*@ spec_public */ private BRelation<Integer,Integer> muted;
 
-	/*@ spec_public */ private BRelation<Integer,Integer> 										owner;				//->single-listen, write
+	/*@ spec_public */ private BRelation<Integer,Integer> owner;
 
-	/*@ spec_public */ private BRelation<Integer,Integer> 										readChatContentSeq;	//not listen, not write				-done
+	/*@ spec_public */ private BRelation<Integer,Integer> readChatContentSeq;
 
-	/*@ spec_public */ private BRelation<Integer,Integer> 										toread;				//->single-listen, write
+	/*@ spec_public */ private BRelation<Integer,Integer> toread;
 
-	/*@ spec_public */ private BRelation<Integer,BRelation<Integer,Integer>> 					toreadcon;			//->single-listen, write
+	/*@ spec_public */ private BRelation<Integer,BRelation<Integer,Integer>> toreadcon;
 
-	/*@ spec_public */ private BSet<Integer> 													user;				//add-child-listen, not write		-done
+	/*@ spec_public */ private BSet<Integer> user;
 
 
 
