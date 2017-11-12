@@ -3,6 +3,10 @@ package Util;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -342,7 +346,6 @@ public class SimpleMapper {
 
     private static String fromBRR(BRelation<Integer, BRelation<Integer, Integer>> rel,
                                   String node) {
-
         String result = "\"" + node + "\":[";
 
         StringBuilder builder = new StringBuilder();
@@ -352,21 +355,21 @@ public class SimpleMapper {
             builder.append(",");
             builder.append(fromBR(pair.snd(), "snd"));
             //builder.deleteCharAt(builder.length()-1);
-            builder.append("}],");
+            builder.append("},");
         }
         try {
             builder.deleteCharAt(builder.length() - 1);
         } catch (Exception e) {
             //e.printStackTrace();
         }
-        return result + builder.toString();
+        return result + builder.toString() + "]";
     }
 
     private static String fromBRRR(BRelation<Integer, BRelation<Integer, BRelation<Integer, Integer>>> rel,
                                   String node) {
 
         String result = "\"" + node + "\":[";
-
+        System.out.println(node);
         StringBuilder builder = new StringBuilder();
         for (Pair<Integer, BRelation<Integer, BRelation<Integer, Integer>>> pair : rel) {
             builder.append("{\"fst\":");
@@ -374,14 +377,14 @@ public class SimpleMapper {
             builder.append(",");
             builder.append(fromBRR(pair.snd(), "snd"));
             //builder.deleteCharAt(builder.length()-1);
-            builder.append("}],");
+            builder.append("},");
         }
         try {
             builder.deleteCharAt(builder.length() - 1);
         } catch (Exception e) {
             //e.printStackTrace();
         }
-        return result + builder.toString();
+        return result + builder.toString() + "]";
     }
 
     private static String fromBSet(BSet<Integer> rel, String node) {
@@ -404,7 +407,6 @@ public class SimpleMapper {
     }
 
     public static void toFirebaseString(machine3 machine) {
-
         String value = machineToString(machine);
 
         FirebaseDatabase.getInstance()
@@ -417,8 +419,6 @@ public class SimpleMapper {
     public static String machineToString(machine3 machine) {
         StringBuilder result = new StringBuilder();
 
-        System.out.println(fromBR(machine.get_chat(), ""));
-
         result.append("{");
         result.append(fromBR(machine.get_chat(), "chat") + ",");
         result.append(fromBRRR(machine.get_chatcontent(), "chatcontent") + ",");
@@ -427,7 +427,7 @@ public class SimpleMapper {
         result.append("\"contentsize\":" + String.valueOf(machine.get_contentsize()) + ",");
         result.append(fromBR(machine.get_owner(), "owner") + ",");
         result.append(fromBR(machine.get_toread(), "toread") + ",");
-        result.append(fromBRR(machine.get_toreadcon(), "toreadcon")+ ",");
+        result.append(fromBRR(machine.get_toreadcon(), "toreadcon"));
         result.append("}");
 
         return result.toString();
@@ -436,40 +436,145 @@ public class SimpleMapper {
     public static machine3 fromFirebaseString(
             machine3 machine, String value) {
 
+        try {
+            JSONObject jobj = new JSONObject(value);
+            String chat = jobj.getString("chat");
+            System.out.println(chat);
+            machine.set_chat(toBR(chat));
 
+            String chatcontent = jobj.getString("chatcontent");
+            System.out.println(chatcontent);
+            machine.set_chatcontent(toBRRR(chatcontent));
+
+            String chatcontentseq = jobj.getString("chatcontentseq");
+            machine.set_chatcontentseq(toBRRR(chatcontentseq));
+
+            String content = jobj.getString("content");
+            machine.set_content(toBSet(content));
+
+            Integer contentSize = jobj.getInt("contentsize");
+            machine.set_contentsize(contentSize);
+
+            String owner = jobj.getString("owner");
+            machine.set_owner(toBR(owner));
+
+            String toread = jobj.getString("toread");
+            machine.set_toread(toBR(toread));
+
+            String toreadcon = jobj.getString("toreadcon");
+            machine.set_toreadcon(toBRR(toreadcon));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return machine;
     }
 
 
-    public static void main(String[] args) {
-        machine3 machine = new machine3();
-        System.out.println(machineToString(machine));
+    private static BSet<Integer> toBSet(String value) throws JSONException {
+        JSONArray jArr = new JSONArray(value);
+        BSet<Integer> set = new BSet<>();
 
+        for (int i = 0; i < jArr.length(); i++) {
+            JSONObject obj = jArr.getJSONObject(i);
+            Integer val = obj.getInt(String.valueOf(i));
+            set.add(val);
+        }
+        return set;
+    }
+
+
+    private static BRelation<Integer, Integer> toBR(String value) throws JSONException {
+        JSONArray jArr = new JSONArray(value);
+        BRelation<Integer, Integer> rel = new BRelation<>();
+
+        for (int i = 0; i < jArr.length(); i++) {
+            JSONObject jObj = jArr.getJSONObject(i);
+            System.out.println(jObj);
+            Integer fst = jObj.getInt("fst");
+            Integer snd = jObj.getInt("snd");
+            rel.add(fst, snd);
+        }
+
+        return rel;
+    }
+
+
+    private static BRelation<Integer, BRelation<Integer, Integer>> toBRR(
+            String value) throws JSONException {
+
+        JSONArray jArr = new JSONArray(value);
+        BRelation<Integer, BRelation<Integer, Integer>> rel = new BRelation<>();
+
+        for (int i = 0; i < jArr.length(); i++) {
+            JSONObject jObj = jArr.getJSONObject(i);
+            Integer fst = jObj.getInt("fst");
+            String snd = jObj.getString("snd");
+            rel.add(fst, toBR(snd));
+        }
+
+        return rel;
+    }
+
+
+    private static BRelation<Integer, BRelation<Integer, BRelation<Integer, Integer>>> toBRRR(
+            String value) throws JSONException {
+
+        JSONArray jArr = new JSONArray(value);
+        BRelation<Integer, BRelation<Integer, BRelation<Integer, Integer>>> rel
+                = new BRelation<>();
+
+        for (int i = 0; i < jArr.length(); i++) {
+            JSONObject jObj = jArr.getJSONObject(i);
+            Integer fst = jObj.getInt("fst");
+            String snd = jObj.getString("snd");
+            rel.add(fst, toBRR(snd));
+        }
+
+        return rel;
+    }
+
+
+    public static void main(String[] args) throws JSONException {
+        machine3 machine = new machine3();
+        String machineStr = machineToString(machine);
+        fromFirebaseString(machine, machineStr);
+
+
+        String relStr = "";
 
         BRelation<Integer, Integer> rel = new BRelation<>();
         rel.add(new Pair<Integer, Integer>(1,2));
         rel.add(new Pair<Integer, Integer>(3,4));
         System.out.println(rel);
-        System.out.println(fromBR(rel, ""));
+        relStr = fromBR(rel, "");
+        System.out.println(relStr);
+        System.out.println(toBR(relStr.replaceAll("\"\":", "")));
 
         BRelation<Integer, BRelation<Integer, Integer>> rel_rel = new BRelation<>();
         rel_rel.add(new Pair<Integer, BRelation<Integer, Integer>>(10,rel));
         //rel_rel.add(new Pair<Integer, BRelation<Integer, Integer>>(20,rel));
-        System.out.println(rel_rel);
-        System.out.println(fromBRR(rel_rel, ""));
+        relStr = fromBRR(rel_rel, "");
+        System.out.println(relStr);
+        System.out.println(toBRR(relStr.replaceAll("\"\":", "")));
 
         BRelation<Integer, BRelation<Integer, BRelation<Integer, Integer>>> rel_rel_rel = new BRelation<>();
         rel_rel_rel.add(new Pair<Integer, BRelation<Integer, BRelation<Integer, Integer>>>(100,rel_rel));
-        // 2nd
+        //
         System.out.println(rel_rel_rel);
-        System.out.println(fromBRRR(rel_rel_rel, ""));
+        relStr = fromBRRR(rel_rel_rel, "");
+        System.out.println(relStr);
+        System.out.println(toBRRR(relStr.replaceAll("\"\":", "")));
 
         BSet<Integer> set = new BSet<Integer>();
         set.add(1);
         set.add(2);
         set.add(3);
         System.out.println(set);
-        System.out.println(fromBSet(set, ""));
+        String setStr = fromBSet(set, "");
+        System.out.println(setStr);
+
+        System.out.println(toBSet(setStr.replaceAll("\"\":", "")));
     }
 }
