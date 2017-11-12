@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.inno.dabudabot.whyapp.R;
-import com.inno.dabudabot.whyapp.controller.SendContentController;
+import com.inno.dabudabot.whyapp.controller.sync.SendContentController;
 import com.inno.dabudabot.whyapp.listener.SendContentView;
 import com.inno.dabudabot.whyapp.ui.activities.UserChooserActivity;
 

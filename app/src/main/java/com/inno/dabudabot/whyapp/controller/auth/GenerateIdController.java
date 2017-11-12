@@ -14,7 +14,6 @@ import Util.Settings;
  * Created by Group-6 on 07.11.17.
  * controller generates unique id
  */
-
 public class GenerateIdController {
 
     private GenerateIdView listener;

@@ -11,8 +11,8 @@ import android.widget.Button;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.inno.dabudabot.whyapp.R;
-import com.inno.dabudabot.whyapp.controller.ReceiveContentController;
-import com.inno.dabudabot.whyapp.controller.SendContentController;
+import com.inno.dabudabot.whyapp.controller.sync.ReceiveContentController;
+import com.inno.dabudabot.whyapp.controller.sync.SendContentController;
 import com.inno.dabudabot.whyapp.controller.listing.GetListingsController;
 import com.inno.dabudabot.whyapp.listener.GetListingsView;
 import com.inno.dabudabot.whyapp.listener.SendContentView;

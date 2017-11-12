@@ -1,13 +1,8 @@
 package Util;
 
-
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.ValueEventListener;
-import com.inno.dabudabot.whyapp.controller.ReceiveContentController;
-import com.inno.dabudabot.whyapp.controller.listing.GetListingsController;
-import com.inno.dabudabot.whyapp.controller.sync.GetChatContentController;
-import com.inno.dabudabot.whyapp.listener.GetChatContentView;
-import com.inno.dabudabot.whyapp.listener.ReceiveContentView;
+import com.inno.dabudabot.whyapp.controller.sync.ReceiveContentController;
 
 import eventb_prelude.BRelation;
 import eventb_prelude.Pair;

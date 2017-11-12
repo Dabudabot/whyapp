@@ -17,7 +17,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.inno.dabudabot.whyapp.listener.LoginView;
 import group_6_model_sequential.User;
 import Util.Constants;
-import Util.Settings;
 import Util.SharedPrefUtil;
 
 import java.util.Iterator;
@@ -28,7 +27,6 @@ import static android.content.ContentValues.TAG;
  * Created by Group-6 on 07.11.17.
  * controller logs in user
  */
-
 public class LoginController {
 
     private LoginView listener;

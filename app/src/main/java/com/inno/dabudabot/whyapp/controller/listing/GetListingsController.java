@@ -3,32 +3,21 @@ package com.inno.dabudabot.whyapp.controller.listing;
 import android.text.TextUtils;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.inno.dabudabot.whyapp.listener.GetListingsView;
 
 import Util.Settings;
-import eventb_prelude.BRelation;
 import eventb_prelude.Pair;
-import group_6_model_sequential.machine3;
 import group_6_model_sequential.User;
-import Util.Constants;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
-import eventb_prelude.BSet;
 
 /**
  * Created by Group-6 on 07.11.17.
  * Controller return lists of users
  */
-
 public class GetListingsController {
 
     private GetListingsView listener;

@@ -9,7 +9,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.inno.dabudabot.whyapp.controller.ReceiveContentController;
 import com.inno.dabudabot.whyapp.ui.activities.ChatsListingActivity;
 
 import eventb_prelude.BRelation;

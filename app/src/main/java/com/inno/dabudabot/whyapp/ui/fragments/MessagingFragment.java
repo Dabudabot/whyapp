@@ -2,7 +2,6 @@ package com.inno.dabudabot.whyapp.ui.fragments;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -15,12 +14,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.FirebaseDatabase;
 import com.inno.dabudabot.whyapp.R;
-import com.inno.dabudabot.whyapp.controller.ReceiveContentController;
-import com.inno.dabudabot.whyapp.controller.SendContentController;
+import com.inno.dabudabot.whyapp.controller.sync.ReceiveContentController;
+import com.inno.dabudabot.whyapp.controller.sync.SendContentController;
 
 import Util.ItemClickSupport;
 import Util.Settings;

@@ -1,25 +1,18 @@
-package com.inno.dabudabot.whyapp.controller;
+package com.inno.dabudabot.whyapp.controller.sync;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.FirebaseDatabase;
 import com.inno.dabudabot.whyapp.controller.auth.GenerateIdController;
 import com.inno.dabudabot.whyapp.listener.GenerateIdView;
 import com.inno.dabudabot.whyapp.listener.SendContentView;
-import com.inno.dabudabot.whyapp.wrappers.ChattingWrapper;
 
 import Util.Constants;
-import Util.Settings;
 import group_6_model_sequential.Content;
-import group_6_model_sequential.machine3;
 
 /**
- * Created by dabudabot on 10.11.17.
+ * Created by Group-6 on 10.11.17.
+ * Sends content to FireBase
  */
-
 public class SendContentController implements GenerateIdView {
 
     private SendContentView listener;

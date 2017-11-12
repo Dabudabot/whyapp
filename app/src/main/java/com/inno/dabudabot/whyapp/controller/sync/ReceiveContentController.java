@@ -1,4 +1,4 @@
-package com.inno.dabudabot.whyapp.controller;
+package com.inno.dabudabot.whyapp.controller.sync;
 
 import com.inno.dabudabot.whyapp.listener.ReceiveContentView;
 import com.inno.dabudabot.whyapp.wrappers.ReadingWrapper;
@@ -9,9 +9,9 @@ import java.util.List;
 import Util.Settings;
 
 /**
- * Created by dabudabot on 11.11.17.
+ * Created by Group-6 on 11.11.17.
+ * Notifies if content was changed by another user
  */
-
 public class ReceiveContentController {
 
     private static List<ReceiveContentView> listeners;

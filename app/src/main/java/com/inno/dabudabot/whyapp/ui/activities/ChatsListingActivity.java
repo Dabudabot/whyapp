@@ -18,16 +18,14 @@ import android.widget.LinearLayout;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.inno.dabudabot.whyapp.R;
-import com.inno.dabudabot.whyapp.controller.SendContentController;
+import com.inno.dabudabot.whyapp.controller.sync.SendContentController;
 import com.inno.dabudabot.whyapp.controller.auth.LogoutController;
 import com.inno.dabudabot.whyapp.controller.listing.GetListingsController;
 import com.inno.dabudabot.whyapp.controller.sync.InitListeners;
 import com.inno.dabudabot.whyapp.listener.GetListingsView;
 import com.inno.dabudabot.whyapp.listener.SendContentView;
 import com.inno.dabudabot.whyapp.ui.adapters.ChatsListingAdapter;
-import com.inno.dabudabot.whyapp.ui.dialogs.BroadcastDialog;
 import com.inno.dabudabot.whyapp.wrappers.BroadcastWrapper;
-import com.inno.dabudabot.whyapp.wrappers.ForwardWrapper;
 
 import java.util.List;
 

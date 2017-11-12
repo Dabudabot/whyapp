@@ -20,7 +20,6 @@ import static android.content.ContentValues.TAG;
  * Created by Group-6 on 07.11.17.
  * controller registers new user
  */
-
 public class RegisterController implements GenerateIdView, AddUserView {
 
     private RegisterView listener;

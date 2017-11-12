@@ -9,10 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.inno.dabudabot.whyapp.R;
-import com.inno.dabudabot.whyapp.listener.ForwardView;
 import com.inno.dabudabot.whyapp.ui.adapters.UserChooserAdapter;
 
-import Util.Constants;
 
 /**
  * Created by dabudabot on 12.11.17.
