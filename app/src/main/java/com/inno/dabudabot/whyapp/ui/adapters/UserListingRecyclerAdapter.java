@@ -50,8 +50,7 @@ public class UserListingRecyclerAdapter
             int back = R.drawable.circle_accent;
 
             for (Pair<Integer, Integer> pair : machine.get_toread()) {
-                if (pair.snd().equals(user.getId())
-                    || pair.fst().equals(user.getId())) {
+                if (pair.snd().equals(user.getId())) {
                     alphabet = "!";
                     back = R.drawable.circle_accent_warn;
                 }

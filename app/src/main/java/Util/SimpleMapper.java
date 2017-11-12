@@ -397,7 +397,7 @@ public class SimpleMapper {
         StringBuilder builder = new StringBuilder();
         int i = 0;
         for (Integer val : rel) {
-            builder.append("{" + String.valueOf(i) + ":");
+            builder.append("{\"" + String.valueOf(i) + "\":");
             builder.append(val);
             builder.append("},");
             i++;

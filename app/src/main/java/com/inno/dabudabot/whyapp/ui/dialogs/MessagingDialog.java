@@ -74,10 +74,16 @@ public class MessagingDialog extends Dialog implements
             case R.id.delete_msg:
                 if (Settings.getInstance()
                         .getCurrentUser().getId().equals(this.userId)) {
+                    Integer snd = -1;
+                    for (Pair<Integer, Integer> pair :
+                            Settings.getInstance().getMachine().get_active()) {
+                        snd = pair.snd();
+                    }
+                    
                     new RemoveContentWrapper()
                             .runRemoveContent(contentId,
                                     Settings.getInstance().getCurrentUser().getId(),
-                                    userId,
+                                    snd,
                                     i,
                                     Settings.getInstance().getMachine());
                 } else {

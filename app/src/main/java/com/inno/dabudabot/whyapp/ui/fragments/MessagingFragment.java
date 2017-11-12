@@ -119,6 +119,8 @@ public class MessagingFragment
         unselectChatWrapper = new UnselectChatWrapper();
 
         ReceiveContentController.subscribe(this);
+        ItemClickSupport.addTo(mRecyclerViewChat)
+                .setOnItemClickListener(this);
     }
 
     @Override
