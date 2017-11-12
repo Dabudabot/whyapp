@@ -14,7 +14,7 @@
         android:clickable="true"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:text="@string/muteunmute"
+        android:text="@string/mute"
         android:textColor="@android:color/white"
         android:textSize="15dp"
         android:textStyle="bold" />

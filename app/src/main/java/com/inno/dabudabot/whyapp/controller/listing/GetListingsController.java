@@ -60,13 +60,6 @@ public class GetListingsController {
                     }
                 }
             }
-            if (chat.snd().equals(Settings.getInstance().getCurrentUser().getId())) {
-                for (User user : Settings.getInstance().getUsers().values()) {
-                    if (user.getId().equals(chat.fst())) {
-                        users.add(user);
-                    }
-                }
-            }
         }
 
         listener.onGetListingsSuccess(new ArrayList<>(users));

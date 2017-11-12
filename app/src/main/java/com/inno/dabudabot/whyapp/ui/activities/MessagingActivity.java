@@ -6,10 +6,17 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.inno.dabudabot.whyapp.WhyMainApp;
 import com.inno.dabudabot.whyapp.R;
+import com.inno.dabudabot.whyapp.controller.auth.LogoutController;
 import com.inno.dabudabot.whyapp.ui.fragments.MessagingFragment;
+import com.inno.dabudabot.whyapp.wrappers.DeleteChatSessionWrapper;
+import com.inno.dabudabot.whyapp.wrappers.MuteChatWrapper;
+import com.inno.dabudabot.whyapp.wrappers.UnmuteChatWrapper;
+
 import Util.Constants;
 import Util.Settings;
 
@@ -19,6 +26,8 @@ import Util.Settings;
  */
 public class MessagingActivity extends AppCompatActivity {
     private Toolbar mToolbar;
+
+    private LogoutController logoutController;
 
     public static void startActivity(Context context, Integer userId) {
         Intent intent = new Intent(context, MessagingActivity.class);
@@ -35,6 +44,7 @@ public class MessagingActivity extends AppCompatActivity {
 
     private void init() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        logoutController = new LogoutController();
         // set the toolbar
         setSupportActionBar(mToolbar);
 
@@ -62,5 +72,45 @@ public class MessagingActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         WhyMainApp.setChatActivityOpen(false);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_general3, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_muteunmute:
+                if (item.getTitle().equals("Mute")) {
+                    new MuteChatWrapper().runMuteChat(
+                            getIntent().getExtras().getInt(Constants.NODE_ID),
+                            Settings.getInstance().getCurrentUser().getId(),
+                            Settings.getInstance().getMachine());
+                    item.setTitle("Unmute");
+                } else if (item.getTitle().equals("Unmute")) {
+                    new UnmuteChatWrapper().runUnmuteChat(
+                            getIntent().getExtras().getInt(Constants.NODE_ID),
+                            Settings.getInstance().getCurrentUser().getId(),
+                            Settings.getInstance().getMachine());
+                    item.setTitle("Mute");
+                }
+                break;
+            case R.id.action_delete_chat:
+                new DeleteChatSessionWrapper().runDeleteChatSession(
+                        Settings.getInstance().getCurrentUser().getId(),
+                        getIntent().getExtras().getInt(Constants.NODE_ID),
+                        Settings.getInstance().getMachine());
+                ChatsListingActivity.startActivity(MessagingActivity.this,
+                        Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                | Intent.FLAG_ACTIVITY_NEW_TASK);
+                break;
+            case R.id.action_logout:
+                logoutController.performFirebaseLogout(this);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

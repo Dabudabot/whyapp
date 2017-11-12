@@ -1,8 +1,5 @@
 package com.inno.dabudabot.whyapp.ui.adapters;
 
-import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,9 +31,9 @@ public class UserListingRecyclerAdapter
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.item_listing,
-                        parent,
-                        false);
+                R.layout.item_listing,
+                parent,
+                false);
         return new ViewHolder(view);
     }
 
@@ -50,7 +47,9 @@ public class UserListingRecyclerAdapter
             int back = R.drawable.circle_accent;
 
             for (Pair<Integer, Integer> pair : machine.get_toread()) {
-                if (pair.snd().equals(user.getId())) {
+                if (pair.fst().equals(Settings.getInstance().getCurrentUser().getId())
+                        && pair.snd().equals(user.getId())) {
+
                     alphabet = "!";
                     back = R.drawable.circle_accent_warn;
                 }

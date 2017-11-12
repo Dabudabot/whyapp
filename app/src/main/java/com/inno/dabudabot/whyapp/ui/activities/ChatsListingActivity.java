@@ -130,12 +130,7 @@ public class ChatsListingActivity extends AppCompatActivity implements GetListin
                 logout.performFirebaseLogout(this);
                 break;
             case R.id.action_broadcast:
-//                BroadcastDialog cdd =
-//                        new BroadcastDialog(this);
-//                cdd.show();
-
                 getListingsController.getUsersListing();
-
                 break;
         }
         return super.onOptionsItemSelected(item);

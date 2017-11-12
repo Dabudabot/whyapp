@@ -8,8 +8,15 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.inno.dabudabot.whyapp.R;
 import com.inno.dabudabot.whyapp.ui.activities.LoginActivity;
+
+import java.util.HashMap;
+
+import Util.Settings;
+import group_6_model_sequential.Content;
+import group_6_model_sequential.User;
 
 /**
  * Created by Group-6 on 07.11.17.
@@ -19,40 +26,28 @@ import com.inno.dabudabot.whyapp.ui.activities.LoginActivity;
 public class LogoutController {
 
     public void performFirebaseLogout(final Activity activity) {
-        AlertDialog.Builder builder =
-                new AlertDialog.Builder(activity.getApplicationContext())
-                .setTitle(R.string.logout)
-                .setMessage(R.string.are_you_sure)
-                .setPositiveButton(R.string.logout, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
 
-                            FirebaseAuth.getInstance().signOut();
-                            LoginActivity.startIntent(activity.getApplicationContext(),
-                                    Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                                            Intent.FLAG_ACTIVITY_NEW_TASK);
-                        } else {
-                            Toast.makeText(
-                                    activity.getApplicationContext(),
-                                    "No user logged in yet!",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-
-        AlertDialog alert = builder.create();
-        alert.show();
-        Button nbutton = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
-        nbutton.setTextColor(activity.getResources().getColor(R.color.grey_900));
-        Button pbutton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
-        pbutton.setTextColor(activity.getResources().getColor(R.color.grey_900));
+            FirebaseAuth.getInstance().signOut();
+            LoginActivity.startIntent(activity.getApplicationContext(),
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                            Intent.FLAG_ACTIVITY_NEW_TASK);
+        } else {
+            Toast.makeText(
+                    activity.getApplicationContext(),
+                    "No user logged in yet!",
+                    Toast.LENGTH_SHORT).show();
+        }
+        FirebaseDatabase.getInstance().getReference().removeEventListener(Settings.getInstance().getNewUserListener());
+        FirebaseDatabase.getInstance().getReference().removeEventListener(Settings.getInstance().getAddContentListener());
+        FirebaseDatabase.getInstance().getReference().removeEventListener(Settings.getInstance().getChatcontentChangeListener());
+        FirebaseDatabase.getInstance().getReference().removeEventListener(Settings.getInstance().getMutedChangeListener());
+        Settings.getInstance().setCurrentUser(null);
+        Settings.getInstance().setContents(new HashMap<Integer, Content>());
+        Settings.getInstance().setUsers(new HashMap<Integer, User>());
+        Settings.getInstance().setMachine(null);
+        Settings.getInstance().setIdGen(0);
+        Settings.getInstance().setForwardingContent(null);
+        Settings.getInstance().setBroadcastingContent(null);
     }
 }

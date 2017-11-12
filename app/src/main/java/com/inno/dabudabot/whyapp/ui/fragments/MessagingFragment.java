@@ -80,8 +80,10 @@ public class MessagingFragment
                     getArguments().getInt(Constants.NODE_ID),
                     m);
             ReceiveContentController.unsubscribe(this);
-            super.onStop();
+        } else {
+            System.err.println("UNSELECT BAD");
         }
+        super.onStop();
     }
 
     @Nullable

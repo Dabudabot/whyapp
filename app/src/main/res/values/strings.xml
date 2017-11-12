@@ -25,7 +25,8 @@
 
     <string name="broadcast">Broadcast</string>
     <string name="delete_chat">Delete</string>
-    <string name="muteunmute">Mute/Unmute</string>
+    <string name="mute">Mute</string>
+    <string name="unmute">Unmute</string>
     <string name="forward">Forward</string>
 
     <string name="user_chooser">User Chooser</string>
