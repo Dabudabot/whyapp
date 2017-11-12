@@ -63,11 +63,90 @@ public class MachineSerializationTest {
         users.add(u1);
         users.add(u2);
         users.add(u3);
+        users.add(u4);
         machine.set_user(users);
 
         machine.evt_create_chat_session.run_create_chat_session(u1, u2);
 
         machine.evt_chatting.run_chatting(10, u1, u2);
+
+        String machineString = SimpleMapper.machineToString(machine);
+        machine3 deserializedMachine = SimpleMapper.fromFirebaseString(new machine3(), machineString);
+        compareMachines(machine, deserializedMachine);
+    }
+
+    @Test
+    public void testMute(){
+        BSet<Integer> users = new BSet<Integer>();
+        users.add(u1);
+        users.add(u2);
+        users.add(u3);
+        users.add(u4);
+        machine.set_user(users);
+
+
+        machine.evt_create_chat_session.run_create_chat_session(u1, u2);
+        machine.evt_create_chat_session.run_create_chat_session(u2, u1);
+        machine.evt_chatting.run_chatting(10, u1, u2);
+        machine.evt_chatting.run_chatting(20, u2, u1);
+        machine.evt_mute_chat.run_mute_chat(u1, u2);
+        machine.evt_chatting.run_chatting(10, u1, u2);
+        machine.evt_chatting.run_chatting(20, u2, u1);
+        machine.evt_unmute_chat.run_unmute_chat(u1, u2);
+        machine.evt_select_chat.run_select_chat(u1, u2);
+        machine.evt_chatting.run_chatting(11, u1, u2);
+        machine.evt_chatting.run_chatting(21, u2, u1);
+
+        String machineString = SimpleMapper.machineToString(machine);
+        machine3 deserializedMachine = SimpleMapper.fromFirebaseString(new machine3(), machineString);
+        compareMachines(machine, deserializedMachine);
+    }
+
+    @Test
+    public void testBroadcast(){
+        BSet<Integer> users = new BSet<Integer>();
+        users.add(u1);
+        users.add(u2);
+        users.add(u3);
+        users.add(u4);
+        machine.set_user(users);
+
+        BSet<Integer> recievers = new BSet<Integer>();
+        recievers.add(u2);
+        recievers.add(u3);
+        recievers.add(u4);
+
+        machine.evt_create_chat_session.run_create_chat_session(u1, u4);
+        machine.evt_create_chat_session.run_create_chat_session(u4, u1);
+        machine.evt_select_chat.run_select_chat(u4, u1);
+        machine.evt_broadcast.run_broadcast(10, u1, recievers);
+
+        String machineString = SimpleMapper.machineToString(machine);
+        machine3 deserializedMachine = SimpleMapper.fromFirebaseString(new machine3(), machineString);
+        compareMachines(machine, deserializedMachine);
+    }
+
+    @Test
+    public void testForward(){
+        BSet<Integer> users = new BSet<Integer>();
+        users.add(u1);
+        users.add(u2);
+        users.add(u3);
+        users.add(u4);
+        machine.set_user(users);
+
+        BSet<Integer> recievers = new BSet<Integer>();
+        recievers.add(u2);
+        recievers.add(u3);
+        recievers.add(u4);
+
+        machine.evt_create_chat_session.run_create_chat_session(u1, u2);
+        machine.evt_create_chat_session.run_create_chat_session(u1, u4);
+        machine.evt_create_chat_session.run_create_chat_session(u4, u1);
+        machine.evt_select_chat.run_select_chat(u4, u1);
+        machine.evt_forward.run_forward(11, u1, recievers); //this should not be executed
+        machine.evt_create_chat_session.run_create_chat_session(u1, u3);
+        machine.evt_forward.run_forward(10, u1, recievers);
 
         String machineString = SimpleMapper.machineToString(machine);
         machine3 deserializedMachine = SimpleMapper.fromFirebaseString(new machine3(), machineString);
