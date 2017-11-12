@@ -46,21 +46,7 @@ public class SendContentController implements GenerateIdView {
             Content chatMessage = new Content(id,
                     (String) target,
                     System.currentTimeMillis());
-            FirebaseDatabase.getInstance()
-                    .getReference()
-                    .child(Constants.NODE_CONTENTS)
-                    .child(chatMessage.getId().toString())
-                    .setValue(chatMessage)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                listener.sendSuccess(id);
-                            } else {
-                                listener.sendFailure("SEND - BAD");
-                            }
-                        }
-                    });
+            listener.sendSuccess(chatMessage);
         } else {
             onGenerateFailure("BAD TYPE");
         }

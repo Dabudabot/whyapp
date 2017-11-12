@@ -46,6 +46,7 @@ public class InitListeners {
                                 initData();
                                 initMuted();
                                 initUser();
+                                initContent();
                             }
                             Settings.getInstance().getUsers().put(user.getId(), user);
                         }
@@ -83,6 +84,7 @@ public class InitListeners {
                                 initData();
                                 initMuted();
                                 initUser();
+                                initContent();
                             }
                             Settings.getInstance().getUsers().put(user.getId(), user);
                         }
@@ -183,5 +185,42 @@ public class InitListeners {
                 .getReference()
                 .child(Constants.NODE_USERS)
                 .addChildEventListener(addUserListener);
+    }
+
+    private void initContent() {
+        ChildEventListener addContentListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Content content = dataSnapshot.getValue(Content.class);
+                Settings.getInstance().getContents().put(content.getId(), content);
+                Settings.getInstance().uptContent(content.getId());
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        Settings.getInstance().setAddContentListener(addContentListener);
+        FirebaseDatabase.getInstance()
+                .getReference()
+                .child(Constants.NODE_CONTENTS)
+                .addChildEventListener(addContentListener);
     }
 }

@@ -3,11 +3,14 @@ package Util;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.ValueEventListener;
+import com.inno.dabudabot.whyapp.controller.ReceiveContentController;
 import com.inno.dabudabot.whyapp.controller.listing.GetListingsController;
 import com.inno.dabudabot.whyapp.controller.sync.GetChatContentController;
 import com.inno.dabudabot.whyapp.listener.GetChatContentView;
+import com.inno.dabudabot.whyapp.listener.ReceiveContentView;
 
 import eventb_prelude.BRelation;
+import eventb_prelude.Pair;
 import group_6_model_sequential.Content;
 import group_6_model_sequential.machine3;
 import group_6_model_sequential.User;
@@ -29,6 +32,7 @@ public class Settings {
     private machine3 machine;
 
     private ChildEventListener newUserListener;
+    private ChildEventListener addContentListener;
     private ValueEventListener chatcontentChangeListener;
     private ValueEventListener mutedChangeListener;
 
@@ -36,7 +40,7 @@ public class Settings {
     private volatile Boolean busy;
 
     private Integer forwardingContent;
-    private Integer broadcastingContent;
+    private Content broadcastingContent;
 
     public static Settings getInstance() {
         Settings localInstance = instance;
@@ -68,7 +72,6 @@ public class Settings {
     }
 
     public void uptDataMachine(machine3 machine) {
-
         this.machine.set_chatcontent(machine.get_chatcontent());
         this.machine.set_chat(machine.get_chat());
         this.machine.set_chatcontentseq(machine.get_chatcontentseq());
@@ -77,8 +80,6 @@ public class Settings {
         this.machine.set_owner(machine.get_owner());
         this.machine.set_toread(machine.get_toread());
         this.machine.set_toreadcon(machine.get_toreadcon());
-
-        //TODO new data change
     }
 
     public void uptMuted(BRelation<Integer, Integer> muted) {
@@ -87,6 +88,17 @@ public class Settings {
 
     public void uptUser(Integer userId) {
         machine.get_user().add(userId);
+    }
+
+    public void uptContent(Integer contentId) {
+        machine.get_content().add(contentId);
+        for (Pair<Integer, Integer> p : machine.get_owner()) {
+            if (p.fst().equals(contentId)) {
+                ReceiveContentController.sendNotify(
+                        Settings.getInstance().getCurrentUser().getId(),
+                        p.snd());
+            }
+        }
     }
 
     public Map<Integer, Content> getContents() {
@@ -172,11 +184,19 @@ public class Settings {
         this.forwardingContent = forwardingContent;
     }
 
-    public Integer getBroadcastingContent() {
+    public Content getBroadcastingContent() {
         return broadcastingContent;
     }
 
-    public void setBroadcastingContent(Integer broadcastingContent) {
+    public void setBroadcastingContent(Content broadcastingContent) {
         this.broadcastingContent = broadcastingContent;
+    }
+
+    public ChildEventListener getAddContentListener() {
+        return addContentListener;
+    }
+
+    public void setAddContentListener(ChildEventListener addContentListener) {
+        this.addContentListener = addContentListener;
     }
 }

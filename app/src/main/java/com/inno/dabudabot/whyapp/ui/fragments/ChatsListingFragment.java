@@ -88,8 +88,6 @@ public class ChatsListingFragment extends Fragment implements
                 getActivity());
     }
 
-
-
     @Override
     public void onGetListingsSuccess(List<User> users) {
         mUserListingRecyclerAdapter = new UserListingRecyclerAdapter(users);

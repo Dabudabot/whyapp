@@ -14,6 +14,7 @@ import com.inno.dabudabot.whyapp.listener.SendContentView;
 import com.inno.dabudabot.whyapp.ui.activities.UserChooserActivity;
 
 import Util.Settings;
+import group_6_model_sequential.Content;
 
 /**
  * Created by dabudabot on 12.11.17.
@@ -58,9 +59,9 @@ public class BroadcastDialog extends Dialog implements
     }
 
     @Override
-    public void sendSuccess(Integer id) {
+    public void sendSuccess(Content content) {
         broadcastMessage.setText("");
-        Settings.getInstance().setBroadcastingContent(id);
+        Settings.getInstance().setBroadcastingContent(content);
         UserChooserActivity.startActivity(getContext());
         dismiss();
     }

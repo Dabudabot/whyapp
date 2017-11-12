@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.inno.dabudabot.whyapp.R;
 import com.inno.dabudabot.whyapp.controller.listing.GetListingsController;
 import com.inno.dabudabot.whyapp.listener.GetListingsView;
@@ -21,9 +22,11 @@ import com.inno.dabudabot.whyapp.wrappers.SelectChatWrapper;
 
 import java.util.List;
 
+import Util.Constants;
 import Util.ItemClickSupport;
 import Util.Settings;
 import eventb_prelude.BSet;
+import group_6_model_sequential.Content;
 import group_6_model_sequential.User;
 
 /**
@@ -43,7 +46,7 @@ public class UserChooserFragment extends Fragment implements
     private FloatingActionButton fab;
     private BSet<Integer> userIds;
     private Integer forwardingContent;
-    private Integer broadcastingContent;
+    private Content broadcastingContent;
 
     @Nullable
     @Override
@@ -97,11 +100,24 @@ public class UserChooserFragment extends Fragment implements
                             Settings.getInstance().getMachine());
                 }
                 if (broadcastingContent != null) {
-                    new BroadcastWrapper().runBroadcast(
-                            forwardingContent,
+                    BroadcastWrapper broadcastWrapper = new BroadcastWrapper();
+                    if (broadcastWrapper.guardBroadcast(
+                            broadcastingContent.getId(),
                             Settings.getInstance().getCurrentUser().getId(),
                             userIds,
-                            Settings.getInstance().getMachine());
+                            Settings.getInstance().getMachine())) {
+                        broadcastWrapper.runBroadcast(
+                                broadcastingContent.getId(),
+                                Settings.getInstance().getCurrentUser().getId(),
+                                userIds,
+                                Settings.getInstance().getMachine());
+                        FirebaseDatabase.getInstance()
+                                .getReference()
+                                .child(Constants.NODE_CONTENTS)
+                                .child(broadcastingContent.getId().toString())
+                                .setValue(broadcastingContent);
+                    }
+
                 }
                 UserChooserFragment.super.onStop();
             }

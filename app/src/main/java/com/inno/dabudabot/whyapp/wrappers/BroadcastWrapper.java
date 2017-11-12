@@ -14,6 +14,11 @@ public class BroadcastWrapper {
     
     public BroadcastWrapper() {}
 
+    public boolean guardBroadcast(Integer b_c, Integer b_u, BSet<Integer> b_ul, machine3 m) {
+        broadcast broadcast = new broadcast(m);
+        return broadcast.guard_broadcast(b_c, b_u, b_ul);
+    }
+
     public void runBroadcast(Integer b_c, Integer b_u, BSet<Integer> b_ul, machine3 m) {
         broadcast broadcast = new broadcast(m);
         if(broadcast.guard_broadcast(b_c,b_u,b_ul)) {

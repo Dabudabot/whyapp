@@ -2,6 +2,7 @@ package com.inno.dabudabot.whyapp.ui.fragments;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.FirebaseDatabase;
 import com.inno.dabudabot.whyapp.R;
 import com.inno.dabudabot.whyapp.controller.ReceiveContentController;
 import com.inno.dabudabot.whyapp.controller.SendContentController;
@@ -132,14 +136,24 @@ public class MessagingFragment
     }
 
     @Override
-    public void sendSuccess(Integer id) {
+    public void sendSuccess(Content content) {
         machine3 m =  Settings.getInstance().getMachine();
         ChattingWrapper chattingWrapper = new ChattingWrapper();
         mETxtMessage.setText("");
-        chattingWrapper.runChatting(id,
+        if (chattingWrapper.guardChatting(content.getId(),
                 Settings.getInstance().getCurrentUser().getId(),
                 getArguments().getInt(Constants.NODE_ID),
-                m);
+                m)) {
+            chattingWrapper.runChatting(content.getId(),
+                    Settings.getInstance().getCurrentUser().getId(),
+                    getArguments().getInt(Constants.NODE_ID),
+                    m);
+            FirebaseDatabase.getInstance()
+                    .getReference()
+                    .child(Constants.NODE_CONTENTS)
+                    .child(content.getId().toString())
+                    .setValue(content);
+        }
         Toast.makeText(getActivity(), "Message sent", Toast.LENGTH_SHORT).show();
     }
 
