@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.inno.dabudabot.whyapp.R;
 import com.inno.dabudabot.whyapp.controller.auth.LoginController;
-import com.inno.dabudabot.whyapp.controller.sync.InitListeners;
 import com.inno.dabudabot.whyapp.listener.LoginView;
 import com.inno.dabudabot.whyapp.controller.auth.RegisterController;
 import com.inno.dabudabot.whyapp.listener.RegisterView;

@@ -3,10 +3,8 @@ package com.inno.dabudabot.whyapp.wrappers;
 import java.util.Iterator;
 
 import Util.Settings;
-import Util.SimpleMapper;
 import eventb_prelude.BRelation;
 import eventb_prelude.Pair;
-import group_6_model_sequential.machine3;
 import group_6_model_sequential.machine3;
 import group_6_model_sequential.reading;
 

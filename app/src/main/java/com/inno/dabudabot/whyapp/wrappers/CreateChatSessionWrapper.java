@@ -5,10 +5,8 @@ import android.app.Activity;
 import com.inno.dabudabot.whyapp.ui.activities.MessagingActivity;
 
 import Util.Settings;
-import Util.SimpleMapper;
 import group_6_model_sequential.machine3;
 import group_6_model_sequential.create_chat_session;
-import group_6_model_sequential.machine3;
 
 public class CreateChatSessionWrapper {
 

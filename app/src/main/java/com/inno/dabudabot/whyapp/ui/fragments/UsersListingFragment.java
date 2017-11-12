@@ -14,10 +14,8 @@ import com.inno.dabudabot.whyapp.controller.listing.GetListingsController;
 import com.inno.dabudabot.whyapp.listener.GetListingsView;
 
 import Util.Settings;
-import group_6_model_sequential.machine3;
 import group_6_model_sequential.User;
 
-import com.inno.dabudabot.whyapp.ui.activities.MessagingActivity;
 import com.inno.dabudabot.whyapp.ui.adapters.UserListingRecyclerAdapter;
 import com.inno.dabudabot.whyapp.wrappers.CreateChatSessionWrapper;
 

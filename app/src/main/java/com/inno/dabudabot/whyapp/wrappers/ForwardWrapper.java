@@ -8,7 +8,6 @@ import eventb_prelude.BSet;
 import eventb_prelude.Pair;
 import group_6_model_sequential.machine3;
 import group_6_model_sequential.forward;
-import group_6_model_sequential.machine3;
 
 public class ForwardWrapper {
     

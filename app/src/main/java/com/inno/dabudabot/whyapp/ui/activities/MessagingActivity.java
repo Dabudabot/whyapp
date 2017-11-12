@@ -25,7 +25,6 @@ import Util.Settings;
  * Chatting screen activity
  */
 public class MessagingActivity extends AppCompatActivity {
-    private Toolbar mToolbar;
 
     private LogoutController logoutController;
 
@@ -43,7 +42,7 @@ public class MessagingActivity extends AppCompatActivity {
     }
 
     private void init() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         logoutController = new LogoutController();
         // set the toolbar
         setSupportActionBar(mToolbar);

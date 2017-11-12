@@ -14,9 +14,9 @@ import com.inno.dabudabot.whyapp.wrappers.MuteChatWrapper;
 import Util.Settings;
 
 /**
- * Created by dabudabot on 12.11.17.
+ * Created by Group-6 on 12.11.17.
+ * Upper menu dialog in chat activity
  */
-
 public class ChatsDialog  extends Dialog implements
         android.view.View.OnClickListener {
 

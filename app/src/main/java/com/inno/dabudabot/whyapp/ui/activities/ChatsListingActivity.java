@@ -39,7 +39,6 @@ import group_6_model_sequential.User;
  * Created by Group-6 on 04.11.17.
  * User`s chats activity
  */
-
 public class ChatsListingActivity extends AppCompatActivity implements GetListingsView, SendContentView {
     private Toolbar mToolbar;
     private TabLayout mTabLayoutUserListing;
@@ -203,7 +202,7 @@ public class ChatsListingActivity extends AppCompatActivity implements GetListin
 
     @Override
     public void onGetListingsFailure(String message) {
-
+        System.err.println("CHATS LISTING ACTIVITY " + message);
     }
 
     @Override
@@ -222,6 +221,6 @@ public class ChatsListingActivity extends AppCompatActivity implements GetListin
 
     @Override
     public void sendFailure(String message) {
-
+        System.err.println("CHATS LISTING ACTIVITY " + message);
     }
 }

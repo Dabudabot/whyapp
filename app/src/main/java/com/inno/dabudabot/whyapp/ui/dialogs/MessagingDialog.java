@@ -31,7 +31,8 @@ import group_6_model_sequential.Content;
 import group_6_model_sequential.User;
 
 /**
- * Created by dabudabot on 12.11.17.
+ * Created by Group-6 on 12.11.17.
+ * Upper menu dialog in messaging activity
  */
 
 public class MessagingDialog extends Dialog implements

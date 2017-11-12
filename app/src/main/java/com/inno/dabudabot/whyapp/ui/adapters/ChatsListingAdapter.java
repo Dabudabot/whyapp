@@ -10,7 +10,6 @@ import com.inno.dabudabot.whyapp.ui.fragments.ChatsListingFragment;
  * Created by Group-6 on 04.11.17.
  * Inflates view with user`s chats
  */
-
 public class ChatsListingAdapter extends FragmentPagerAdapter {
     private static final Fragment[] sFragments =
             new Fragment[]{new ChatsListingFragment()};

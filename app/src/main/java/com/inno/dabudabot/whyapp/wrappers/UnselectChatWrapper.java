@@ -1,8 +1,6 @@
 package com.inno.dabudabot.whyapp.wrappers;
 
 import Util.Settings;
-import Util.SimpleMapper;
-import group_6_model_sequential.machine3;
 import group_6_model_sequential.machine3;
 import group_6_model_sequential.unselect_chat;
 

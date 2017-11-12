@@ -17,7 +17,6 @@ import Util.Settings;
 import group_6_model_sequential.User;
 import com.inno.dabudabot.whyapp.ui.adapters.UserListingRecyclerAdapter;
 import com.inno.dabudabot.whyapp.ui.dialogs.ChatsDialog;
-import com.inno.dabudabot.whyapp.ui.dialogs.MessagingDialog;
 import com.inno.dabudabot.whyapp.wrappers.SelectChatWrapper;
 
 import Util.ItemClickSupport;

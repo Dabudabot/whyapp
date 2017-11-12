@@ -7,17 +7,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
 import eventb_prelude.BRelation;
 import eventb_prelude.BSet;
 import eventb_prelude.Pair;
-import group_6_model_sequential.Content;
 import group_6_model_sequential.machine3;
-import group_6_model_sequential.User;
 
 /**
  * Created by Group-6 on 08.11.17.
@@ -106,62 +101,6 @@ public class SimpleMapper {
         return result;
     }
 
-    private static BRelation<Integer, BRelation<Integer, BRelation<Integer, Integer>>> toBRelationRelationRelation(DataSnapshot dataSnapshot, String node) {
-        if (dataSnapshot.hasChild(node)) {
-            Iterator<DataSnapshot> pairs =
-                    dataSnapshot.child(node).getChildren().iterator();
-            BRelation<Integer, BRelation<Integer, BRelation<Integer, Integer>>> result = new BRelation<>();
-            while (pairs.hasNext()) {
-                DataSnapshot child = pairs.next();
-                Pair<Integer, BRelation<Integer, BRelation<Integer, Integer>>> cPair =
-                        toBPairBRelationRelation(child);
-                result.add(cPair);
-            }
-            return result;
-        } else {
-            return new BRelation<>();
-        }
-    }
-
-    public static BRelation<Integer, BRelation<Integer, BRelation<Integer, Integer>>> toBRelationRelationRelation(DataSnapshot dataSnapshot) {
-
-        Iterator<DataSnapshot> pairs =
-                dataSnapshot.getChildren().iterator();
-        BRelation<Integer, BRelation<Integer, BRelation<Integer, Integer>>> result =
-                new BRelation<>();
-        while (pairs.hasNext()) {
-            DataSnapshot child = pairs.next();
-            Pair<Integer, BRelation<Integer, BRelation<Integer, Integer>>> cPair =
-                    toBPairBRelationRelation(child);
-            result.add(cPair);
-        }
-        return result;
-    }
-
-    private static BRelation<Integer, BRelation<Integer, Integer>> toBRelationRelation(DataSnapshot dataSnapshot, String node) {
-        if (dataSnapshot.hasChild(node)) {
-            Iterator<DataSnapshot> pairs = dataSnapshot.child(node).getChildren().iterator();
-            BRelation<Integer, BRelation<Integer, Integer>> result = new BRelation<>();
-            while (pairs.hasNext()) {
-                DataSnapshot child = pairs.next();
-                Pair<Integer, BRelation<Integer, Integer>> cPair =
-                        toBPairBRelation(child);
-                result.add(cPair);
-            }
-            return result;
-        } else {
-            return new BRelation<>();
-        }
-    }
-
-    private static Integer toInteger(DataSnapshot dataSnapshot, String node) {
-        if (dataSnapshot.hasChild(node)) {
-            return dataSnapshot.child(node).getValue(Integer.class);
-        } else {
-            return 0;
-        }
-    }
-
     private static void fromBRelation(BRelation<Integer, Integer> relation,
                                       String node) {
         if (relation.isEmpty()) {
@@ -192,120 +131,9 @@ public class SimpleMapper {
         }
     }
 
-    private static void fromBRelationRelation(BRelation<Integer, BRelation<Integer, Integer>> relation,
-                                                      String node) {
-        int iterator = 0;
-        for (Pair<Integer, BRelation<Integer, Integer>> pair : relation) {
-            FirebaseDatabase.getInstance()
-                    .getReference()
-                    .child(Constants.NODE_MACHINE)
-                    .child(node)
-                    .child(String.valueOf(iterator))
-                    .child(Constants.NODE_FST)
-                    .setValue(pair.fst());
-            int iterator1 = 0;
-            for (Pair<Integer, Integer> pair1 : pair.snd()) {
-                FirebaseDatabase.getInstance()
-                        .getReference()
-                        .child(Constants.NODE_MACHINE)
-                        .child(node)
-                        .child(String.valueOf(iterator))
-                        .child(Constants.NODE_SND)
-                        .child(String.valueOf(iterator1))
-                        .child(Constants.NODE_FST)
-                        .setValue(pair1.fst());
-                FirebaseDatabase.getInstance()
-                        .getReference()
-                        .child(Constants.NODE_MACHINE)
-                        .child(node)
-                        .child(String.valueOf(iterator))
-                        .child(Constants.NODE_SND)
-                        .child(String.valueOf(iterator1))
-                        .child(Constants.NODE_SND)
-                        .setValue(pair1.snd());
-                iterator1++;
-            }
-            iterator++;
-        }
-    }
-
-    private static void fromBRelationRelationRelation(BRelation<Integer, BRelation<Integer, BRelation<Integer, Integer>>> relation,
-                                                  String node) {
-        int iterator = 0;
-        for (Pair<Integer, BRelation<Integer, BRelation<Integer, Integer>>> pair : relation) {
-            FirebaseDatabase.getInstance()
-                    .getReference()
-                    .child(Constants.NODE_MACHINE)
-                    .child(node)
-                    .child(String.valueOf(iterator))
-                    .child(Constants.NODE_FST)
-                    .setValue(pair.fst());
-            int iterator1 = 0;
-            for (Pair<Integer, BRelation<Integer, Integer>> pair1 : pair.snd()) {
-                FirebaseDatabase.getInstance()
-                        .getReference()
-                        .child(Constants.NODE_MACHINE)
-                        .child(node)
-                        .child(String.valueOf(iterator))
-                        .child(Constants.NODE_SND)
-                        .child(String.valueOf(iterator1))
-                        .child(Constants.NODE_FST)
-                        .setValue(pair1.fst());
-                int iterator2 = 0;
-                for (Pair<Integer, Integer> pair2 : pair1.snd()) {
-                    FirebaseDatabase.getInstance()
-                            .getReference()
-                            .child(Constants.NODE_MACHINE)
-                            .child(node)
-                            .child(String.valueOf(iterator))
-                            .child(Constants.NODE_SND)
-                            .child(String.valueOf(iterator1))
-                            .child(Constants.NODE_SND)
-                            .child(String.valueOf(iterator2))
-                            .child(Constants.NODE_FST)
-                            .setValue(pair2.fst());
-                    FirebaseDatabase.getInstance()
-                            .getReference()
-                            .child(Constants.NODE_MACHINE)
-                            .child(node)
-                            .child(String.valueOf(iterator))
-                            .child(Constants.NODE_SND)
-                            .child(String.valueOf(iterator1))
-                            .child(Constants.NODE_SND)
-                            .child(String.valueOf(iterator2))
-                            .child(Constants.NODE_SND)
-                            .setValue(pair2.snd());
-                    iterator2++;
-                }
-                iterator1++;
-            }
-            iterator++;
-        }
-    }
-
-    private static void fromInteger(Integer value, String node) {
-        FirebaseDatabase.getInstance()
-                .getReference()
-                .child(Constants.NODE_MACHINE)
-                .child(node)
-                .setValue(value);
-    }
-
     public static machine3 toMachine(DataSnapshot dataSnapshot) {
         machine3 machine = new machine3();
-//        machine.set_chat(toBRelation(dataSnapshot, Constants.NODE_CHAT));
-//        machine.set_active(new BRelation<Integer, Integer>());
         machine.set_muted(toBRelation(dataSnapshot, Constants.NODE_MUTED));
-//        machine.set_chatcontent(toBRelationRelationRelation(
-//                dataSnapshot, Constants.NODE_CHATCONTENT));
-//        machine.set_toread(toBRelation(dataSnapshot, Constants.NODE_TOREAD));
-//        machine.set_inactive(new BRelation<Integer, Integer>());
-//        machine.set_toreadcon(toBRelationRelation(dataSnapshot, Constants.NODE_TOREADCON));
-//        machine.set_owner(toBRelation(dataSnapshot, Constants.NODE_OWNER));
-//        machine.set_contentsize(toInteger(dataSnapshot, Constants.NODE_CONTENTSIZE));
-//        machine.set_chatcontentseq(toBRelationRelationRelation(dataSnapshot, Constants.NODE_CHATCONTENTSEQ));
-//        machine.set_readChatContentSeq(new BRelation<Integer, Integer>());
-//        machine.set_content(toBSet(dataSnapshot, Constants.NODE_CONTENT));
         machine.set_user(toBSet(dataSnapshot, Constants.NODE_USER));
 
         machine = fromFirebaseString(machine,
@@ -315,17 +143,7 @@ public class SimpleMapper {
     }
 
     public static void toDatabaseReference(machine3 machine) {
-        //fromBRelation(machine.get_chat(), Constants.NODE_CHAT);
-        //fromBRelation(machine.get_active(), Constants.NODE_ACTIVE);
         fromBRelation(machine.get_muted(), Constants.NODE_MUTED);
-        //fromBRelationRelationRelation(machine.get_chatcontent(), Constants.NODE_CHATCONTENT);
-        //fromBRelation(machine.get_toread(), Constants.NODE_TOREAD);
-        //fromBRelation(machine.get_inactive(), Constants.NODE_INACTIVE);
-        //fromBRelationRelation(machine.get_toreadcon(), Constants.NODE_TOREADCON);
-        //fromBRelation(machine.get_owner(), Constants.NODE_OWNER);
-        //fromInteger(machine.get_contentsize(), Constants.NODE_CONTENTSIZE);
-        //fromBRelationRelationRelation(machine.get_chatcontentseq(), Constants.NODE_CHATCONTENTSEQ);
-        //fromBRelation(machine.get_readChatContentSeq(), Constants.NODE_READCHATCONTENTSEQ);
         toFirebaseString(machine);
     }
 
@@ -358,7 +176,6 @@ public class SimpleMapper {
             builder.append(pair.fst());
             builder.append(",");
             builder.append(fromBR(pair.snd(), "snd"));
-            //builder.deleteCharAt(builder.length()-1);
             builder.append("},");
         }
         try {
@@ -380,7 +197,6 @@ public class SimpleMapper {
             builder.append(pair.fst());
             builder.append(",");
             builder.append(fromBRR(pair.snd(), "snd"));
-            //builder.deleteCharAt(builder.length()-1);
             builder.append("},");
         }
         try {
@@ -421,20 +237,16 @@ public class SimpleMapper {
     }
 
     public static String machineToString(machine3 machine) {
-        StringBuilder result = new StringBuilder();
-
-        result.append("{");
-        result.append(fromBR(machine.get_chat(), "chat") + ",");
-        result.append(fromBRRR(machine.get_chatcontent(), "chatcontent") + ",");
-        result.append(fromBRRR(machine.get_chatcontentseq(), "chatcontentseq") + ",");
-        result.append(fromBSet(machine.get_content(), "content") + ",");
-        result.append("\"contentsize\":" + String.valueOf(machine.get_contentsize()) + ",");
-        result.append(fromBR(machine.get_owner(), "owner") + ",");
-        result.append(fromBR(machine.get_toread(), "toread") + ",");
-        result.append(fromBRR(machine.get_toreadcon(), "toreadcon"));
-        result.append("}");
-
-        return result.toString();
+        return "{" +
+                fromBR(machine.get_chat(), "chat") + "," +
+                fromBRRR(machine.get_chatcontent(), "chatcontent") + "," +
+                fromBRRR(machine.get_chatcontentseq(), "chatcontentseq") + "," +
+                fromBSet(machine.get_content(), "content") + "," +
+                "\"contentsize\":" + String.valueOf(machine.get_contentsize()) + "," +
+                fromBR(machine.get_owner(), "owner") + "," +
+                fromBR(machine.get_toread(), "toread") + "," +
+                fromBRR(machine.get_toreadcon(), "toreadcon") +
+                "}";
     }
 
     public static machine3 fromFirebaseString(
@@ -475,7 +287,6 @@ public class SimpleMapper {
         return machine;
     }
 
-
     private static BSet<Integer> toBSet(String value) throws JSONException {
         JSONArray jArr = new JSONArray(value);
         BSet<Integer> set = new BSet<>();
@@ -487,7 +298,6 @@ public class SimpleMapper {
         }
         return set;
     }
-
 
     private static BRelation<Integer, Integer> toBR(String value) throws JSONException {
         JSONArray jArr = new JSONArray(value);
@@ -503,7 +313,6 @@ public class SimpleMapper {
 
         return rel;
     }
-
 
     private static BRelation<Integer, BRelation<Integer, Integer>> toBRR(
             String value) throws JSONException {
@@ -521,7 +330,6 @@ public class SimpleMapper {
         return rel;
     }
 
-
     private static BRelation<Integer, BRelation<Integer, BRelation<Integer, Integer>>> toBRRR(
             String value) throws JSONException {
 
@@ -537,48 +345,5 @@ public class SimpleMapper {
         }
 
         return rel;
-    }
-
-
-    public static void main(String[] args) throws JSONException {
-        machine3 machine = new machine3();
-        String machineStr = machineToString(machine);
-        fromFirebaseString(machine, machineStr);
-
-
-        String relStr = "";
-
-        BRelation<Integer, Integer> rel = new BRelation<>();
-        rel.add(new Pair<Integer, Integer>(1,2));
-        rel.add(new Pair<Integer, Integer>(3,4));
-        System.out.println(rel);
-        relStr = fromBR(rel, "");
-        System.out.println(relStr);
-        System.out.println(toBR(relStr.replaceAll("\"\":", "")));
-
-        BRelation<Integer, BRelation<Integer, Integer>> rel_rel = new BRelation<>();
-        rel_rel.add(new Pair<Integer, BRelation<Integer, Integer>>(10,rel));
-        //rel_rel.add(new Pair<Integer, BRelation<Integer, Integer>>(20,rel));
-        relStr = fromBRR(rel_rel, "");
-        System.out.println(relStr);
-        System.out.println(toBRR(relStr.replaceAll("\"\":", "")));
-
-        BRelation<Integer, BRelation<Integer, BRelation<Integer, Integer>>> rel_rel_rel = new BRelation<>();
-        rel_rel_rel.add(new Pair<Integer, BRelation<Integer, BRelation<Integer, Integer>>>(100,rel_rel));
-        //
-        System.out.println(rel_rel_rel);
-        relStr = fromBRRR(rel_rel_rel, "");
-        System.out.println(relStr);
-        System.out.println(toBRRR(relStr.replaceAll("\"\":", "")));
-
-        BSet<Integer> set = new BSet<Integer>();
-        set.add(1);
-        set.add(2);
-        set.add(3);
-        System.out.println(set);
-        String setStr = fromBSet(set, "");
-        System.out.println(setStr);
-
-        System.out.println(toBSet(setStr.replaceAll("\"\":", "")));
     }
 }

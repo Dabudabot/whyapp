@@ -7,7 +7,6 @@ import eventb_prelude.BRelation;
 import eventb_prelude.BSet;
 import eventb_prelude.Pair;
 import group_6_model_sequential.machine3;
-import group_6_model_sequential.machine3;
 import group_6_model_sequential.remove_content;
 
 public class RemoveContentWrapper {

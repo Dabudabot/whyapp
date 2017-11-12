@@ -21,18 +21,12 @@ public class ChattingWrapper {
         if(chatting.guard_chatting(ch_c,ch_u1,ch_u2)) {
             BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>> 
                                 chatcontent_tmp = m.get_chatcontent();
-            
-            Integer contentsize_tmp = m.get_contentsize();
-            BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>>
-                                chatcontentseq_tmp = m.get_chatcontentseq();
 
             chatting.run_chatting(ch_c, ch_u1, ch_u2);
             m.set_chatcontent(
                     modifyChatcontent(ch_u1, ch_u2, ch_c, chatcontent_tmp));
-            
-            m.set_chatcontentseq((chatcontentseq_tmp.override(new BRelation<Integer,BRelation<Integer,BRelation<Integer,Integer>>>(new Pair<Integer,BRelation<Integer,BRelation<Integer,Integer>>>(new Integer(contentsize_tmp + 1),new BRelation<Integer,BRelation<Integer,Integer>>(new Pair<Integer,BRelation<Integer,Integer>>(ch_c,(BRelation.cross(new BSet(ch_u1),new BSet(ch_u2)).union(BRelation.cross(new BSet(ch_u2),new BSet(ch_u1)))))))))));
+
             Settings.getInstance().commitMachine(m);
-            //ReceiveContentController.sendNotify(ch_u1, ch_u2);
         }
 	}
 	
