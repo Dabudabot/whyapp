@@ -293,20 +293,23 @@ public class SimpleMapper {
 
     public static machine3 toMachine(DataSnapshot dataSnapshot) {
         machine3 machine = new machine3();
-        machine.set_chat(toBRelation(dataSnapshot, Constants.NODE_CHAT));
-        machine.set_active(new BRelation<Integer, Integer>());
+//        machine.set_chat(toBRelation(dataSnapshot, Constants.NODE_CHAT));
+//        machine.set_active(new BRelation<Integer, Integer>());
         machine.set_muted(toBRelation(dataSnapshot, Constants.NODE_MUTED));
-        machine.set_chatcontent(toBRelationRelationRelation(
-                dataSnapshot, Constants.NODE_CHATCONTENT));
-        machine.set_toread(toBRelation(dataSnapshot, Constants.NODE_TOREAD));
-        machine.set_inactive(new BRelation<Integer, Integer>());
-        machine.set_toreadcon(toBRelationRelation(dataSnapshot, Constants.NODE_TOREADCON));
-        machine.set_owner(toBRelation(dataSnapshot, Constants.NODE_OWNER));
-        machine.set_contentsize(toInteger(dataSnapshot, Constants.NODE_CONTENTSIZE));
-        machine.set_chatcontentseq(toBRelationRelationRelation(dataSnapshot, Constants.NODE_CHATCONTENTSEQ));
-        machine.set_readChatContentSeq(new BRelation<Integer, Integer>());
-        machine.set_content(toBSet(dataSnapshot, Constants.NODE_CONTENT));
+//        machine.set_chatcontent(toBRelationRelationRelation(
+//                dataSnapshot, Constants.NODE_CHATCONTENT));
+//        machine.set_toread(toBRelation(dataSnapshot, Constants.NODE_TOREAD));
+//        machine.set_inactive(new BRelation<Integer, Integer>());
+//        machine.set_toreadcon(toBRelationRelation(dataSnapshot, Constants.NODE_TOREADCON));
+//        machine.set_owner(toBRelation(dataSnapshot, Constants.NODE_OWNER));
+//        machine.set_contentsize(toInteger(dataSnapshot, Constants.NODE_CONTENTSIZE));
+//        machine.set_chatcontentseq(toBRelationRelationRelation(dataSnapshot, Constants.NODE_CHATCONTENTSEQ));
+//        machine.set_readChatContentSeq(new BRelation<Integer, Integer>());
+//        machine.set_content(toBSet(dataSnapshot, Constants.NODE_CONTENT));
         machine.set_user(toBSet(dataSnapshot, Constants.NODE_USER));
+
+        machine = fromFirebaseString(machine,
+                dataSnapshot.child(Constants.NODE_DATA).getValue(String.class));
 
         return machine;
     }

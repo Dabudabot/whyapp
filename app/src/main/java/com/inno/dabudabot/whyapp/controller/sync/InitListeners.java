@@ -42,12 +42,6 @@ public class InitListeners {
                                 machine3 machine =
                                         SimpleMapper.toMachine(dataSnapshot.child(Constants.NODE_MACHINE));
                                 Settings.getInstance().setMachine(machine);
-//                                if (!machine.get_user().contains(user.getId())) {
-//                                    machine.get_user().add(user.getId());
-//                                    Settings.getInstance().commitMachine(machine);
-//                                } else {
-//                                    Settings.getInstance().setMachine(machine);
-//                                }
 
                                 initData();
                                 initMuted();
@@ -85,12 +79,6 @@ public class InitListeners {
                                 machine3 machine =
                                         SimpleMapper.toMachine(dataSnapshot.child(Constants.NODE_MACHINE));
                                 Settings.getInstance().setMachine(machine);
-//                                if (!machine.get_user().contains(user.getId())) {
-//                                    machine.get_user().add(user.getId());
-//                                    Settings.getInstance().commitMachine(machine);
-//                                } else {
-//                                    Settings.getInstance().setMachine(machine);
-//                                }
 
                                 initData();
                                 initMuted();
@@ -108,7 +96,7 @@ public class InitListeners {
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        System.err.println("BAD init");
+                        System.out.println("BAD init");
                     }
                 });
     }
@@ -141,7 +129,8 @@ public class InitListeners {
         ValueEventListener mutedChangeListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                BRelation<Integer, Integer> muted = SimpleMapper.toBRelation(dataSnapshot);
+                BRelation<Integer, Integer> muted =
+                        SimpleMapper.toBRelation(dataSnapshot);
                 Settings.getInstance().uptMuted(muted);
             }
 
