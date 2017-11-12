@@ -25,6 +25,7 @@ import com.inno.dabudabot.whyapp.listener.ReceiveContentView;
 import com.inno.dabudabot.whyapp.listener.SendContentView;
 import com.inno.dabudabot.whyapp.ui.adapters.MessagingRecyclerAdapter;
 import com.inno.dabudabot.whyapp.ui.dialogs.MessagingDialog;
+import com.inno.dabudabot.whyapp.wrappers.ChattingWrapper;
 import com.inno.dabudabot.whyapp.wrappers.UnselectChatWrapper;
 
 import java.util.ArrayList;
@@ -127,15 +128,18 @@ public class MessagingFragment
 
     private void sendMessage() {
         String message = mETxtMessage.getText().toString();
-        sendContentController.send(message,
-                Settings.getInstance().getCurrentUser().getId(),
-                getArguments().getInt(Constants.NODE_ID),
-                getActivity());
+        sendContentController.send(message, getActivity());
     }
 
     @Override
-    public void sendSuccess() {
+    public void sendSuccess(Integer id) {
+        machine3 m =  Settings.getInstance().getMachine();
+        ChattingWrapper chattingWrapper = new ChattingWrapper();
         mETxtMessage.setText("");
+        chattingWrapper.runChatting(id,
+                Settings.getInstance().getCurrentUser().getId(),
+                getArguments().getInt(Constants.NODE_ID),
+                m);
         Toast.makeText(getActivity(), "Message sent", Toast.LENGTH_SHORT).show();
     }
 

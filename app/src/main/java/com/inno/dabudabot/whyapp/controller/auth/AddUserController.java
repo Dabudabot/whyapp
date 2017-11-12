@@ -10,11 +10,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.inno.dabudabot.whyapp.R;
 import com.inno.dabudabot.whyapp.listener.AddUserView;
 
-import Util.SimpleMapper;
-import group_6_model_sequential.machine3;
 import group_6_model_sequential.User;
 import Util.Constants;
-import Util.Settings;
 import Util.SharedPrefUtil;
 
 /**

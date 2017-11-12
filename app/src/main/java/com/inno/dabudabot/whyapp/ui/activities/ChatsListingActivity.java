@@ -16,6 +16,7 @@ import com.inno.dabudabot.whyapp.R;
 import com.inno.dabudabot.whyapp.controller.auth.LogoutController;
 import com.inno.dabudabot.whyapp.controller.sync.InitListeners;
 import com.inno.dabudabot.whyapp.ui.adapters.ChatsListingAdapter;
+import com.inno.dabudabot.whyapp.ui.dialogs.BroadcastDialog;
 
 /**
  * Created by Group-6 on 04.11.17.
@@ -94,7 +95,7 @@ public class ChatsListingActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_general, menu);
+        getMenuInflater().inflate(R.menu.menu_general2, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -103,6 +104,11 @@ public class ChatsListingActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_logout:
                 logout.performFirebaseLogout(this);
+                break;
+            case R.id.action_broadcast:
+                BroadcastDialog cdd =
+                        new BroadcastDialog(this);
+                cdd.show();
                 break;
         }
         return super.onOptionsItemSelected(item);

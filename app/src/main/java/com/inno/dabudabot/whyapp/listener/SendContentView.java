@@ -6,7 +6,7 @@ package com.inno.dabudabot.whyapp.listener;
 
 public interface SendContentView {
 
-    void sendSuccess();
+    void sendSuccess(Integer id);
 
     void sendFailure(String message);
 

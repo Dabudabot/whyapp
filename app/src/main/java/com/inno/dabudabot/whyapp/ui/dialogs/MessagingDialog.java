@@ -8,6 +8,7 @@ import android.view.Window;
 import android.widget.Button;
 
 import com.inno.dabudabot.whyapp.R;
+import com.inno.dabudabot.whyapp.ui.activities.UserChooserActivity;
 import com.inno.dabudabot.whyapp.wrappers.DeleteContentWrapper;
 import com.inno.dabudabot.whyapp.wrappers.ForwardWrapper;
 import com.inno.dabudabot.whyapp.wrappers.RemoveContentWrapper;
@@ -67,7 +68,8 @@ public class MessagingDialog extends Dialog implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.forward:
-                //new ForwardWrapper().run_forward();
+                Settings.getInstance().setForwardingContent(contentId);
+                UserChooserActivity.startActivity(getContext());
                 break;
             case R.id.delete_msg:
                 if (Settings.getInstance()

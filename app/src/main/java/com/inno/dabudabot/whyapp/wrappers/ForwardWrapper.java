@@ -14,7 +14,7 @@ public class ForwardWrapper {
     
     public ForwardWrapper() {}
 
-    public void run_forward(Integer f_c,
+    public void runForward(Integer f_c,
                             Integer f_u,
                             BSet<Integer> f_ul,
                             machine3 m) {

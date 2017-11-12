@@ -24,8 +24,6 @@ public class SendContentController implements GenerateIdView {
 
     private SendContentView listener;
     private GenerateIdController generateIdController;
-    private Integer senderId;
-    private Integer receiverId;
 
     public SendContentController(SendContentView listener) {
         this.listener = listener;
@@ -33,11 +31,7 @@ public class SendContentController implements GenerateIdView {
     }
 
     public void send(String message,
-                     Integer senderId,
-                     Integer receiverId,
                      Activity activity) {
-        this.senderId = senderId;
-        this.receiverId = receiverId;
         generateIdController.checkInDatabase(
                 activity,
                 message,
@@ -60,12 +54,8 @@ public class SendContentController implements GenerateIdView {
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            machine3 m =  Settings.getInstance().getMachine();
-                            ChattingWrapper chattingWrapper = new ChattingWrapper();
-                            if (task.isSuccessful() &&
-                                    chattingWrapper.guardChatting(id, senderId, receiverId, m)) {
-                                chattingWrapper.runChatting(id, senderId, receiverId, m);
-                                listener.sendSuccess();
+                            if (task.isSuccessful()) {
+                                listener.sendSuccess(id);
                             } else {
                                 listener.sendFailure("SEND - BAD");
                             }

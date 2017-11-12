@@ -39,6 +39,7 @@
             android:name=".ui.activities.ChatsListingActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.activities.UserChooserActivity" />
     </application>
 
 </manifest>

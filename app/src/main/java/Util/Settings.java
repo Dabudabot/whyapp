@@ -35,6 +35,9 @@ public class Settings {
     private int idGen;
     private volatile Boolean busy;
 
+    private Integer forwardingContent;
+    private Integer broadcastingContent;
+
     public static Settings getInstance() {
         Settings localInstance = instance;
         if (localInstance == null) {
@@ -159,5 +162,21 @@ public class Settings {
 
     public void setMutedChangeListener(ValueEventListener mutedChangeListener) {
         this.mutedChangeListener = mutedChangeListener;
+    }
+
+    public Integer getForwardingContent() {
+        return forwardingContent;
+    }
+
+    public void setForwardingContent(Integer forwardingContent) {
+        this.forwardingContent = forwardingContent;
+    }
+
+    public Integer getBroadcastingContent() {
+        return broadcastingContent;
+    }
+
+    public void setBroadcastingContent(Integer broadcastingContent) {
+        this.broadcastingContent = broadcastingContent;
     }
 }
