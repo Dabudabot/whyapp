@@ -9,6 +9,12 @@ public class MuteChatWrapper {
 
     public MuteChatWrapper() {}
 
+    public boolean guardMuteChat(Integer mc_u1,
+                              Integer mc_u2,
+                              machine3 m) {
+        return new mute_chat(m).guard_mute_chat(mc_u1, mc_u2);
+    }
+
     public void runMuteChat(Integer mc_u1,
                             Integer mc_u2,
                             machine3 m) {

@@ -9,6 +9,10 @@ public class UnmuteChatWrapper {
 
 	public UnmuteChatWrapper() {}
 
+	public boolean guardUnmuteChat(Integer umc_u1, Integer umc_u2, machine3 m) {
+        return new unmute_chat(m).guard_unmute_chat(umc_u1, umc_u2);
+	}
+
 	public void runUnmuteChat(Integer umc_u1, Integer umc_u2, machine3 m) {
 	    unmute_chat unmute_chat = new unmute_chat(m);
 		if (unmute_chat.guard_unmute_chat(umc_u1, umc_u2)) {

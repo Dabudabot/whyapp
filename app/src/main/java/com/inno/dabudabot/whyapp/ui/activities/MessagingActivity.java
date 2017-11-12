@@ -77,6 +77,23 @@ public class MessagingActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_general3, menu);
+        boolean muted = new MuteChatWrapper().guardMuteChat(
+                getIntent().getExtras().getInt(Constants.NODE_ID),
+                Settings.getInstance().getCurrentUser().getId(),
+                Settings.getInstance().getMachine());
+        boolean unmuted = new UnmuteChatWrapper().guardUnmuteChat(
+                getIntent().getExtras().getInt(Constants.NODE_ID),
+                Settings.getInstance().getCurrentUser().getId(),
+                Settings.getInstance().getMachine());
+        for (int i = 0; i < menu.size(); i++) {
+            if (menu.getItem(i).getTitle().equals("Mute")
+                    && unmuted) {
+                menu.getItem(i).setTitle("Unmute");
+            } else if (menu.getItem(i).getTitle().equals("Unmute")
+                    && muted) {
+                menu.getItem(i).setTitle("Mute");
+            }
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -84,14 +101,23 @@ public class MessagingActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_muteunmute:
-                if (item.getTitle().equals("Mute")) {
-                    new MuteChatWrapper().runMuteChat(
+                MuteChatWrapper muteChatWrapper = new MuteChatWrapper();
+                UnmuteChatWrapper unmuteChatWrapper = new UnmuteChatWrapper();
+                if (item.getTitle().equals("Mute") &&
+                        muteChatWrapper.guardMuteChat(
+                                getIntent().getExtras().getInt(Constants.NODE_ID),
+                                Settings.getInstance().getCurrentUser().getId(),
+                                Settings.getInstance().getMachine())) {
+                    muteChatWrapper.runMuteChat(
                             getIntent().getExtras().getInt(Constants.NODE_ID),
                             Settings.getInstance().getCurrentUser().getId(),
                             Settings.getInstance().getMachine());
                     item.setTitle("Unmute");
-                } else if (item.getTitle().equals("Unmute")) {
-                    new UnmuteChatWrapper().runUnmuteChat(
+                } else if (item.getTitle().equals("Unmute")
+                        && unmuteChatWrapper.guardUnmuteChat(getIntent().getExtras().getInt(Constants.NODE_ID),
+                        Settings.getInstance().getCurrentUser().getId(),
+                        Settings.getInstance().getMachine())) {
+                    unmuteChatWrapper.runUnmuteChat(
                             getIntent().getExtras().getInt(Constants.NODE_ID),
                             Settings.getInstance().getCurrentUser().getId(),
                             Settings.getInstance().getMachine());
