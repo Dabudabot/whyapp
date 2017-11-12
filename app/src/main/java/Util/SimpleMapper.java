@@ -332,7 +332,11 @@ public class SimpleMapper {
             builder.append(pair.snd());
             builder.append("},");
         }
-        builder.deleteCharAt(builder.length()-1);
+        try {
+            builder.deleteCharAt(builder.length() - 1);
+        } catch (Exception e) {
+            //e.printStackTrace();
+        }
         return result + builder.toString()+ "]";
     }
 
@@ -347,24 +351,61 @@ public class SimpleMapper {
             builder.append(pair.fst());
             builder.append(",");
             builder.append(fromBR(pair.snd(), "snd"));
-            builder.append(",\"snd\":[");
-            for (Pair<Integer, Integer> pair1 : pair.snd()) {
-                builder.append("{\"fst\":");
-                builder.append(pair1.fst());
-                builder.append(",\"snd\":");
-                builder.append(pair1.snd());
-                builder.append("},");
-            }
-            builder.deleteCharAt(builder.length()-1);
-            builder.append("]},");
+            //builder.deleteCharAt(builder.length()-1);
+            builder.append("}],");
         }
-        builder.deleteCharAt(builder.length()-1);
-        return result + builder.toString()+ "]";
+        try {
+            builder.deleteCharAt(builder.length() - 1);
+        } catch (Exception e) {
+            //e.printStackTrace();
+        }
+        return result + builder.toString();
+    }
+
+    private static String fromBRRR(BRelation<Integer, BRelation<Integer, BRelation<Integer, Integer>>> rel,
+                                  String node) {
+
+        String result = "\"" + node + "\":[";
+
+        StringBuilder builder = new StringBuilder();
+        for (Pair<Integer, BRelation<Integer, BRelation<Integer, Integer>>> pair : rel) {
+            builder.append("{\"fst\":");
+            builder.append(pair.fst());
+            builder.append(",");
+            builder.append(fromBRR(pair.snd(), "snd"));
+            //builder.deleteCharAt(builder.length()-1);
+            builder.append("}],");
+        }
+        try {
+            builder.deleteCharAt(builder.length() - 1);
+        } catch (Exception e) {
+            //e.printStackTrace();
+        }
+        return result + builder.toString();
+    }
+
+    private static String fromBSet(BSet<Integer> rel, String node) {
+        String result = "\"" + node + "\":[";
+
+        StringBuilder builder = new StringBuilder();
+        int i = 0;
+        for (Integer val : rel) {
+            builder.append("{" + String.valueOf(i) + ":");
+            builder.append(val);
+            builder.append("},");
+            i++;
+        }
+        try {
+            builder.deleteCharAt(builder.length() - 1);
+        } catch (Exception e) {
+            //e.printStackTrace();
+        }
+        return result + builder.toString() + "]";
     }
 
     public static void toFirebaseString(machine3 machine) {
 
-        String value = "";
+        String value = machineToString(machine);
 
         FirebaseDatabase.getInstance()
                 .getReference()
@@ -373,7 +414,62 @@ public class SimpleMapper {
                 .setValue(value);
     }
 
-    public static machine3 fromFirebaseString(machine3 machine, String value) {
+    public static String machineToString(machine3 machine) {
+        StringBuilder result = new StringBuilder();
+
+        System.out.println(fromBR(machine.get_chat(), ""));
+
+        result.append("{");
+        result.append(fromBR(machine.get_chat(), "chat") + ",");
+        result.append(fromBRRR(machine.get_chatcontent(), "chatcontent") + ",");
+        result.append(fromBRRR(machine.get_chatcontentseq(), "chatcontentseq") + ",");
+        result.append(fromBSet(machine.get_content(), "content") + ",");
+        result.append("\"contentsize\":" + String.valueOf(machine.get_contentsize()) + ",");
+        result.append(fromBR(machine.get_owner(), "owner") + ",");
+        result.append(fromBR(machine.get_toread(), "toread") + ",");
+        result.append(fromBRR(machine.get_toreadcon(), "toreadcon")+ ",");
+        result.append("}");
+
+        return result.toString();
+    }
+
+    public static machine3 fromFirebaseString(
+            machine3 machine, String value) {
+
+
+
         return machine;
+    }
+
+
+    public static void main(String[] args) {
+        machine3 machine = new machine3();
+        System.out.println(machineToString(machine));
+
+
+        BRelation<Integer, Integer> rel = new BRelation<>();
+        rel.add(new Pair<Integer, Integer>(1,2));
+        rel.add(new Pair<Integer, Integer>(3,4));
+        System.out.println(rel);
+        System.out.println(fromBR(rel, ""));
+
+        BRelation<Integer, BRelation<Integer, Integer>> rel_rel = new BRelation<>();
+        rel_rel.add(new Pair<Integer, BRelation<Integer, Integer>>(10,rel));
+        //rel_rel.add(new Pair<Integer, BRelation<Integer, Integer>>(20,rel));
+        System.out.println(rel_rel);
+        System.out.println(fromBRR(rel_rel, ""));
+
+        BRelation<Integer, BRelation<Integer, BRelation<Integer, Integer>>> rel_rel_rel = new BRelation<>();
+        rel_rel_rel.add(new Pair<Integer, BRelation<Integer, BRelation<Integer, Integer>>>(100,rel_rel));
+        // 2nd
+        System.out.println(rel_rel_rel);
+        System.out.println(fromBRRR(rel_rel_rel, ""));
+
+        BSet<Integer> set = new BSet<Integer>();
+        set.add(1);
+        set.add(2);
+        set.add(3);
+        System.out.println(set);
+        System.out.println(fromBSet(set, ""));
     }
 }
