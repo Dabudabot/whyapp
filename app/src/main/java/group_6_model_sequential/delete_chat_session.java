@@ -17,9 +17,9 @@ public class delete_chat_session{
 	/*@ public normal_behavior
 		requires true;
  		assignable \nothing;
-		ensures \result <==> (machine.get_chat().has(new Pair<Integer,Integer>(dcs_u1,dcs_u2)) && machine.get_user().has(dcs_u1) && machine.get_user().has(dcs_u2)); */
+		ensures \result <==> (machine.get_user().has(dcs_u1) && machine.get_user().has(dcs_u2) && machine.get_chat().has(new Pair<Integer,Integer>(dcs_u1,dcs_u2)) && machine.get_active().has(new Pair<Integer,Integer>(dcs_u1,dcs_u2))); */
 	public /*@ pure */ boolean guard_delete_chat_session( Integer dcs_u1, Integer dcs_u2) {
-		return (machine.get_chat().has(new Pair<Integer,Integer>(dcs_u1,dcs_u2)) && machine.get_user().has(dcs_u1) && machine.get_user().has(dcs_u2));
+		return (machine.get_user().has(dcs_u1) && machine.get_user().has(dcs_u2) && machine.get_chat().has(new Pair<Integer,Integer>(dcs_u1,dcs_u2)) && machine.get_active().has(new Pair<Integer,Integer>(dcs_u1,dcs_u2)));
 	}
 
 	/*@ public normal_behavior

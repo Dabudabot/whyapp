@@ -17,9 +17,9 @@ public class mute_chat{
 	/*@ public normal_behavior
 		requires true;
  		assignable \nothing;
-		ensures \result <==> (machine.get_chat().has(new Pair<Integer,Integer>(mc_u1,mc_u2)) && !machine.get_muted().has(new Pair<Integer,Integer>(mc_u1,mc_u2)) && machine.get_user().has(mc_u1) && machine.get_user().has(mc_u2)); */
+		ensures \result <==> (machine.get_user().has(mc_u1) && machine.get_user().has(mc_u2) && machine.get_chat().has(new Pair<Integer,Integer>(mc_u1,mc_u2)) && !machine.get_muted().has(new Pair<Integer,Integer>(mc_u1,mc_u2))); */
 	public /*@ pure */ boolean guard_mute_chat( Integer mc_u1, Integer mc_u2) {
-		return (machine.get_chat().has(new Pair<Integer,Integer>(mc_u1,mc_u2)) && !machine.get_muted().has(new Pair<Integer,Integer>(mc_u1,mc_u2)) && machine.get_user().has(mc_u1) && machine.get_user().has(mc_u2));
+		return (machine.get_user().has(mc_u1) && machine.get_user().has(mc_u2) && machine.get_chat().has(new Pair<Integer,Integer>(mc_u1,mc_u2)) && !machine.get_muted().has(new Pair<Integer,Integer>(mc_u1,mc_u2)));
 	}
 
 	/*@ public normal_behavior
