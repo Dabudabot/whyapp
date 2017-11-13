@@ -7,40 +7,65 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.inno.dabudabot.whyapp.R;
-import com.inno.dabudabot.whyapp.models.User;
+
+import Util.Settings;
+import eventb_prelude.Pair;
+import group_6_model_sequential.User;
+import group_6_model_sequential.machine3;
 
 import java.util.List;
 
 
-
-public class UserListingRecyclerAdapter extends RecyclerView.Adapter<UserListingRecyclerAdapter.ViewHolder> {
+/**
+ * Created by Group-6 on 09.11.17.
+ * Manages users list on view
+ */
+public class UserListingRecyclerAdapter
+        extends RecyclerView.Adapter<UserListingRecyclerAdapter.ViewHolder> {
     private List<User> mUsers;
 
     public UserListingRecyclerAdapter(List<User> users) {
         this.mUsers = users;
     }
 
-    public void add(User user) {
-        mUsers.add(user);
-        notifyItemInserted(mUsers.size() - 1);
-    }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_all_user_listing, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(
+                R.layout.item_listing,
+                parent,
+                false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         User user = mUsers.get(position);
+        if (user.getName() != null) {
 
-        if (user.getEmail() != null){
-            String alphabet = user.getEmail().substring(0, 1);
+            machine3 machine = Settings.getInstance().getMachine();
+            String alphabet = user.getName().substring(0, 1);
+            int back = R.drawable.circle_accent;
 
-            holder.txtUsername.setText(user.getEmail());
+            for (Pair<Integer, Integer> pair : machine.get_toread()) {
+                if (pair.fst().equals(Settings.getInstance().getCurrentUser().getId())
+                        && pair.snd().equals(user.getId())) {
+
+                    alphabet = "!";
+                    back = R.drawable.circle_accent_warn;
+                }
+            }
+            for (Pair<Integer, Integer> pair : machine.get_muted()) {
+                if (pair.snd().equals(user.getId())
+                        || pair.fst().equals(user.getId())) {
+                    alphabet = "M";
+                    back = R.drawable.circle_accent_muted;
+                }
+            }
+
+            holder.txtUsername.setText(user.getName());
             holder.txtUserAlphabet.setText(alphabet);
-          }
+            holder.txtUserAlphabet.setBackgroundResource(back);
+        }
     }
 
     @Override
@@ -60,8 +85,10 @@ public class UserListingRecyclerAdapter extends RecyclerView.Adapter<UserListing
 
         ViewHolder(View itemView) {
             super(itemView);
-            txtUserAlphabet = (TextView) itemView.findViewById(R.id.text_view_user_alphabet);
-            txtUsername = (TextView) itemView.findViewById(R.id.text_view_username);
+            txtUserAlphabet =
+                    (TextView) itemView.findViewById(R.id.text_view_user_alphabet);
+            txtUsername =
+                    (TextView) itemView.findViewById(R.id.text_view_username);
         }
     }
 }

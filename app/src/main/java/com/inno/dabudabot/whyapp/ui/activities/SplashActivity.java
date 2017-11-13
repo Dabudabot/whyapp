@@ -8,15 +8,16 @@ import com.inno.dabudabot.whyapp.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
- * Created by Daulet on 10/21/17.
+ * Created by Group-6 on 10/21/17.
+ *
+ * It is possible to say that work starts here
+ *
  * Checking is user logged in or not
  * if logged in redirect the user to user listing activity
  * if not redirect user to login activity
  */
 public class SplashActivity extends AppCompatActivity {
     private static final int SPLASH_TIME_MS = 2000;
-    private Handler mHandler;
-    private Runnable mRunnable;
 
     /**
      * Runs at creation of current activity
@@ -27,15 +28,16 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        mHandler = new Handler();
+        Handler mHandler = new Handler();
 
-        mRunnable = new Runnable() {
+        Runnable mRunnable = new Runnable() {
             @Override
             public void run() {
                 if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                    UserListingActivity.startActivity(SplashActivity.this);
+                    ChatsListingActivity.startActivity(SplashActivity.this);
                 } else {
-                    LoginActivity.startIntent(SplashActivity.this);
+                    LoginActivity.startIntent(
+                            SplashActivity.this);
                 }
                 finish();
             }
@@ -43,16 +45,4 @@ public class SplashActivity extends AppCompatActivity {
 
         mHandler.postDelayed(mRunnable, SPLASH_TIME_MS);
     }
-
-    /*@Override
-    protected void onPause() {
-        super.onPause();
-        mHandler.removeCallbacks(mRunnable);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mHandler.postDelayed(mRunnable, SPLASH_TIME_MS);
-    }*/
 }

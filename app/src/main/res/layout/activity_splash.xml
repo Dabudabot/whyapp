@@ -4,4 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ui.activities.SplashActivity" />
+    tools:context=".ui.activities.SplashActivity" >
+
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/loader"
+        android:background="@color/white"
+        />
+
+</android.support.design.widget.CoordinatorLayout>

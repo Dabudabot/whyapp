@@ -11,11 +11,10 @@ import com.inno.dabudabot.whyapp.R;
 import com.inno.dabudabot.whyapp.ui.fragments.LoginFragment;
 
 /**
- * Created by Daulet on 10/21/17.
- * Login and registration procedure
+ * Created by Group-6 on 10/21/17.
+ * Login and registration activity
  */
 public class LoginActivity extends AppCompatActivity {
-    private Toolbar mToolbar;
 
     /**
      * current activity startup as intent
@@ -53,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
      * init fragment
      */
     private void init() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
         // set the toolbar
         setSupportActionBar(mToolbar);
@@ -62,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction
                 = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout_content_login,
-                LoginFragment.newInstance(),
+                new LoginFragment(),
                 LoginFragment.class.getSimpleName());
         fragmentTransaction.commit();
     }
